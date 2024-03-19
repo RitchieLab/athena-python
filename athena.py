@@ -53,8 +53,12 @@ data = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn
     out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'])
     
     
-(train_splits, test_splits) = data_processing.split_kfolds(data, params['CV'], 
-    params['RANDOM_SEED'])
+if params['FITNESS'] == 'rsquared':
+    (train_splits, test_splits) = data_processing.split_kfolds(data, params['CV'], 
+        params['RANDOM_SEED'])
+else:
+    (train_splits, test_splits) = data_processing.split_statkfolds(data, params['CV'], 
+        params['RANDOM_SEED'])
 
 var_map = data_processing.rename_variables(data)
 

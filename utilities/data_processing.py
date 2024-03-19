@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, StratifiedKFold
 import re
 import numpy as np
 
@@ -113,6 +113,19 @@ def split_kfolds(df, nfolds, seed=100):
     test_splits=[]
     
     for i, (train_index, test_index) in enumerate(kf.split(df.index.values)):
+        train_splits.append(train_index)
+        test_splits.append(test_index)
+    
+    return train_splits,test_splits
+    
+def split_statkfolds(df, nfolds, seed=100):
+#     kf = KFold(n_splits=nfolds, shuffle=True, random_state=seed)
+    kf = StratifiedKFold(n_splits=nfolds, shuffle=True, random_state=seed)
+    
+    train_splits=[]
+    test_splits=[]
+    
+    for i, (train_index, test_index) in enumerate(kf.split(df.index.values,df['y'])):
         train_splits.append(train_index)
         test_splits.append(test_index)
     
