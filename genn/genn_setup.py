@@ -3,6 +3,7 @@ from deap import creator, base, tools
 import grape.grape as grape
 from genn.genn_functions import activate_sigmoid, PA, PM, PS, PD, pdiv
 import numpy as np
+from sklearn.metrics import balanced_accuracy_score
 
 INVALID_FITNESS = -1000
 
@@ -108,8 +109,9 @@ def fitness_balacc(individual, points):
     assert np.isrealobj(pred)
     
     try:
-        fitness = r_squared(y,pred)
-#         fitness = np.mean(np.square(y - pred))
+        # assign case/control status
+        pred = np.where(pred < 0.5, 0, 1)
+        fitness = balanced_accuracy_score(y,pred)
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
         fitness = INVALID_FITNESS
