@@ -50,10 +50,12 @@ np.random.seed(params['RANDOM_SEED'])
 # process the input files to create the appropriate X and Y sets for testing training
 data = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
     continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
-    out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'])
+    out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
+    missing=params['MISSING'])
     
     
-if params['FITNESS'] == 'rsquared':
+print(params['FITNESS'])
+if params['FITNESS'] == 'r-squared':
     (train_splits, test_splits) = data_processing.split_kfolds(data, params['CV'], 
         params['RANDOM_SEED'])
 else:

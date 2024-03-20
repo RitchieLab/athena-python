@@ -4,7 +4,7 @@ import re
 import numpy as np
 
 def read_input_files(outcomefn, genofn, continfn, out_scale=False,
-    contin_scale=False, geno_encode=None):
+    contin_scale=False, geno_encode=None, missing=None):
     """
     Read in data and construct pandas dataframe
 
@@ -25,10 +25,10 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
     
     contin_df = None
     if continfn:
-        contin_df = process_continfile(continfn, contin_scale)
+        contin_df = process_continfile(continfn, contin_scale, missing)
     
     if genofn:
-        geno_df = process_genofile(genofn, geno_encode)
+        geno_df = process_genofile(genofn, geno_encode, missing)
     
     dataset_df = y_df
     if genofn:
@@ -46,18 +46,24 @@ def normalize(val):
     return newval
 
 
-def process_continfile(fn, scale):
+def process_continfile(fn, scale, missing=None):
     """
     Read in continuous data and construct dataframe from values
 
         Parameters:
             fn: Phenotypes (outcomes) file
             normalize: boolean for controlling normalization
+            missing: string identifying any missing data
 
         Returns: 
             pandas dataframe
     """
-    data = pd.read_table(fn, delim_whitespace=True, header=0)
+    data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
+    
+    if missing:
+        data.replace([missing], np.nan, inplace=True)
+    
+    data = data.astype(float)
     
     if scale:
         data = data.apply(normalize, axis=0)
@@ -66,28 +72,33 @@ def process_continfile(fn, scale):
     
     
 def additive_encoding(genos):
-    return genos.map({'0':-1,'1':0, '2':1})
+    return genos.map({'0':-1,'1':0, '2':1, np.nan:np.nan})
 
 def add_quad_encoding_second(genos):
-    return genos.map({'0': -1, '1':2, '2':-1})
+    return genos.map({'0': -1, '1':2, '2':-1, np.nan:np.nan})
     
 def add_quad_encoding(df):
     df.iloc[:, ::2] = df.iloc[:, ::2].astype(str).apply(additive_encoding)
     df.iloc[:, 1::2] = df.iloc[:, 1::2].astype(str).apply(add_quad_encoding_second)
     return df
 
-def process_genofile(fn, encoding):
+def process_genofile(fn, encoding, missing=None):
     """
     Read in genotype data and construct dataframe from values
 
         Parameters:
             fn: Phenotypes (outcomes) file
             encoding: string for controlling encoding 
+            missing: string identifying any missing data
 
         Returns: 
             pandas dataframe
     """
-    data = pd.read_table(fn, delim_whitespace=True, header=0)
+    data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
+
+    if missing:
+        data.replace([missing], np.nan, inplace=True)
+        
     
     if encoding == 'additive':
         data = data.astype(str).apply(additive_encoding)
@@ -100,7 +111,6 @@ def process_genofile(fn, encoding):
         new_df.columns = columns
         add_quad_encoding(new_df)
         data = new_df
-            
 
     return data
 

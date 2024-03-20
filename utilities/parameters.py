@@ -55,7 +55,9 @@ params = {
     
     'GENO_ENCODE' : None,
     'SCALE_OUTCOME': False,
-    'SCALE_CONTIN': False
+    'SCALE_CONTIN': False,
+    
+    'MISSING':None
 
 }
 
@@ -368,6 +370,10 @@ def parse_cmd_args(arguments):
                         dest='SCALE_CONTIN',
                         action="store_true",
                         help="Sets flag for scaling continuous variables from 0 to 1.0")
+    parser.add_argument('--missing',
+                        dest='MISSING',
+                        type=str,
+                        help="Sets identifier for missing values input files")
 
 #     parser.format_help()
 #     print("format help")
@@ -404,13 +410,6 @@ def set_params(command_line_args, create_files=True):
     :param command_line_args: Command line arguments specified by the user.
     :return: Nothing.
     """
-
-#     from utilities.algorithm.initialise_run import initialise_run_params
-#     from utilities.algorithm.initialise_run import set_param_imports
-#     from utilities.fitness.math_functions import return_one_percent
-#     from utilities.algorithm.command_line_parser import parse_cmd_args
-#     from utilities.stats import trackers, clean_stats
-#     from representation import grammar
 
     cmd_args, unknown = parse_cmd_args(command_line_args)
 

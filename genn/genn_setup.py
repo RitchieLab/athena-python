@@ -46,9 +46,10 @@ def configure_toolbox(genome_type, fitness):
 # y actual values
 # y_hat predicted values
 def r_squared(y, y_hat):
-    y_bar = y.mean()
-    ss_tot = ((y-y_bar)**2).sum()
-    ss_res = ((y-y_hat)**2).sum()
+    nan_mask = np.isnan(y_hat)
+    y_bar = y[~nan_mask].mean()
+    ss_tot = ((y[~nan_mask]-y_bar)**2).sum()
+    ss_res = ((y[~nan_mask]-y_hat[~nan_mask])**2).sum()
     return 1 - (ss_res/ss_tot)
     
 
@@ -74,7 +75,7 @@ def fitness_rsquared(individual, points):
     
     try:
         fitness = r_squared(y,pred)
-#         fitness = np.mean(np.square(y - pred))
+        individual.nmissing = np.count_nonzero(np.isnan(pred))
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
         fitness = INVALID_FITNESS
@@ -109,9 +110,12 @@ def fitness_balacc(individual, points):
     assert np.isrealobj(pred)
     
     try:
+        nan_mask = np.isnan(pred)
         # assign case/control status
-        pred = np.where(pred < 0.5, 0, 1)
-        fitness = balanced_accuracy_score(y,pred)
+        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        fitness = balanced_accuracy_score(y[~nan_mask],pred_nonan)
+        individual.nmissing = np.count_nonzero(np.isnan(pred))
+        
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
         fitness = INVALID_FITNESS
