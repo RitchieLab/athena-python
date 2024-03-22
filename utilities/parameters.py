@@ -57,7 +57,8 @@ params = {
     'SCALE_OUTCOME': False,
     'SCALE_CONTIN': False,
     
-    'MISSING':None
+    'MISSING':None,
+    'SELECTION': 'tournament'
 
 }
 
@@ -148,6 +149,9 @@ def valid_parameters(parameters):
         ['add_quad', 'additive']:
         print("GENO_ENCODE must be either 'add_quad or additive")
     
+    if parameters['SELECTION'] and parameters['SELECTION'] not in \
+        ['tournament', 'lexicase', 'epsilon_lexicase']:
+        print("SELECTION must be one of tournament, lexicase, epsilon_lexicase")
 
     return all_valid    
     
@@ -330,7 +334,7 @@ def parse_cmd_args(arguments):
     parser.add_argument('--fitness',
                         dest='FITNESS',
                         type=str,
-                        help='Sets metric for fitness (balacc or rsquared)')
+                        help='Sets metric for fitness (balanced_acc or r-squared)')
     parser.add_argument('--rand',
                         dest='RANDOM_SEED',
                         type=int,
@@ -374,6 +378,10 @@ def parse_cmd_args(arguments):
                         dest='MISSING',
                         type=str,
                         help="Sets identifier for missing values input files")
+    parser.add_argument('--selection',
+                        dest='SELECTION',
+                        type=str,
+                        help="Sets selection type (tournament, lexicase, epsilon_lexicase)")
 
 #     parser.format_help()
 #     print("format help")

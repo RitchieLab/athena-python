@@ -53,8 +53,6 @@ data = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn
     out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
     missing=params['MISSING'])
     
-    
-print(params['FITNESS'])
 if params['FITNESS'] == 'r-squared':
     (train_splits, test_splits) = data_processing.split_kfolds(data, params['CV'], 
         params['RANDOM_SEED'])
@@ -68,7 +66,7 @@ grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
 # print(grammarstr)
 BNF_GRAMMAR = grape.Grammar(grammarstr, params['CODON_CONSUMPTION'])
 
-toolbox=genn_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'])
+toolbox=genn_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'], params['SELECTION'])
 
 REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
                 'fitness_test', 

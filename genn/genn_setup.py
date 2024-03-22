@@ -7,7 +7,7 @@ from sklearn.metrics import balanced_accuracy_score
 
 INVALID_FITNESS = -1000
 
-def configure_toolbox(genome_type, fitness):
+def configure_toolbox(genome_type, fitness, selection):
     toolbox = base.Toolbox()
     if genome_type == 'standard':
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -33,12 +33,21 @@ def configure_toolbox(genome_type, fitness):
     
     if fitness=='r-squared':
         toolbox.register("evaluate", fitness_rsquared)
+        toolbox.register("select", tools.selLexicase)#, tournsize=7)
     elif fitness == 'balanced_acc':
-        toolbox.register("evaluate", fitness_balacc)
+#         toolbox.register("evaluate", fitness_balacc)
+        if selection=='lexicase':
+            toolbox.register("evaluate", fitness_balacc_lexicase)
+            toolbox.register("select", grape.selBalAccLexicase)
+        else:
+            toolbox.register("evaluate", fitness_balacc)
+            toolbox.register("select", tools.selLexicase)#, tournsize=7)    s
+#         fitness_balacc_lexicase
     else:
         raise ValueError("fitness must be fitness_rsquared or fitness_balacc")
     
-    toolbox.register("select", tools.selTournament, tournsize=7) 
+#     toolbox.register("select", tools.selTournament, tournsize=7) 
+#     toolbox.register("select", tools.selLexicase)#, tournsize=7) 
 
     return toolbox
 
@@ -94,6 +103,9 @@ def fitness_balacc(individual, points):
     x = points[0]
     y = points[1]
     
+#     print(individual.__dir__())
+#     print(type(individual.fitness))
+#     exit()
     if individual.invalid == True:
         return INVALID_FITNESS,
 
@@ -130,3 +142,58 @@ def fitness_balacc(individual, points):
     
     return fitness,
     
+
+def fitness_balacc_lexicase(individual, points):
+    x = points[0]
+    y = points[1]
+    
+#     print(individual.__dir__())
+#     print(type(individual.fitness))
+#     exit()
+    if individual.invalid == True:
+        individual.ptscores = []
+        return INVALID_FITNESS,
+
+    try:
+        pred = eval(individual.phenotype)
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        return INVALID_FITNESS,
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("evaluation error", err)
+            raise
+    assert np.isrealobj(pred)
+    
+    try:
+        nan_mask = np.isnan(pred)
+        # assign case/control status
+        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        fitness = balanced_accuracy_score(y[~nan_mask],pred_nonan)
+        individual.nmissing = np.count_nonzero(np.isnan(pred))
+        
+        # save individual point scores for use in lexicase selection
+        full = np.copy(pred)
+#         print(full)
+        full[~nan_mask] = np.where(pred[~nan_mask] < 0.5, 0, 1)
+#         print(full)
+#         print(y)
+        individual.ptscores = np.absolute(y-full)
+#         print(individual.ptscores)
+#         exit()
+        
+        
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        fitness = INVALID_FITNESS
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("fitness error", err)
+            raise
+        
+    if fitness == float("inf"):
+        return INVALID_FITNESS,
+    
+    return fitness,

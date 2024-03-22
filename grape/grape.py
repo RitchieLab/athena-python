@@ -1895,3 +1895,37 @@ def selTournRoulette(individuals, k, fit_attr="fitness"):
         chosen.append(selected)    
         
     return chosen
+
+
+def selBalAccLexicase(individuals, k):
+    """Returns an individual that does the best on the fitness cases when
+    considered one at a time in random order.
+    http://faculty.hampshire.edu/lspector/pubs/lexicase-IEEE-TEC.pdf
+    Matches will have 0 for a result while mismatches are 1
+    nan also causes a candidate to drop out
+
+    :param individuals: A list of individuals to select from.
+    :param k: The number of individuals to select.
+    :returns: A list of selected individuals.
+    """
+    selected_individuals = []
+
+    for ind in individuals:
+        if ind.ptscores.any():
+            nscores =  len(ind.ptscores)
+
+    for i in range(k):
+        candidates = individuals
+        cases = list(range(nscores))
+        random.shuffle(cases)
+
+        while len(cases) > 0 and len(candidates) > 1:
+            newcandidates = [x for x in candidates if x.ptscores[cases[0]] == 0]
+            if not newcandidates:
+                break
+            candidates = newcandidates
+            cases.pop(0)
+            
+        selected_individuals.append(random.choice(candidates))
+
+    return selected_individuals
