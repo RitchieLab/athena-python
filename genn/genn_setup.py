@@ -32,8 +32,12 @@ def configure_toolbox(genome_type, fitness, selection):
         raise ValueError("genome_type must be standard, leap or mcge")
     
     if fitness=='r-squared':
-        toolbox.register("evaluate", fitness_rsquared)
-        toolbox.register("select", tools.selLexicase)#, tournsize=7)
+        if selection == 'epsilon_lexicase':
+            toolbox.register("evaluate", fitness_rsquared_lexicase)
+            toolbox.register("select", grape.selAutoEpsilonLexicase)#, tournsize=7)
+        else:
+            toolbox.register("evaluate", fitness_rsquared)
+            toolbox.register("select", tools.selTournament, tournsize=2)
     elif fitness == 'balanced_acc':
 #         toolbox.register("evaluate", fitness_balacc)
         if selection=='lexicase':
@@ -41,13 +45,12 @@ def configure_toolbox(genome_type, fitness, selection):
             toolbox.register("select", grape.selBalAccLexicase)
         else:
             toolbox.register("evaluate", fitness_balacc)
-            toolbox.register("select", tools.selLexicase)#, tournsize=7)    s
+            toolbox.register("select", tools.selTournament, tournsize=2)
 #         fitness_balacc_lexicase
     else:
         raise ValueError("fitness must be fitness_rsquared or fitness_balacc")
     
 #     toolbox.register("select", tools.selTournament, tournsize=7) 
-#     toolbox.register("select", tools.selLexicase)#, tournsize=7) 
 
     return toolbox
 
@@ -99,13 +102,56 @@ def fitness_rsquared(individual, points):
     
     return fitness,
     
+    
+def fitness_rsquared_lexicase(individual, points):
+    #points = [X, Y]
+    x = points[0]
+    y = points[1]
+    
+    if individual.invalid == True:
+        individual.ptscores = np.full(len(y), np.nan)
+        return INVALID_FITNESS,
+
+    try:
+        pred = eval(individual.phenotype)
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        return INVALID_FITNESS,
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("evaluation error", err)
+            raise
+    assert np.isrealobj(pred)
+    
+    try:
+        fitness = r_squared(y,pred)
+        individual.nmissing = np.count_nonzero(np.isnan(pred))
+        
+        # store individual differences for lexicase
+        individual.ptscores = np.absolute(y-pred)
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        individual.ptscores = np.full(len(y), np.nan)
+        fitness = INVALID_FITNESS
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("fitness error", err)
+            raise
+        
+    if fitness == float("inf"):
+        individual.ptscores = np.full(len(y), np.nan)
+        return INVALID_FITNESS,
+    
+    return fitness,
+    
+    
 def fitness_balacc(individual, points):
     x = points[0]
     y = points[1]
     
-#     print(individual.__dir__())
-#     print(type(individual.fitness))
-#     exit()
+
     if individual.invalid == True:
         return INVALID_FITNESS,
 
@@ -147,11 +193,8 @@ def fitness_balacc_lexicase(individual, points):
     x = points[0]
     y = points[1]
     
-#     print(individual.__dir__())
-#     print(type(individual.fitness))
-#     exit()
     if individual.invalid == True:
-        individual.ptscores = []
+        individual.ptscores = np.full(len(y), np.nan)
         return INVALID_FITNESS,
 
     try:
@@ -175,18 +218,14 @@ def fitness_balacc_lexicase(individual, points):
         
         # save individual point scores for use in lexicase selection
         full = np.copy(pred)
-#         print(full)
         full[~nan_mask] = np.where(pred[~nan_mask] < 0.5, 0, 1)
-#         print(full)
-#         print(y)
         individual.ptscores = np.absolute(y-full)
-#         print(individual.ptscores)
-#         exit()
         
         
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
         fitness = INVALID_FITNESS
+        individual.ptscores = np.full(len(y), np.nan)
     except Exception as err:
             # Other errors should not usually happen (unless we have
             # an unprotected operator) so user would prefer to see them.
@@ -194,6 +233,7 @@ def fitness_balacc_lexicase(individual, points):
             raise
         
     if fitness == float("inf"):
+        individual.ptscores = np.full(len(y), np.nan)
         return INVALID_FITNESS,
     
     return fitness,

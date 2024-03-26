@@ -1910,9 +1910,7 @@ def selBalAccLexicase(individuals, k):
     """
     selected_individuals = []
 
-    for ind in individuals:
-        if ind.ptscores.any():
-            nscores =  len(ind.ptscores)
+    nscores =  len(individuals[0].ptscores)
 
     for i in range(k):
         candidates = individuals
@@ -1926,6 +1924,50 @@ def selBalAccLexicase(individuals, k):
             candidates = newcandidates
             cases.pop(0)
             
+        selected_individuals.append(random.choice(candidates))
+
+    return selected_individuals
+
+def selAutoEpsilonLexicase(individuals, k):
+    """
+    Adapted from DEAP selAutomaticEpsilonLexicase
+    Returns an individual that does the best on the fitness cases when considered one at a
+    time in random order.
+    https://push-language.hampshire.edu/uploads/default/original/1X/35c30e47ef6323a0a949402914453f277fb1b5b0.pdf
+    Implemented lambda_epsilon_y implementation.
+
+    :param individuals: A list of individuals to select from.
+    :param k: The number of individuals to select.
+    :returns: A list of selected individuals.
+    """
+    selected_individuals = []
+    nscores =  len(individuals[0].ptscores)
+
+    for i in range(k):
+        candidates = individuals
+        cases = list(range(nscores))
+        random.shuffle(cases)
+
+        while len(cases) > 0 and len(candidates) > 1:
+            errors_for_this_case = np.array([x.ptscores[cases[0]] for x in candidates])
+
+            # check if all candidates are nan for this case
+            if np.count_nonzero(np.isnan(errors_for_this_case)) == len(candidates):
+                break
+            nan_mask = np.isnan(errors_for_this_case)
+            
+            median_val = np.median(errors_for_this_case[~nan_mask])
+            median_absolute_deviation = np.median([abs(x - median_val) for x in errors_for_this_case[~nan_mask]])
+            
+            best_val_for_case = min(errors_for_this_case[~nan_mask])
+            max_val_to_survive = best_val_for_case + median_absolute_deviation
+            new_candidates = []
+            for x in candidates:
+                if not np.isnan(x.ptscores[cases[0]]) and x.ptscores[cases[0]] <= max_val_to_survive:
+                    new_candidates.append(x)
+            candidates = new_candidates
+            cases.pop(0)
+
         selected_individuals.append(random.choice(candidates))
 
     return selected_individuals
