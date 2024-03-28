@@ -149,11 +149,24 @@ def rename_variables(df):
     for i in range(len(oldcols)):
         newvar = 'x' + str(i)# + ']'
         newcols[oldcols[i]]=newvar
-        vmap[newvar]=oldcols[i]
+        vmap['x['+str(i) + ']']=oldcols[i]
 
     df.rename(newcols, inplace=True, axis=1)
 
     return vmap
+
+def reset_variable_names(model, vmap):
+    """
+    Replace x variables with names in variable map
+
+        Parameters:
+            model: string of model
+            vmap: dict with key as x variable and value as new name
+
+        Returns: 
+            string
+    """
+    return re.sub(r"((x\[\d+\]))", lambda g: vmap[g.group(1)], model)
 
 def process_grammar_file(grammarfn, data):
 #     print(nvars)

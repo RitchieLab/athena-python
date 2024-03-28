@@ -159,7 +159,8 @@ for cv in range(params['CV']):
 
 
     best = hof.items[0].phenotype
-    print("Best individual: \n","\n".join(textwrap.wrap(best,80)))
+    print("Best individual:")#,"\n".join(textwrap.wrap(best,80)))
+    print("\n".join(textwrap.wrap(data_processing.reset_variable_names(best, var_map),80)))
     print("\nTraining Fitness: ", hof.items[0].fitness.values[0])
 #     print("Test Fitness: ", genn_setup.fitness_eval(hof.items[0], [X_test,Y_test])[0])
     print("Test Fitness: ", fitness_test[-1])
