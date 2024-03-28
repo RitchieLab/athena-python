@@ -13,9 +13,6 @@ from genn import genn_setup
 import random
 import sys
 
-# import time
-
-
 from sklearn.model_selection import train_test_split
 import csv
 import os
@@ -47,18 +44,22 @@ random.seed(params['RANDOM_SEED'])
 np.random.seed(params['RANDOM_SEED'])
 # print(params)
 
+test_data = None
 # process the input files to create the appropriate X and Y sets for testing training
 data = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
     continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
     out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
     missing=params['MISSING'])
-    
-if params['FITNESS'] == 'r-squared':
-    (train_splits, test_splits) = data_processing.split_kfolds(data, params['CV'], 
-        params['RANDOM_SEED'])
-else:
-    (train_splits, test_splits) = data_processing.split_statkfolds(data, params['CV'], 
-        params['RANDOM_SEED'])
+
+if params['TEST_OUTCOME_FILE']:
+    test_data = data_processing.read_input_files(outcomefn=params['TEST_OUTCOME_FILE'], genofn=params['TEST_GENO_FILE'],
+    continfn=params['TEST_CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
+    out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
+    missing=params['MISSING'])
+
+(train_splits, test_splits, data) = data_processing.generate_splits(fitness_type=params['FITNESS'],
+    ncvs=params['CV'], df=data, have_test_file=params['TEST_OUTCOME_FILE'], 
+    test_df=test_data, rand_seed=params['RANDOM_SEED'])
 
 var_map = data_processing.rename_variables(data)
 

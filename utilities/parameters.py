@@ -37,6 +37,11 @@ params = {
     # Set parameters file
     'PARAM_FILE': None,
     
+    # user-specified testing set
+    'TEST_OUTCOME_FILE': None,
+    'TEST_GENO_FILE': None,
+    'TEST_CONTIN_FILE': None,
+    
     # can be r-squared or balanced accuracy for case/control inputs
     'FITNESS': 'r-squared',
     
@@ -152,7 +157,24 @@ def valid_parameters(parameters):
     if parameters['SELECTION'] and parameters['SELECTION'] not in \
         ['tournament', 'lexicase', 'epsilon_lexicase']:
         print("SELECTION must be one of tournament, lexicase, epsilon_lexicase")
-
+        
+        
+    if parameters['TEST_OUTCOME_FILE']:
+        if not os.path.isfile(parameters['TEST_OUTCOME_FILE']):
+            print(f"TEST_OUTCOME_FILE {parameters['TEST_OUTCOME_FILE']} not found")
+            all_valid = False
+        if parameters['TEST_CONTIN_FILE'] and not os.path.isfile(parameters['TEST_CONTIN_FILE']):
+                print(f"TEST_CONTIN_FILE {parameters['TEST_CONTIN_FILE']} not found")
+                all_valid = False
+        if parameters['TEST_GENO_FILE'] and not os.path.isfile(parameters['TEST_GENO_FILE']):
+                print(f"TEST_GENO_FILE {parameters['TEST_GENO_FILE']} not found")
+                all_valid = False
+        if not(parameters['TEST_CONTIN_FILE'] or parameters['TEST_GENO_FILE']):
+            print("At least one of TEST_CONTIN_FILE and TEST_GENO_FILE must be set when TEST_OUTCOME_FILE is provided ")
+            all_valid = False
+        if parameters['CV'] != 1:
+            print("CV must be set to 1 when using user provided testing set")
+    
     return all_valid    
     
 
@@ -382,10 +404,18 @@ def parse_cmd_args(arguments):
                         dest='SELECTION',
                         type=str,
                         help="Sets selection type (tournament, lexicase, epsilon_lexicase)")
-
-#     parser.format_help()
-#     print("format help")
-#     exit()
+    parser.add_argument('--test_outcome',
+                        dest='TEST_OUTCOME_FILE',
+                        type=str,
+                        help="Set name of outcome file for designated test dataset")
+    parser.add_argument('--test_geno',
+                        dest='TEST_GENO_FILE',
+                        type=str,
+                        help="Set name of genoype data file for designated test dataset")
+    parser.add_argument('--test_contin',
+                        dest='TEST_CONTIN_FILE',
+                        type=str,
+                        help="Set name of continuous data file for designated test dataset")
 
     # Parse command line arguments using all above information.
     args, unknown = parser.parse_known_args(arguments)

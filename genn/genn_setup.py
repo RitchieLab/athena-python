@@ -139,7 +139,7 @@ def fitness_rsquared_lexicase(individual, points):
             # an unprotected operator) so user would prefer to see them.
             print("fitness error", err)
             raise
-        
+    
     if fitness == float("inf"):
         individual.ptscores = np.full(len(y), np.nan)
         return INVALID_FITNESS,

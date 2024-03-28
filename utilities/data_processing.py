@@ -164,7 +164,6 @@ def process_grammar_file(grammarfn, data):
     updated_grammar=""
     for i,line in enumerate(grammarstr.splitlines()):
         if re.search("^\s*<v>",line):
-#              print("MATCH")
              line = "<v> ::= " + ' | '.join([f"x[{i}]" for i in range(nvars)])
         updated_grammar += line + "\n"
 #     print(updated_grammar)
@@ -201,3 +200,24 @@ def prepare_split_data(df, train_indexes, test_indexes):
     X_test = np.transpose(X_test)
     
     return X_train,Y_train,X_test,Y_test
+    
+
+def generate_splits(ncvs, fitness_type, df, have_test_file=False, test_df=None, rand_seed=1234):
+    if ncvs > 1:
+        if fitness_type== 'r-squared':
+            (train_splits, test_splits) = split_kfolds(df, ncvs, 
+                rand_seed)
+        else:
+            (train_splits, test_splits) = split_statkfolds(df, ncvs, 
+                rand_seed)
+    else:
+        train_splits = np.zeros((1,df.shape[0]))
+        train_splits[0] = np.array([i for i in range(df.shape[0])])
+        if not have_test_file:
+            test_splits = np.zeros((1,0))
+        else:
+            test_splits = np.zeros((1, test_df.shape[0]))
+            test_splits[0] = np.array([i for i in range(df.shape[0], test_df.shape[0] + df.shape[0])])
+            df = pd.concat([df, test_df], axis=0)
+
+    return train_splits, test_splits, df
