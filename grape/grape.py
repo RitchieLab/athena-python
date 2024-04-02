@@ -14,12 +14,6 @@ import copy
 
 from math import modf
 
-import time
-ELAPSED_REMAP_TIME=0
-ELAPSED_CXO_TIME=0
-ELAPSED_MUT_TIME=0
-NREMAPS=0
-NMUTS=0
 
 class Individual(object):
     """
@@ -38,8 +32,8 @@ class Individual(object):
         elif codon_consumption == 'eager':
             self.phenotype, self.nodes, self.depth, \
             self.used_codons, self.invalid, self.n_wraps, \
-            self.structure = mapper_eager_opt(genome, grammar, max_depth)
-#             self.structure = mapper_eager(genome, grammar, max_depth)
+            self.structure = mapper_eager(genome, grammar, max_depth)
+#             self.structure = mapper_eager_opt(genome, grammar, max_depth)
             
             
         else:
@@ -114,10 +108,6 @@ class Grammar(object):
     
     """
     def __init__(self, bnf_grammar,codon_consumption='eager'):
-        #Reading the file
-#         with open(file_address, "r") as text_file:
-#             bnf_grammar = text_file.read()
-        #Getting rid of all the duplicate spaces
         bnf_grammar = re.sub(r"\s+", " ", bnf_grammar)
 
         #self.non_terminals = ['<' + term + '>' for term in re.findall(r"\<(\w+)\>\s*::=",bnf_grammar)]
@@ -362,7 +352,6 @@ def mapper_eager(genome, grammar, max_depth):
     phenotype = grammar.start_rule
     next_NT = re.search(r"\<(\w+)\>",phenotype).group()
     n_starting_NTs = len([term for term in re.findall(r"\<(\w+)\>",phenotype)])
-    print(next_NT)
     list_depth = [1]*n_starting_NTs #it keeps the depth of each branch
     idx_depth = 0
     nodes = 0
@@ -406,52 +395,10 @@ def mapper_eager(genome, grammar, max_depth):
    
     return phenotype, nodes, depth, used_codons, invalid, 0, structure
     
-def mapper_eager_opt(genome, grammar, max_depth):
-    """
-    Identical to the previous one.
-    Solve the names later.
-    """    
-
-    idx_genome = 0
-    phenotype = grammar.start_rule
-    next_NT = re.search(r"\<(\w+)\>",phenotype).group()
-    n_starting_NTs = len([term for term in re.findall(r"\<(\w+)\>",phenotype)])
-#     print(next_NT)
-#     list_depth = [1]*n_starting_NTs #it keeps the depth of each branch
-#     idx_depth = 0
-#     nodes = 0
-    structure = []
-    
-    while next_NT and idx_genome < len(genome):
-        NT_index = grammar.non_terminals.index(next_NT)
-        index_production_chosen = genome[idx_genome] % grammar.n_rules[NT_index]
-        structure.append(index_production_chosen)
-        phenotype = phenotype.replace(next_NT, grammar.production_rules[NT_index][index_production_chosen][0], 1)
-
-        next_ = re.search(r"\<(\w+)\>",phenotype)
-        if next_:
-            next_NT = next_.group()
-        else:
-            next_NT = None
-        idx_genome += 1
-    
-   
-    if next_NT:
-        invalid = True
-        used_codons = 0
-    else:
-        invalid = False
-        used_codons = idx_genome
-    
-#     print(f"invalid={invalid} next_NT={next_NT} {phenotype}")
-#     depth = max(list_depth)
-   
-    return phenotype, 0, 1, used_codons, invalid, 0, []
 
 def mapper_eager_leap(genome, grammar, max_depth):
     """
-    Identical to the previous one.
-    Solve the names later.
+    'Eager' codon consumption mapping for LEAP genome
     """    
 
     phenotype = grammar.start_rule
@@ -509,6 +456,7 @@ def mapper_eager_leap(genome, grammar, max_depth):
         used_codons = 0
     else:
         invalid = False
+        depth = max(list_depth)
         used_codons = idx_frame * grammar.nt_rule_size
     
     depth = max(list_depth)
@@ -563,11 +511,11 @@ def mapper_eager_mcge(genome, grammar, max_depth):
             next_NT = next_.group()
         else:
             next_NT = None
-#         idx_genome += 1
         
     if next_NT:
         invalid = True
         used_codons = 0
+        consumed_codons=[]
     else:
         invalid = False
         used_codons = sum(consumed_codons)
@@ -765,6 +713,7 @@ def mapper_lazy_mcge(genome, grammar, max_depth):
     if next_NT:
         invalid = True
         used_codons = 0
+        consumed_codons=[]
     else:
         invalid = False
         used_codons = sum(consumed_codons)
@@ -969,9 +918,7 @@ def leap_sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_dept
         
         n_full = n_grow + is_odd + remaining #if pop_size is odd, generate an extra ind with "full"
         
-        #TODO check if it is possible to generate inds with max_init_depth
-        # this has not been done as I discovered before debugging my problem with GENN grammar
-        
+        #TODO check if it is possible to generate inds with max_init_depth        
         
         population = []
         #Generate inds using "Grow"
@@ -1311,6 +1258,7 @@ def crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_consumpti
     """
     
     """
+    # restrict crossover to effective genome when individual is valid
     if parent0.invalid: #used_codons = 0
         possible_crossover_codons0 = len(parent0.genome)
     else:
@@ -1319,87 +1267,35 @@ def crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_consumpti
         possible_crossover_codons1 = len(parent1.genome)
     else:
         possible_crossover_codons1 = min(len(parent1.genome), parent1.used_codons)
-
-    parent0_genome = parent0.genome.copy()
-    parent1_genome = parent1.genome.copy()
-    continue_ = True    
     
-#     print(f"max_depth={max_depth}")
-#     exit(0)
-    while continue_:
-        #Set points for crossover within the effective part of the genomes
-        point0 = random.randint(1, possible_crossover_codons0)
-        point1 = random.randint(1, possible_crossover_codons1)
-      
-        if genome_representation == 'list':
-            #Operate crossover
-            new_genome0 = parent0_genome[0:point0] + parent1_genome[point1:]
-            new_genome1 = parent1_genome[0:point1] + parent0_genome[point0:]
-        else:
-            raise ValueError("Only 'list' representation is implemented")
-        
-        new_ind0 = reMap(parent0, new_genome0, bnf_grammar, max_depth, codon_consumption)
-        new_ind1 = reMap(parent1, new_genome1, bnf_grammar, max_depth, codon_consumption)
-
-#         continue_ = False
-        continue_ = new_ind0.depth > max_depth or new_ind1.depth > max_depth
-#         if continue_ == True:
-#             print(f"DEPTH EXCEEDED")
-#             exit()
-
-    parent0.genome=new_genome0
-    parent1.genome=new_genome1
-    
-    if max_genome_length:
-        if len(new_ind0.genome) > max_genome_length:
-            new_ind0.invalid = True
-        if len(new_ind1.genome) > max_genome_length:
-            new_ind1.invalid = True
-        
-    del new_ind0.fitness.values, new_ind1.fitness.values
-#     del parent0.fitness.values, parent1.fitness.values
-    return new_ind0, new_ind1   
-#     return parent0, parent1
-    
-def crossover_onepoint_opt(parent0, parent1, bnf_grammar, max_depth, codon_consumption, 
-                       genome_representation='list', max_genome_length=None):
-    """
-    
-    """
-    global ELAPSED_CXO_TIME
-    start_time = time.perf_counter()
-    if parent0.invalid: #used_codons = 0
-        possible_crossover_codons0 = len(parent0.genome)
-    else:
-        possible_crossover_codons0 = min(len(parent0.genome), parent0.used_codons) #in case of wrapping, used_codons can be greater than genome's length
-    if parent1.invalid:
-        possible_crossover_codons1 = len(parent1.genome)
-    else:
-        possible_crossover_codons1 = min(len(parent1.genome), parent1.used_codons)
-
-    parent0_genome = parent0.genome#.copy()
-    parent1_genome = parent1.genome#.copy()
-#     continue_ = True    
-    
-    #Set points for crossover within the effective part of the genomes
     point0 = random.randint(1, possible_crossover_codons0)
     point1 = random.randint(1, possible_crossover_codons1)
-      
-    new_genome0 = parent0_genome[0:point0] + parent1_genome[point1:]
-    new_genome1 = parent1_genome[0:point1] + parent0_genome[point0:]
-
-    parent0.genome=new_genome0
-    parent1.genome=new_genome1
+  
+    if genome_representation == 'list':
+        #Operate crossover
+        new_genome0 = parent0.genome[0:point0] + parent1.genome[point1:]
+        new_genome1 = parent1.genome[0:point1] + parent0.genome[point0:]
+    else:
+        raise ValueError("Only 'list' representation is implemented")
+    
+    new_ind0 = reMap(parent0, new_genome0, bnf_grammar, max_depth, codon_consumption)
+    new_ind1 = reMap(parent1, new_genome1, bnf_grammar, max_depth, codon_consumption)
+    
+    if new_ind0.depth > max_depth:
+        new_ind0.invalid = True
+    if new_ind1.depth > max_depth:
+        new_ind1.invalid = True
     
     if max_genome_length:
         if len(new_ind0.genome) > max_genome_length:
             new_ind0.invalid = True
         if len(new_ind1.genome) > max_genome_length:
             new_ind1.invalid = True
-        
-    del parent0.fitness.values, parent1.fitness.values
-    ELAPSED_CXO_TIME += time.perf_counter() - start_time
-    return parent0, parent1
+    
+    del new_ind0.fitness.values, new_ind1.fitness.values
+    return new_ind0, new_ind1   
+
+    
 
 def leap_crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_consumption, 
                        genome_representation, max_genome_length):
@@ -1418,7 +1314,7 @@ def leap_crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_cons
 
     frame0 = random.randint(0,possible_crossover_codons0 // bnf_grammar.nt_rule_size -1 )
     frame1 = random.randint(0,possible_crossover_codons1 // bnf_grammar.nt_rule_size -1 )
-    
+        
     codon_cross = random.randint(0,bnf_grammar.nt_rule_size - 1)
     
     point0 = frame0*bnf_grammar.nt_rule_size+codon_cross
@@ -1441,12 +1337,16 @@ def leap_crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_cons
         #Operate crossover
         new_genome0 = parent0.genome[0:point0] + parent1.genome[point1:]
         new_genome1 = parent1.genome[0:point1] + parent0.genome[point0:]
-        
     else:
         raise ValueError("Unknown genome representation")
       
     new_ind0 = reMap_leap(parent0, new_genome0, bnf_grammar, max_depth, codon_consumption)
     new_ind1 = reMap_leap(parent1, new_genome1, bnf_grammar, max_depth, codon_consumption)
+    
+    if new_ind0.depth > max_depth:
+        new_ind0.invalid = True
+    if new_ind1.depth > max_depth:
+        new_ind1.invalid = True
     
     if max_genome_length:
         if len(new_ind0.genome) > max_genome_length:
@@ -1468,7 +1368,7 @@ def mcge_crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_cons
     
     idx_chr = random.randint(0,bnf_grammar.nt_rule_size-1)
     
-    if parent0.invalid or parent0.consumed_codons[idx_chr] == 0: #used_codons = 0
+    if parent0.invalid or parent0.consumed_codons[idx_chr] == 0: 
         possible_crossover_codons0 = len(parent0.genome[idx_chr])
     else:
         possible_crossover_codons0 = min(len(parent0.genome[idx_chr]), parent0.consumed_codons[idx_chr]) #in case of wrapping, used_codons can be greater than genome's length
@@ -1497,10 +1397,8 @@ def mcge_crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_cons
         new_genome1[point1:] = parent0.genome[point0:]
         
     elif genome_representation == 'list':
-        #Operate crossover - copy parents and then crossover designated chromosome
-#         new_genome0 = parent0.genome.copy()
+        #Operate crossover - copy parents and then cross over designated chromosome
         new_genome0 = copy.deepcopy(parent0.genome)
-#         new_genome1 = parent1.genome.copy()
         new_genome1 = copy.deepcopy(parent1.genome)
         new_genome0[idx_chr] = parent0.genome[idx_chr][0:point0] + parent1.genome[idx_chr][point1:]
         new_genome1[idx_chr] = parent1.genome[idx_chr][0:point1] + parent0.genome[idx_chr][point0:]
@@ -1511,7 +1409,12 @@ def mcge_crossover_onepoint(parent0, parent1, bnf_grammar, max_depth, codon_cons
         
     new_ind0 = reMap_mcge(parent0, new_genome0, bnf_grammar, max_depth, codon_consumption)
     new_ind1 = reMap_mcge(parent1, new_genome1, bnf_grammar, max_depth, codon_consumption)
-        
+       
+    if new_ind0.depth > max_depth:
+        new_ind0.invalid = True
+    if new_ind1.depth > max_depth:
+        new_ind1.invalid = True
+ 
     if max_genome_length:
         if len(new_ind0.genome) > max_genome_length:
             new_ind0.invalid = True
@@ -1533,19 +1436,20 @@ def mutation_int_flip_per_codon(ind, mut_probability, codon_size, bnf_grammar, m
     else:
         possible_mutation_codons = min(len(ind.genome), ind.used_codons) #in case of wrapping, used_codons can be greater than genome's length
 
-    continue_ = True
-    #genome = ind.genome.copy()
-    genome = copy.deepcopy(ind.genome)
     mutated_ = False
     
-    while continue_:
-        for i in range(possible_mutation_codons):
-            if random.random() < mut_probability:
-                genome[i] = random.randint(0, codon_size)
-                mutated_ = True
+    for i in range(possible_mutation_codons):
+        if random.random() < mut_probability:
+            ind.genome[i] = random.randint(0, codon_size)
+            mutated_ = True
+
+    if mutated_:
+        new_ind = reMap(ind, ind.genome, bnf_grammar, max_depth, codon_consumption)
+    else:
+        new_ind = ind
     
-        new_ind = reMap(ind, genome, bnf_grammar, max_depth, codon_consumption)
-        continue_ = new_ind.depth > max_depth
+    if new_ind.depth > max_depth:
+        new_ind.invalid = True
         
     if max_genome_length:
         if len(new_ind.genome) > max_genome_length:
@@ -1555,79 +1459,6 @@ def mutation_int_flip_per_codon(ind, mut_probability, codon_size, bnf_grammar, m
         del new_ind.fitness.values
     return new_ind,
     
-
-def mutation_int_flip_per_codon_opt(ind, mut_probability, codon_size, bnf_grammar, max_depth, 
-                                codon_consumption, max_genome_length=None):
-    """
-
-    """
-    global ELAPSED_MUT_TIME
-    global NMUTS
-    start_time = time.perf_counter()
-    # Operation mutation within the effective part of the genome
-#     if ind.invalid: #used_codons = 0
-    # have to use the entire genome in this version as the individuals have not been remapped at this point
-    possible_mutation_codons = len(ind.genome)
-#     else:
-#         possible_mutation_codons = min(len(ind.genome), ind.used_codons) #in case of wrapping, used_codons can be greater than genome's length
-
-#     continue_ = True
-#     genome = ind.genome.copy()
-#     genome = copy.deepcopy(ind.genome)
-#     mutated_ = False
-    
-#     while continue_:
-    for i in range(possible_mutation_codons):
-        if random.random() < mut_probability:
-            ind.genome[i] = random.randint(0, codon_size)
-            NMUTS+=1
-#             mutated_ = True
-    ELAPSED_MUT_TIME += time.perf_counter() - start_time
-    new_ind = reMap(ind, ind.genome, bnf_grammar, max_depth, codon_consumption)
-#     continue_ = new_ind.depth > max_depth
-        
-    if max_genome_length:
-        if len(new_ind.genome) > max_genome_length:
-            new_ind.invalid = True
-
-#     if mutated_:
-    del new_ind.fitness.values
-    
-    return new_ind,
-
-
-# alternative approach
-def mutation_per_ind(ind, mut_probability, codon_size, bnf_grammar, max_depth, 
-                                codon_consumption, max_genome_length=None):
-    global ELAPSED_MUT_TIME, NMUTS
-    start_time = time.perf_counter()
-    
-    genome = copy.deepcopy(ind.genome)
-    possible_mutation_codons = len(ind.genome)
-    nevents_fract = mut_probability * possible_mutation_codons
-    # determine probability of one more event
-    prob,nevents = modf(nevents_fract)
-
-    if random.random() < prob:
-        nevents += 1
-    for mut in range(int(nevents)):
-        codon = random.randint(0,possible_mutation_codons-1)
-#         print(f"codon={codon} genome size={possible_mutation_codons}")
-        genome[codon] = random.randint(0, codon_size)
-
-    NMUTS += nevents
-    ELAPSED_MUT_TIME += time.perf_counter() - start_time
-    new_ind = reMap(ind, genome, bnf_grammar, max_depth, codon_consumption)
-    
-    if max_genome_length:
-        if len(new_ind.genome) > max_genome_length:
-            new_ind.invalid = True
-
-#     if mutated_:
-    del new_ind.fitness.values
-    
-    return new_ind,
-
 
 
 def leap_mutation_int_flip_per_codon(ind, mut_probability, codon_size, bnf_grammar, max_depth, 
@@ -1642,15 +1473,21 @@ def leap_mutation_int_flip_per_codon(ind, mut_probability, codon_size, bnf_gramm
         possible_mutation_codons = min(len(ind.genome), ind.used_codons) #in case of wrapping, used_codons can be greater than genome's length
 
     mutated_ = False
-    genome = copy.deepcopy(ind.genome)
     
     for i in range(possible_mutation_codons):
         if random.random() < mut_probability:
-            genome[i] = random.randint(0, codon_size)
+            ind.genome[i] = random.randint(0, codon_size)
             mutated_ = True
 
-    new_ind = reMap_leap(ind, genome, bnf_grammar, max_depth, codon_consumption)
+    if mutated_:
+        new_ind = reMap_leap(ind, ind.genome, bnf_grammar, max_depth, codon_consumption)
+    else:
+        new_ind = ind
         
+        
+    if new_ind.depth > max_depth:
+        new_ind.invalid = True
+
     if max_genome_length:
         if len(new_ind.genome) > max_genome_length:
             new_ind.invalid = True
@@ -1666,25 +1503,27 @@ def mcge_mutation_int_flip_per_codon(ind, mut_probability, codon_size, bnf_gramm
     """
     Mutation operator for multi-chromosome GE genome
     Mutation done per chromosome
-    """
-    
-    
+    """    
     # Operation mutation within the effective part of the genome
     mutated_ = False
     for idx_chr in range(len(ind.genome)):
-        chrom = ind.genome[idx_chr] 
         if ind.invalid: #used_codons = 0
-            possible_mutation_codons = len(chrom)
+            possible_mutation_codons = len(ind.genome[idx_chr])
         else:
-            possible_mutation_codons = min(len(chrom), ind.consumed_codons[idx_chr]) #in case of wrapping, used_codons can be greater than genome's length
+            possible_mutation_codons = min(len(ind.genome[idx_chr]), ind.consumed_codons[idx_chr]) 
 
         for i in range(possible_mutation_codons):
             if random.random() < mut_probability:
-                chrom[i] = random.randint(0, codon_size)
+                ind.genome[idx_chr][i] = random.randint(0, codon_size)
                 mutated_ = True
     
-    new_ind = reMap_mcge(ind, ind.genome, bnf_grammar, max_depth, codon_consumption)
+    if mutated_:
+        new_ind = reMap_mcge(ind, ind.genome, bnf_grammar, max_depth, codon_consumption)
+    else:
+        new_ind = ind
     
+    if new_ind.depth > max_depth:
+        new_ind.invalid = True
         
     if max_genome_length:
         if len(new_ind.genome) > max_genome_length:
@@ -1696,12 +1535,6 @@ def mcge_mutation_int_flip_per_codon(ind, mut_probability, codon_size, bnf_gramm
 
 
 def reMap(ind, genome, bnf_grammar, max_tree_depth, codon_consumption):
-    #TODO refazer todo o reMap para nao copiar o ind
-    #
-    #ind = Individual(genome, bnf_grammar, max_tree_depth, codon_consumption)
-    global ELAPSED_REMAP_TIME, NREMAPS
-    NREMAPS+=1
-    start_remap_time = time.perf_counter()
     ind.genome = genome
     if codon_consumption == 'lazy':
         ind.phenotype, ind.nodes, ind.depth, \
@@ -1710,23 +1543,17 @@ def reMap(ind, genome, bnf_grammar, max_tree_depth, codon_consumption):
     elif codon_consumption == 'eager':
         ind.phenotype, ind.nodes, ind.depth, \
         ind.used_codons, ind.invalid, ind.n_wraps, \
-        ind.structure = mapper_eager_opt(genome, bnf_grammar, max_tree_depth)
-#         ind.structure = mapper_eager(genome, bnf_grammar, max_tree_depth)
+        ind.structure = mapper_eager(genome, bnf_grammar, max_tree_depth)
+#         ind.structure = mapper_eager_opt(genome, bnf_grammar, max_tree_depth)
     else:
-        raise ValueError("Unknown mapper")
-    
-    ELAPSED_REMAP_TIME += time.perf_counter()-start_remap_time
-    
+        raise ValueError("Unknown mapper")    
         
+        
+#     print(f"in remap ind.invalid={ind.invalid}")
     return ind
 
 
 def reMap_leap(ind, genome, bnf_grammar, max_tree_depth, codon_consumption):
-    #TODO refazer todo o reMap para nao copiar o ind
-    
-#     print("LEAP REMAP")
-#     sys.exit()
-    #ind = Individual(genome, bnf_grammar, max_tree_depth, codon_consumption)
     ind.genome = genome
     if codon_consumption == 'lazy':
         ind.phenotype, ind.nodes, ind.depth, \
@@ -1743,10 +1570,6 @@ def reMap_leap(ind, genome, bnf_grammar, max_tree_depth, codon_consumption):
 
 
 def reMap_mcge(ind, genome, bnf_grammar, max_tree_depth, codon_consumption):
-    #TODO refazer todo o reMap para nao copiar o ind
-#     print ("MCGE REMAP")
-#     sys.exit()
-    #ind = Individual(genome, bnf_grammar, max_tree_depth, codon_consumption)
     ind.genome = genome
     if codon_consumption == 'lazy':
         ind.phenotype, ind.nodes, ind.depth, \

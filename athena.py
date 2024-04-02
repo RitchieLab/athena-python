@@ -90,7 +90,7 @@ for cv in range(params['CV']):
                                            bnf_grammar=BNF_GRAMMAR,
                                            min_init_genome_length=params['MIN_INIT_GENOME_LENGTH'],
                                            max_init_genome_length=['MAX_INIT_GENOME_LENGTH'],
-                                           max_init_depth=MAX_TREE_DEPTH,
+                                           max_init_depth=params['MAX_DEPTH'],
                                            codon_size=params['CODON_SIZE'],
                                            codon_consumption=params['CODON_CONSUMPTION'],
                                            genome_representation=GENOME_REPRESENTATION
@@ -124,7 +124,7 @@ for cv in range(params['CV']):
                                               elite_size=params['ELITE_SIZE'],
                                               bnf_grammar=BNF_GRAMMAR,
                                               codon_size=params['CODON_SIZE'],
-                                              max_tree_depth=MAX_TREE_DEPTH,
+                                              max_tree_depth=params['MAX_DEPTH'],
                                               max_genome_length=MAX_GENOME_LENGTH,
                                               points_train=[X_train, Y_train],
                                               points_test=[X_test, Y_test],

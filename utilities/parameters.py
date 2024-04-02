@@ -54,6 +54,8 @@ params = {
     'MAX_INIT_GENOME_LENGTH' : 200,
     # Uses sensible initalization
     'INIT' : 'sensible',
+    
+    'MAX_DEPTH': 50,
 
     'MAX_INIT_TREE_DEPTH' : 11,
     'MIN_INIT_TREE_DEPTH' : 7,
@@ -147,7 +149,7 @@ def valid_parameters(parameters):
         all_valid = False
     
     if parameters['CODON_CONSUMPTION'] not in ['eager', 'lazy']:
-         print("CODON_CONSUMPTION must be either eagefgsfdgsfdr or lazy")
+         print("CODON_CONSUMPTION must be either eager or lazy")
          all_valid = False
     
     if parameters['GENO_ENCODE'] and parameters['GENO_ENCODE'] not in \
@@ -174,6 +176,9 @@ def valid_parameters(parameters):
             all_valid = False
         if parameters['CV'] != 1:
             print("CV must be set to 1 when using user provided testing set")
+    
+    if parameters["GENOME_TYPE"] not in ['standard', 'leap', 'mcge']:
+        print("GENOME_TYPE must be one of standard, leap, mcge")
     
     return all_valid    
     
@@ -416,6 +421,10 @@ def parse_cmd_args(arguments):
                         dest='TEST_CONTIN_FILE',
                         type=str,
                         help="Set name of continuous data file for designated test dataset")
+    parser.add_argument('--max_depth',
+                        dest='MAX_DEPTH',
+                        type=int,
+                        help='Sets max depth for mapping with individuals exceeding this being invalid')
 
     # Parse command line arguments using all above information.
     args, unknown = parser.parse_known_args(arguments)
