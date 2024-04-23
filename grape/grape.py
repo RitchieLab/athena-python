@@ -809,7 +809,7 @@ def sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_depth,
                 genome = []
                 if codon_consumption == 'eager' or codon_consumption == 'lazy':
                     for k in range(len(remainders)):
-                        codon = (random.randint(0,1e10) % math.floor(((codon_size + 1) / possible_choices[k])) * possible_choices[k]) + remainders[k]
+                        codon = (random.randint(0,int(1e10)) % math.floor(((codon_size + 1) / possible_choices[k])) * possible_choices[k]) + remainders[k]
                         genome.append(codon)
                 else:
                     raise ValueError("Unknown mapper")
@@ -871,7 +871,7 @@ def sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_depth,
             genome = []
             if codon_consumption == 'eager' or codon_consumption == 'lazy':
             	for j in range(len(remainders)):
-            		codon = (random.randint(0,1e10) % math.floor(((codon_size + 1) / possible_choices[j])) * possible_choices[j]) + remainders[j]
+            		codon = (random.randint(0,int(1e10)) % math.floor(((codon_size + 1) / possible_choices[j])) * possible_choices[j]) + remainders[j]
             		genome.append(codon)
             else:
             	raise ValueError("Unknown mapper")
@@ -969,7 +969,7 @@ def leap_sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_dept
                 if codon_consumption == 'eager' or codon_consumption == 'lazy':
                     frame = [-1 for i in range(bnf_grammar.nt_rule_size)]
                     for k in range(len(remainders)):
-                        codon = (random.randint(0,1e10) % math.floor(((codon_size + 1) / possible_choices[k])) * possible_choices[k]) + remainders[k]
+                        codon = (random.randint(0,int(1e10)) % math.floor(((codon_size + 1) / possible_choices[k])) * possible_choices[k]) + remainders[k]
                         # check if frame has been used
                         if frame[bnf_grammar.rule_conversion[rules_used[k]]] != -1:
                             # fill unused codons in frame randomly
@@ -1047,7 +1047,7 @@ def leap_sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_dept
             if codon_consumption == 'eager' or codon_consumption == 'lazy':
                 frame = [-1 for i in range(bnf_grammar.nt_rule_size)]
                 for j in range(len(remainders)):
-                    codon = (random.randint(0,1e10) % math.floor(((codon_size + 1) / possible_choices[j])) * possible_choices[j]) + remainders[j]
+                    codon = (random.randint(0,int(1e10)) % math.floor(((codon_size + 1) / possible_choices[j])) * possible_choices[j]) + remainders[j]
                     if frame[bnf_grammar.rule_conversion[rules_used[j]]] != -1:
                         # fill unused codons in frame randomly
                         frame = [random.randint(0,codon_size) if x == -1 else x for x in frame]
@@ -1156,7 +1156,7 @@ def mcge_sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_dept
                 genome = [ [] for i in range(bnf_grammar.nt_rule_size)]
                 if codon_consumption == 'eager' or codon_consumption == 'lazy':
                     for k in range(len(remainders)):
-                        codon = (random.randint(0,1e10) % math.floor(((codon_size + 1) / possible_choices[k])) * possible_choices[k]) + remainders[k]
+                        codon = (random.randint(0,int(1e10)) % math.floor(((codon_size + 1) / possible_choices[k])) * possible_choices[k]) + remainders[k]
                         genome[bnf_grammar.rule_conversion[rules_used[k]]].append(codon)
                             
                 else:
@@ -1223,7 +1223,7 @@ def mcge_sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_dept
             genome = [ [] for i in range(bnf_grammar.nt_rule_size)]
             if codon_consumption == 'eager' or codon_consumption == 'lazy':
                 for j in range(len(remainders)):
-                    codon = (random.randint(0,1e10) % math.floor(((codon_size + 1) / possible_choices[j])) * possible_choices[j]) + remainders[j]
+                    codon = (random.randint(0,int(1e10)) % math.floor(((codon_size + 1) / possible_choices[j])) * possible_choices[j]) + remainders[j]
                     genome[bnf_grammar.rule_conversion[rules_used[j]]].append(codon)
             else:
                 raise ValueError("Unknown mapper")

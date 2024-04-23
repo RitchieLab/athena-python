@@ -4,11 +4,18 @@
 @author: scott dudek
 """
 
+# try:
+#     from mpi4py import MPI
+#     has_mpi = True
+# except ImportError:
+#     has_mpi = False
+
 import grape.grape as grape
 import grape.algorithms as algorithms
 #from functions import add, sub, mul, pdiv, plog, exp, psqrt
-from genn.genn_functions import activate_sigmoid, PA, PM, PS, PD, pdiv
-from genn import genn_setup
+from genn.functions import activate_sigmoid, PA, PM, PS, PD, pdiv
+from genn import alg_setup
+from genn import parallel 
 
 import random
 import sys
@@ -21,7 +28,7 @@ import pandas as pd
 import numpy as np
 # from deap import creator, base, tools
 from deap import tools
-import genn.genn_utils
+import genn.utils
 from utilities import *
 
 import warnings
@@ -31,43 +38,85 @@ GENOME_REPRESENTATION = 'list'
 MAX_TREE_DEPTH = 50
 MAX_GENOME_LENGTH = None
 
+proc_rank = 0
+nprocs = 1
+comm = None
+
+
+if parallel.has_mpi:
+    nprocs = parallel.get_nprocs()
+    proc_rank = parallel.get_rank()
+
+print(nprocs)
+print(proc_rank)
+print(f"rank={proc_rank} nprocs={nprocs} has_mpi={parallel.has_mpi}")
+# if parallel.has_mpi:
+#     comm = MPI.COMM_WORLD
+#     nprocs = comm.Get_size()
+#     proc_rank = comm.Get_rank()
+
+proceed = True
 
 if len(sys.argv) == 1:
     sys.argv.append("-h")
-params = parameters.set_params(sys.argv[1:])
+    proceed = False
+    
+if proc_rank == 0:
+    params = parameters.set_params(sys.argv[1:], has_mpi=parallel.has_mpi)
+    if not parameters.valid_parameters(params):
+        proceed = False
+else:
+    params = None
+    if not proceed:
+        sys.exit()
 
-# print(params)
-if not parameters.valid_parameters(params):
+if nprocs > 1:
+    parallel.continue_run(proc_rank, proceed)
+    params = parallel.distribute_params(params,proc_rank)
+elif not proceed:    
     sys.exit()
     
+
+# print(f"rank={proc_rank} {params}")
+
+params['RANDOM_SEED'] += proc_rank*10
+
 random.seed(params['RANDOM_SEED'])
 np.random.seed(params['RANDOM_SEED'])
-# print(params)
+# print(f"rank={proc_rank} rand_seed={params['RANDOM_SEED']} {random.randint(0,1000)}")
 
-test_data = None
-# process the input files to create the appropriate X and Y sets for testing training
-data = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
-    continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
-    out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
-    missing=params['MISSING'])
 
-if params['TEST_OUTCOME_FILE']:
-    test_data = data_processing.read_input_files(outcomefn=params['TEST_OUTCOME_FILE'], genofn=params['TEST_GENO_FILE'],
-    continfn=params['TEST_CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
-    out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
-    missing=params['MISSING'])
+data, train_splits, test_splits, var_map,BNF_GRAMMAR = None,None,None,None,None
+if proc_rank == 0:
+    # process the input files to create the appropriate X and Y sets for testing training
+    data = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
+        continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
+        out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
+        missing=params['MISSING'])
 
-(train_splits, test_splits, data) = data_processing.generate_splits(fitness_type=params['FITNESS'],
-    ncvs=params['CV'], df=data, have_test_file=params['TEST_OUTCOME_FILE'], 
-    test_df=test_data, rand_seed=params['RANDOM_SEED'])
+    test_data = None
+    if params['TEST_OUTCOME_FILE']:
+        test_data = data_processing.read_input_files(outcomefn=params['TEST_OUTCOME_FILE'], genofn=params['TEST_GENO_FILE'],
+        continfn=params['TEST_CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
+        out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
+        missing=params['MISSING'])
 
-var_map = data_processing.rename_variables(data)
+    (train_splits, test_splits, data) = data_processing.generate_splits(fitness_type=params['FITNESS'],
+        ncvs=params['CV'], df=data, have_test_file=params['TEST_OUTCOME_FILE'], 
+        test_df=test_data, rand_seed=params['RANDOM_SEED'])
+    
+    var_map = data_processing.rename_variables(data)
 
-grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
-# print(grammarstr)
-BNF_GRAMMAR = grape.Grammar(grammarstr, params['CODON_CONSUMPTION'])
+    grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
+    # print(grammarstr)
+    BNF_GRAMMAR = grape.Grammar(grammarstr, params['CODON_CONSUMPTION'])
+ 
+if nprocs > 1:
+    data,train_splits, test_splits, var_map, BNF_GRAMMAR = parallel.distribute_data(rank=proc_rank,
+        data=data,train_splits=train_splits, test_splits=test_splits, vmap=var_map,
+        grammar=BNF_GRAMMAR)
 
-toolbox=genn_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'], params['SELECTION'])
+toolbox=alg_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'], params['SELECTION'])
 
 REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
                 'fitness_test', 
@@ -80,7 +129,8 @@ REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
           'selection_time', 'generation_time', 'best_phenotype']
 
 for cv in range(params['CV']):
-    print("\nCV: ", cv+1, "\n")
+    if proc_rank == 0:
+        print("\nCV: ", cv+1, "\n")
     
     (X_train,Y_train,X_test,Y_test) = data_processing.prepare_split_data(data, 
         train_splits[cv], test_splits[cv])
@@ -131,7 +181,9 @@ for cv in range(params['CV']):
                                               codon_consumption=params['CODON_CONSUMPTION'],
                                               report_items=REPORT_ITEMS,
                                               genome_representation=GENOME_REPRESENTATION,
-                                              stats=stats, halloffame=hof, verbose=False)
+                                              stats=stats, halloffame=hof, verbose=False,
+                                              rank=proc_rank, 
+                                              migrate_interval=params['GENS_MIGRATE'])
 
     import textwrap
 
@@ -156,40 +208,42 @@ for cv in range(params['CV']):
     avg_depth = logbook.select("avg_depth")
 
     structural_diversity = logbook.select("structural_diversity") 
-
+    best_phenotypes = logbook.select("best_phenotype")
 
     best = hof.items[0].phenotype
-    print("Best individual:")#,"\n".join(textwrap.wrap(best,80)))
-    print("\n".join(textwrap.wrap(data_processing.reset_variable_names(best, var_map),80)))
-    print("\nTraining Fitness: ", hof.items[0].fitness.values[0])
-#     print("Test Fitness: ", genn_setup.fitness_eval(hof.items[0], [X_test,Y_test])[0])
-    print("Test Fitness: ", fitness_test[-1])
-    print("Depth: ", hof.items[0].depth)
-    print("Length of the genome: ", len(hof.items[0].genome))
-    print(f'Used portion of the genome: {hof.items[0].used_codons/len(hof.items[0].genome):.2f}')
-
-    import csv    
-    header = REPORT_ITEMS
+    if proc_rank == 0:
+        print("Best individual:")#,"\n".join(textwrap.wrap(best,80)))
+        print("\n".join(textwrap.wrap(data_processing.reset_variable_names(best, var_map),80)))
+        print("\nTraining Fitness: ", hof.items[0].fitness.values[0])
+    #     print("Test Fitness: ", alg_setup.fitness_eval(hof.items[0], [X_test,Y_test])[0])
+        print("Test Fitness: ", fitness_test[-1])
+        print("Depth: ", hof.items[0].depth)
+        print("Length of the genome: ", len(hof.items[0].genome))
+        print(f'Used portion of the genome: {hof.items[0].used_codons/len(hof.items[0].genome):.2f}')
     
-    with open(params['OUT'] +'.'+ str(cv+1) + ".csv", "w", encoding='UTF8', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter='\t')
-        writer.writerow(header)
-        for value in range(len(max_fitness_values)):
-            writer.writerow([gen[value], invalid[value], mean_fitness_values[value],
-                             std_fitness_values[value], min_fitness_values[value],
-                             max_fitness_values[value], 
-                             fitness_test[value],
-                             best_ind_length[value], 
-                             avg_length[value], 
-                             best_ind_nodes[value],
-                             avg_nodes[value],
-                             best_ind_depth[value],
-                             avg_depth[value],
-                             avg_used_codons[value],
-                             best_ind_used_codons[value], 
-                           #  behavioural_diversity[value],
-                             structural_diversity[value],
-                          #   fitness_diversity[value],
-                             selection_time[value], 
-                             generation_time[value]])
+        import csv    
+        header = REPORT_ITEMS
+        
+        with open(params['OUT'] +'.'+ str(cv+1) + ".csv", "w", encoding='UTF8', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter='\t')
+            writer.writerow(header)
+            for value in range(len(max_fitness_values)):
+                writer.writerow([gen[value], invalid[value], mean_fitness_values[value],
+                                 std_fitness_values[value], min_fitness_values[value],
+                                 max_fitness_values[value], 
+                                 fitness_test[value],
+                                 best_ind_length[value], 
+                                 avg_length[value], 
+                                 best_ind_nodes[value],
+                                 avg_nodes[value],
+                                 best_ind_depth[value],
+                                 avg_depth[value],
+                                 avg_used_codons[value],
+                                 best_ind_used_codons[value], 
+                               #  behavioural_diversity[value],
+                                 structural_diversity[value],
+                              #   fitness_diversity[value],
+                                 selection_time[value], 
+                                 generation_time[value],
+                                 best_phenotypes[value]])
     

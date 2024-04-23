@@ -1,14 +1,13 @@
 # import grape
 from deap import creator, base, tools
 import grape.grape as grape
-from genn.genn_functions import activate_sigmoid, PA, PM, PS, PD, pdiv
+from genn.functions import activate_sigmoid, PA, PM, PS, PD, pdiv
 import numpy as np
 from sklearn.metrics import balanced_accuracy_score
 
 INVALID_FITNESS = -1000
 
 def configure_toolbox(genome_type, fitness, selection):
-    print(genome_type)
     toolbox = base.Toolbox()
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
     if genome_type == 'standard':

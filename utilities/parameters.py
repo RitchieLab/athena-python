@@ -65,7 +65,9 @@ params = {
     'SCALE_CONTIN': False,
     
     'MISSING':None,
-    'SELECTION': 'tournament'
+    'SELECTION': 'tournament',
+    
+    'GENS_MIGRATE': None
 
 }
 
@@ -238,7 +240,7 @@ class SortingHelpFormatter(argparse.HelpFormatter):
 
         
         
-def parse_cmd_args(arguments):
+def parse_cmd_args(arguments, has_mpi=False):
     """
     Parser for command line arguments specified by the user. Specified command
     line arguments over-write parameter file arguments, which themselves
@@ -425,6 +427,11 @@ def parse_cmd_args(arguments):
                         dest='MAX_DEPTH',
                         type=int,
                         help='Sets max depth for mapping with individuals exceeding this being invalid')
+    if has_mpi:
+        parser.add_argument('--gens-migrate',
+                            dest='GENS_MIGRATE',
+                            type=int,
+                            help='Sets generational interval for migrating best individuals for multi-process run')
 
     # Parse command line arguments using all above information.
     args, unknown = parser.parse_known_args(arguments)
@@ -446,7 +453,7 @@ def parse_cmd_args(arguments):
     return cmd_args, unknown
 
                          
-def set_params(command_line_args, create_files=True):
+def set_params(command_line_args, create_files=True, has_mpi=False):
     """
     This function parses all command line arguments specified by the user.
     If certain parameters are not set then defaults are used (e.g. random
@@ -458,8 +465,8 @@ def set_params(command_line_args, create_files=True):
     :return: Nothing.
     """
 
-    cmd_args, unknown = parse_cmd_args(command_line_args)
-
+    cmd_args, unknown = parse_cmd_args(command_line_args, has_mpi)
+    print("done with parse_cmd_args")
     if unknown:
         # We currently do not parse unknown parameters. Raise error.
         s = "algorithm.parameters.set_params\nError: " \
