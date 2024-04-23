@@ -69,41 +69,14 @@ def send_log_info(length, nodes, depth, used_codons, invalid, n_inds, n_unique_s
             
 def get_stats(stats, population):
     # generate fitness lists and send to head proc
-#     print(type(population[0]))
-#     print(population[0].fitness.values)
-#     vals = population[0].fitness.values
-#     print(vals)
-#     exit()
     scores = [ind.fitness.values[0] for ind in population if not ind.invalid]
-#     print(scores)
-    # pass all the scores to the root
-    # run the functions set in stats on them
-    # return the dictionary with the values for root
-#     stats.register("avg", np.nanmean)
-#     stats.register("std", np.nanstd)
-#     stats.register("min", np.nanmin)
-#     stats.register("max", np.nanmax)
-
     recv = None
     recv = comm.gather(scores, root=0)
     if proc_rank == 0:
-#         print(f"proc_rank={proc_rank} recv={recv}")
-#         print(recv[0][0].values[0])
-#         print(recv)
         scores = [val for xs in recv for val in xs]
-#         print(scores)
         
     return {'avg':np.nanmean(scores), 
         'std':np.nanstd(scores),
         'min':np.nanmin(scores),
         'max':np.nanmax(scores)}
-    
-#     if proc_rank==0:
-#         print(compiled)
-# #         scores = [x.values[0] 
-# #             for xs in scores
-# #             for x in xs]
-# #         print(f"scores={scores}")
-#     
-#     exit()
 

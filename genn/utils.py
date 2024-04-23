@@ -38,7 +38,6 @@ def prepare_split_data(df, train_indexes, test_indexes):
             X_train[i,j] = traindf['x'+str(j)].iloc[i]
     for i in range(train_rows):
         Y_train[i] = traindf['y'].iloc[i]
-    # print(X_train)
     
     test_rows=testdf.shape[0]
     test_cols=testdf.shape[1]-1
@@ -63,12 +62,14 @@ def prepare_split_data(df, train_indexes, test_indexes):
 #   nvars: number of variables in data
 # return updated grammar  
 def update_grammar_file(grammar, nvars):
-#     print(nvars)
+    print(grammar)
     updated_grammar=""
     for i,line in enumerate(grammar.splitlines()):
         if re.search("^\s*<v>",line):
-#              print("MATCH")
-             line = "<v> ::= " + ' | '.join([f"x[{i}]" for i in range(nvars)])
+            print(line)
+            exit()
+            line = "<v> ::= " + ' | '.join([f"x[{i}]" for i in range(nvars)])
         updated_grammar += line + "\n"
-#     print(updated_grammar)
+    print(updated_grammar)
     return updated_grammar
+    

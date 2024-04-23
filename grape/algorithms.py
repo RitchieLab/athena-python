@@ -148,7 +148,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
     n_inds = len(population)
     n_unique_structs = len(unique_structures)
     
-#     structural_diversity = len(unique_structures)/len(population)
     fitness_diversity = len(unique_fitnesses)/(len(points_train[1])+1) if 'fitness_diversity' in report_items else 0 #TODO generalise for other problems, because it only works if the fitness is proportional to the number of testcases correctly predicted
     behavioural_diversity = len(unique_behaviours)/len(population) if 'behavioural_diversity' in report_items else 0
 
@@ -167,9 +166,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
     n_depth = len(depth)
 
     if parallel.has_mpi and parallel.nprocs > 1:
-#             sum_length, n_length, sum_nodes, n_nodes, sum_used_codons, n_used_codons, \
-#                sum_depth, n_depth, invalid, n_inds, n_unique_structs \
-#                 = parallel.send_log_info(length, nodes, depth, used_codons, invalid, n_inds, n_unique_structs)
         recv = parallel.send_log_info(length, nodes, depth, used_codons, invalid, n_inds, n_unique_structs)
         sum_length = recv['sum_length']
         n_length = recv['n_length']
@@ -194,18 +190,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
         if not verbose and rank==0:
             print("gen =", 0, ", Best fitness =", halloffame.items[0].fitness.values)
     
-#     length = [len(ind.genome) for ind in valid]
-#     avg_length = sum(length)/len(length)
-#     
-#     nodes = [ind.nodes for ind in valid]
-#     avg_nodes = sum(nodes)/len(nodes)
-#     
-#     depth = [ind.depth for ind in valid]
-#     avg_depth = sum(depth)/len(depth)
-#     
-#     used_codons = [ind.used_codons for ind in valid]
-#     avg_used_codons = sum(used_codons)/len(used_codons)
-    
     avg_length = sum_length / n_length
     avg_nodes = sum_nodes / n_nodes
     avg_used_codons = sum_used_codons / n_used_codons
@@ -220,7 +204,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
     if points_test:
         fitness_test = np.NaN
     
-#     record = stats.compile(population) if stats else {}
     record = stats.compile(valid0) if stats else {}
     if parallel.has_mpi and parallel.nprocs > 1:
         record = parallel.get_stats(stats,valid0)
@@ -329,7 +312,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
         n_inds = len(population)
         n_unique_structs = len(unique_structures)
         
-#         structural_diversity = len(unique_structures)/len(population)
         fitness_diversity = len(unique_fitnesses)/(len(points_train[1])+1) if 'fitness_diversity' in report_items else 0 #TODO generalise for other problems, because it only works if the fitness is proportional to the number of testcases correctly predicted
         behavioural_diversity = len(unique_behaviours)/len(population) if 'behavioural_diversity' in report_items else 0
                   
@@ -349,9 +331,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
         n_depth = len(depth)
 
         if parallel.has_mpi and parallel.nprocs > 1:
-#             sum_length, n_length, sum_nodes, n_nodes, sum_used_codons, n_used_codons, \
-#                sum_depth, n_depth, invalid, n_inds, n_unique_structs \
-#                 = parallel.send_log_info(length, nodes, depth, used_codons, invalid, n_inds, n_unique_structs)
             recv = parallel.send_log_info(length, nodes, depth, used_codons, invalid, n_inds, n_unique_structs)
             sum_length = recv['sum_length']
             n_length = recv['n_length']
@@ -381,11 +360,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
                 else:
                     fitness_test = toolbox.evaluate(halloffame.items[0], points_test)[0]
         
-#         avg_length = sum(length)/len(length)
-#         avg_nodes = sum(nodes)/len(nodes)
-#         avg_used_codons = sum(used_codons)/len(used_codons)
-#         avg_depth = sum(depth)/len(depth)
-        
         avg_length = sum_length / n_length
         avg_nodes = sum_nodes / n_nodes
         avg_used_codons = sum_used_codons / n_used_codons
@@ -396,7 +370,6 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
         generation_time = end_gen-start_gen        
         
         # Append the current generation statistics to the logbook
-#         record = stats.compile(population) if stats else {}
         record = stats.compile(valid0) if stats else {}
         if parallel.has_mpi and parallel.nprocs > 1:
             record = parallel.get_stats(stats,valid0)

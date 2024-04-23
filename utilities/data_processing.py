@@ -169,7 +169,6 @@ def reset_variable_names(model, vmap):
     return re.sub(r"((x\[\d+\]))", lambda g: vmap[g.group(1)], model)
 
 def process_grammar_file(grammarfn, data):
-#     print(nvars)
     with open(grammarfn, "r") as text_file:
         grammarstr = text_file.read()
 
@@ -179,7 +178,6 @@ def process_grammar_file(grammarfn, data):
         if re.search("^\s*<v>",line):
              line = "<v> ::= " + ' | '.join([f"x[{i}]" for i in range(nvars)])
         updated_grammar += line + "\n"
-#     print(updated_grammar)
     return updated_grammar
 
 def prepare_split_data(df, train_indexes, test_indexes):

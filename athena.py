@@ -4,15 +4,8 @@
 @author: scott dudek
 """
 
-# try:
-#     from mpi4py import MPI
-#     has_mpi = True
-# except ImportError:
-#     has_mpi = False
-
 import grape.grape as grape
 import grape.algorithms as algorithms
-#from functions import add, sub, mul, pdiv, plog, exp, psqrt
 from genn.functions import activate_sigmoid, PA, PM, PS, PD, pdiv
 from genn import alg_setup
 from genn import parallel 
@@ -26,9 +19,7 @@ import os
 from os import path
 import pandas as pd
 import numpy as np
-# from deap import creator, base, tools
 from deap import tools
-import genn.utils
 from utilities import *
 
 import warnings
@@ -46,14 +37,6 @@ comm = None
 if parallel.has_mpi:
     nprocs = parallel.get_nprocs()
     proc_rank = parallel.get_rank()
-
-print(nprocs)
-print(proc_rank)
-print(f"rank={proc_rank} nprocs={nprocs} has_mpi={parallel.has_mpi}")
-# if parallel.has_mpi:
-#     comm = MPI.COMM_WORLD
-#     nprocs = comm.Get_size()
-#     proc_rank = comm.Get_rank()
 
 proceed = True
 
@@ -76,15 +59,10 @@ if nprocs > 1:
 elif not proceed:    
     sys.exit()
     
-
-# print(f"rank={proc_rank} {params}")
-
 params['RANDOM_SEED'] += proc_rank*10
 
 random.seed(params['RANDOM_SEED'])
 np.random.seed(params['RANDOM_SEED'])
-# print(f"rank={proc_rank} rand_seed={params['RANDOM_SEED']} {random.randint(0,1000)}")
-
 
 data, train_splits, test_splits, var_map,BNF_GRAMMAR = None,None,None,None,None
 if proc_rank == 0:

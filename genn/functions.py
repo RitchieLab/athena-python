@@ -6,20 +6,6 @@ import math
 
 import warnings
 warnings.filterwarnings('ignore', message='overflow encountered in exp')
-
-# def activate_sigmoid(a):
-#     if isinstance(a, np.ndarray):
-#         exceeded = (a < -709) | (a > 709)
-#         a[exceeded] = np.where(a[exceeded] > 709, np.ones_like(a[exceeded]), np.zeros_like(a[exceeded]))
-#         notexceeded = np.invert(exceeded)
-#         a[notexceeded] = 1.0 / (1.0 + np.exp(np.negative(a[notexceeded])))
-#     else:
-#         if a >= -709 and a <= 709:
-#             a = 1.0 / (1.0 + np.exp(-a))
-#         else:
-#             a = np.float64(0.0) if a < -709 else np.float64(1.0)
-#     
-#     return a
     
 # simplified version better matching ATHENA sigmoid function
 def activate_sigmoid(a):
@@ -36,10 +22,6 @@ def activate_sigmoid(a):
     
     return a
 
-
-#     if val < 709 and val > -709:    
-#         return 1.0 / (1.0 + math.exp(-val))
-    
 def PA(inputs):
     return activate_sigmoid(sum(inputs))
     
@@ -54,25 +36,8 @@ def PS(inputs):
     for num in inputs[1:]:
         diff = diff - num
     return activate_sigmoid(diff)
-
-# def PD(inputs):
-#     result = inputs[0]
-#     for divisor in inputs[1:]:
-#         try:
-#             with np.errstate(divide='ignore', invalid='ignore'):
-#                 result = np.where(divisor == 0, np.ones_like(divisor), result / divisor)        
-#         except ZeroDivisionError:
-#             return 1.0
-#     return activate_sigmoid(result)
-# 
-#     quotient = inputs[0]
-#     for num in inputs[1:]:
-#         if num == 0:
-#             return 1
-#         quotient /= num
-#     return activate_sigmoid(quotient)
     
-# updated PDiv function to match ATHENA
+# updated PD function to match ATHENA
 def PD(inputs):
     result = inputs[0]
     anyzeroed = np.full_like(result,False).astype(bool)

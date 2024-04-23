@@ -466,7 +466,6 @@ def set_params(command_line_args, create_files=True, has_mpi=False):
     """
 
     cmd_args, unknown = parse_cmd_args(command_line_args, has_mpi)
-    print("done with parse_cmd_args")
     if unknown:
         # We currently do not parse unknown parameters. Raise error.
         s = "algorithm.parameters.set_params\nError: " \

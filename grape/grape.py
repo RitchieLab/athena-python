@@ -1549,7 +1549,6 @@ def reMap(ind, genome, bnf_grammar, max_tree_depth, codon_consumption):
         raise ValueError("Unknown mapper")    
         
         
-#     print(f"in remap ind.invalid={ind.invalid}")
     return ind
 
 
