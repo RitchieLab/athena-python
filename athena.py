@@ -33,7 +33,6 @@ proc_rank = 0
 nprocs = 1
 comm = None
 
-
 if parallel.has_mpi:
     nprocs = parallel.get_nprocs()
     proc_rank = parallel.get_rank()
@@ -63,6 +62,9 @@ params['RANDOM_SEED'] += proc_rank*10
 
 random.seed(params['RANDOM_SEED'])
 np.random.seed(params['RANDOM_SEED'])
+best_models = []
+best_fitness_test = []
+nmissing = []
 
 data, train_splits, test_splits, var_map,BNF_GRAMMAR = None,None,None,None,None
 if proc_rank == 0:
@@ -178,6 +180,7 @@ for cv in range(params['CV']):
     best_ind_used_codons = logbook.select("best_ind_used_codons")
     
     fitness_test = logbook.select("fitness_test")
+    best_fitness_test.append(fitness_test[-1])
     
     best_ind_nodes = logbook.select("best_ind_nodes")
     avg_nodes = logbook.select("avg_nodes")
@@ -189,6 +192,11 @@ for cv in range(params['CV']):
     best_phenotypes = logbook.select("best_phenotype")
 
     best = hof.items[0].phenotype
+    best_models.append(hof.items[0])
+    nmissing_test = logbook.select("test_missing")
+
+    nmissing.append([hof.items[0].nmissing/len(Y_train),nmissing_test[-1]/len(Y_test)])
+    
     if proc_rank == 0:
         print("Best individual:")#,"\n".join(textwrap.wrap(best,80)))
         print("\n".join(textwrap.wrap(data_processing.reset_variable_names(best, var_map),80)))
@@ -224,4 +232,9 @@ for cv in range(params['CV']):
                                  selection_time[value], 
                                  generation_time[value],
                                  best_phenotypes[value]])
+
+if proc_rank == 0:
+    data_processing.write_summary(params['OUT'] + '_summary.txt',
+        best_models,params['FITNESS'], var_map, best_fitness_test, nmissing)
     
+

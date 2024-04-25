@@ -344,6 +344,7 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
             n_inds = recv['n_inds']
             n_unique_structs = recv['n_unique_structs']
 
+        nmissing_test = 0
         # Update the hall of fame with the generated individuals
         if halloffame is not None:
             halloffame.update(valid)
@@ -358,7 +359,10 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
                 if gen < ngen:
                     fitness_test = np.NaN
                 else:
+                    nmissing = halloffame.items[0].nmissing
                     fitness_test = toolbox.evaluate(halloffame.items[0], points_test)[0]
+                    nmissing_test = halloffame.items[0].nmissing
+                    halloffame.items[0].nmissing = nmissing
         
         avg_length = sum_length / n_length
         avg_nodes = sum_nodes / n_nodes
@@ -389,7 +393,8 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
                        fitness_diversity=fitness_diversity,
                        selection_time=selection_time, 
                        generation_time=generation_time,
-                       best_phenotype=best_phenotype)
+                       best_phenotype=best_phenotype,
+                       test_missing=nmissing_test)
         else:
             logbook.record(gen=gen, invalid=invalid, **record, 
                        best_ind_length=best_ind_length, avg_length=avg_length, 
@@ -404,6 +409,7 @@ def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size,
                        fitness_diversity=fitness_diversity,
                        selection_time=selection_time, 
                        generation_time=generation_time,
+                       test_missing=nmissing_test,
                        best_phenotype=best_phenotype)
                 
         if verbose and rank==0:

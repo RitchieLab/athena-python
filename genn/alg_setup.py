@@ -139,7 +139,7 @@ def fitness_rsquared_lexicase(individual, points):
     
     return fitness,
     
-    
+
 def fitness_balacc(individual, points):
     x = points[0]
     y = points[1]
@@ -150,6 +150,11 @@ def fitness_balacc(individual, points):
 
     try:
         pred = eval(individual.phenotype)
+        
+#         print(individual.phenotype)
+#         pred2 = eval(compress_weights(individual.phenotype))
+        
+        
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
         return INVALID_FITNESS,
@@ -166,6 +171,11 @@ def fitness_balacc(individual, points):
         pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
         fitness = balanced_accuracy_score(y[~nan_mask],pred_nonan)
         individual.nmissing = np.count_nonzero(np.isnan(pred))
+        
+        
+#         fitness_compressed = balanced_accuracy_score(y[~nan_mask],pred2)
+        
+#         print(f"{fitness} <--> {fitness_compressed}")        
         
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
@@ -230,3 +240,4 @@ def fitness_balacc_lexicase(individual, points):
         return INVALID_FITNESS,
     
     return fitness,
+    
