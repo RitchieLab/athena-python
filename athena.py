@@ -210,7 +210,7 @@ for cv in range(params['CV']):
         import csv    
         header = REPORT_ITEMS
         
-        with open(params['OUT'] +'.'+ str(cv+1) + ".csv", "w", encoding='UTF8', newline='') as csvfile:
+        with open(params['OUT'] +'.cv'+ str(cv+1) + ".csv", "w", encoding='UTF8', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter='\t')
             writer.writerow(header)
             for value in range(len(max_fitness_values)):
@@ -236,5 +236,6 @@ for cv in range(params['CV']):
 if proc_rank == 0:
     data_processing.write_summary(params['OUT'] + '_summary.txt',
         best_models,params['FITNESS'], var_map, best_fitness_test, nmissing)
+    data_processing.write_plots(params['OUT'], best_models, var_map)
     
 

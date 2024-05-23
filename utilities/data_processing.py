@@ -4,6 +4,13 @@ import re
 import numpy as np
 from genn.functions import pdiv
 
+from collections import deque
+import matplotlib.pyplot as plt
+import networkx as nx
+from netgraph import Graph
+import textwrap
+
+
 def read_input_files(outcomefn, genofn, continfn, out_scale=False,
     contin_scale=False, geno_encode=None, missing=None):
     """
@@ -245,6 +252,7 @@ def compress_weights(model_str):
             match_start -= 1
             i -= 1
         value = eval(new_model_str[match_start:m.end(1)])
+        value = "{weight:.2f}".format(weight=float(value))
         new_model_str = new_model_str[:match_start] + str(value) + new_model_str[m.end(1):]
         m = pattern.search(new_model_str)
     return new_model_str
@@ -293,4 +301,120 @@ def write_summary(filename, best_models, score_type, var_map, fitness_test,nmiss
         fh.write(f"\t{i+1}\t{model.phenotype}\n")
     
     fh.close()
+
+
+
+class Node:
+    def __init__(self, label=None, weight=None, to=None, num=None):
+        self.label = label
+        self.weight = weight
+        self.to = to
+        self.num = num
+
+def construct_nodes(modelstr):
+    """
+    Returns node objects representing the network
+
+    :param modelstr: String containing GE network
+    :return: nodes constructed from the model
+    """    
+    model = modelstr.replace('([', ' [').replace('])', '] ').replace('(', ' ( ').replace(')', ' ) ')
+    ignore = {','}
+    elements = model.split()
+    
+    stack = deque()
+
+    stack.append(elements[0])
+    i = 1
+    nodes = []
+    
+    # use stack to construct the nodes/edges
+    while stack:
+        if elements[i] in ignore:
+            i+=1
+        elif elements[i] == ')':
+            enditem = elements[i]
+            item = stack.pop()
+            popitems = list()
+            # pop and keep all the items that are not the matching enditem
+            while item != '(':
+                popitems.append(item)
+                item = stack.pop()
+            
+            # this will now be 3 elements with the first being a node, second * and third the weight            
+            if isinstance(popitems[0], Node):
+                popitems[0].weight = popitems[2]
+                node = popitems[0]
+            else:
+                node = Node(weight = popitems[2], num=len(nodes), label=popitems[0])
+                nodes.append(node)
+            
+            # push the node back on to the stack
+            stack.append(node)
+            i += 1
+        elif elements[i] == ']':
+            # should only be nodes on stack until '['
+            item=stack.pop()
+            function_nodes = list()
+            while item != '[':
+                function_nodes.append(item.num)
+                item=stack.pop()
+            
+            # element after should be a node
+            item = stack.pop()
+            if not isinstance(item, Node):
+                node = Node(num=len(nodes), label=item)
+                nodes.append(node)
+            else:
+                node = item
+                
+            for n in function_nodes:
+                nodes[n].to = node.num
+            # when empty all nodes have been processed
+            if not stack:
+                break
+            else:
+                stack.append(node)
+                i += 1
+        else:
+            stack.append(elements[i])
+            i+=1
+    
+    return nodes
+
+
+def write_plots(basefn, best_models, var_map):
+    """
+    Writes jpg file displaying best models with one per cross-validation.
+
+    :param filename: Output filename base
+    :param best_models: List of individual objects from population
+    :param var_map: dict with x index as key and original name as vallue
+    :return: Nothing
+    """
+
+    for cv,model in enumerate(best_models,1):
+        compressed = compress_weights(model.phenotype)
+        modelstr = reset_variable_names(compressed, var_map)
+        nodes = construct_nodes(modelstr)
+        finalindex = len(nodes)-1
+        node_labels={}
+        edge_labels={}
+        for node in nodes:
+            node.num = abs(node.num - finalindex)
+            node_labels[node.num] = node.label
+            if node.to is not None:
+                node.to = abs(node.to - finalindex)
+                edge_labels[(node.num,node.to)]="{weight:.2f}".format(weight=float(node.weight))
+
+        edges = []
+        for node in nodes:
+            if node.to is not None:
+                edges.append((node.num,node.to))
+        plt.clf()
+        Graph(edges, node_layout='dot', arrows=True, node_labels = node_labels, 
+            edge_labels=edge_labels, node_size=5)
+        outputfn = basefn + ".cv" + str(cv) + ".png"
+        plt.title("\n".join(textwrap.wrap(modelstr, 60)))
+        plt.savefig(outputfn)
 
