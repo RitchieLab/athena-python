@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from netgraph import Graph
 import textwrap
+import csv
 
 
 def read_input_files(outcomefn, genofn, continfn, out_scale=False,
@@ -25,18 +26,22 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
             geno_encode: encode genotype data. options are 'add_quad' and 'additive'
 
         Returns: 
-            pandas dataframe
+            pandas dataframe, dictionary with new label as key and old label 
+            from files as value
     """
     
     y_df = process_continfile(outcomefn, out_scale)
     y_df.columns = ['y']
     
     contin_df = None
+    inputs_map = {}
     if continfn:
         contin_df = process_continfile(continfn, contin_scale, missing)
+        inputs_map={contin_df.columns[i]:contin_df.columns[i] for i in range(0,len(contin_df.columns))}
     
     if genofn:
-        geno_df = process_genofile(genofn, geno_encode, missing)
+        geno_df, geno_map = process_genofile(genofn, geno_encode, missing)
+        inputs_map.update(geno_map)
     
     dataset_df = y_df
     if genofn:
@@ -44,7 +49,7 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
     if continfn:
         dataset_df = pd.concat([dataset_df, contin_df], axis=1)
     
-    return dataset_df
+    return dataset_df, inputs_map
     
 
 def normalize(val):
@@ -64,7 +69,7 @@ def process_continfile(fn, scale, missing=None):
             missing: string identifying any missing data
 
         Returns: 
-            pandas dataframe
+            pandas dataframe 
     """
     data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
     
@@ -75,7 +80,7 @@ def process_continfile(fn, scale, missing=None):
     
     if scale:
         data = data.apply(normalize, axis=0)
-
+        
     return data
     
     
@@ -100,7 +105,7 @@ def process_genofile(fn, encoding, missing=None):
             missing: string identifying any missing data
 
         Returns: 
-            pandas dataframe
+            pandas dataframe and dictionary mapping modified name with original
     """
     data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
 
@@ -108,20 +113,110 @@ def process_genofile(fn, encoding, missing=None):
         data.replace([missing], np.nan, inplace=True)
         
     
+#     oldcols = list(data.drop('y', axis=1).columns)
+    labels = list(data.columns)
+    geno_map={}
+    
     if encoding == 'additive':
         data = data.astype(str).apply(additive_encoding)
+        geno_map = {labels[i]:labels[i] for i in range(0,len(labels))}
         
     if encoding == 'add_quad':
         new_df = data[data.columns.repeat(2)]
         columns = list(new_df.columns)
         columns[::2]= [ x + "-a" for x in new_df.columns[::2]]
         columns[1::2]= [ x + "-b" for x in new_df.columns[1::2]]
+        
+        geno_map = {columns[i]:data.columns[i//2] for i in range(0,len(columns))}
+        
         new_df.columns = columns
         add_quad_encoding(new_df)
         data = new_df
 
-    return data
+    return data, geno_map
+    
 
+class NodeColor:
+    def __init__(self,name,color,category):
+        self.name=name
+        self.color=color
+        self.category=category
+
+class Category:
+    def __init__(self, name,color):
+        self.name=name
+        self.color=color
+
+class ColorMapping:
+    def __init__(self, default_color='white', operator_color='lightgray'):
+        self.categories = {}
+        self.inputs = {}
+        self.default_color = default_color
+        self.operator_color = operator_color
+    
+    def add_category(self, name, color):
+        self.categories[name]=Category(name,color)
+    
+    def get_categories(self):
+        return list(self.categories.values())
+    
+    def add_input(self, label, category, color):
+        self.inputs[label]=NodeColor(label,color,category)
+    
+    def get_category_color(self, name):
+        return self.categories[name].color
+    
+    def get_input_category(self, label):
+        return self.inputs[label].category
+    
+    def add_nodes(self, mapping, category):
+        for name in mapping:
+            self.inputs[name] = NodeColor(name,mapping[name],category)
+    
+    def get_input_color(self,name):
+        if name in self.inputs:
+            return self.inputs[name].color
+        else:
+            return self.default_color
+    
+    
+
+def process_var_colormap(colorfn=None, node_color='lightgray', var_default='white',
+    geno_encode='additive'):
+    """
+    Create color map for graphical output of networks. 
+
+        Parameters:
+            colorfn: name of file to process, when no fn provided only the network nodes
+                (PA,PD,PM,PS) are included
+            node_default: Colors for nodes 
+            var_default: Default colors for unspecified variables
+
+        Returns: 
+            color map with node name as key and color as value
+    """
+    color_map = ColorMapping(default_color=var_default, operator_color=node_color)
+    
+    color_map.add_category('netnodes', color_map.operator_color)
+    color_map.add_nodes({'PA':color_map.operator_color,'PD':color_map.operator_color,
+    'PM':color_map.operator_color,'PS':color_map.operator_color},'netnodes')
+    
+    # header for file is category,color,inputs
+    if colorfn:
+        with open(colorfn) as csv_file:
+            #skip header
+            heading = next(csv_file)
+            reader = csv.reader(csv_file)
+            
+            for row in reader:
+                if not row:
+                    continue
+                # set category color
+                color_map.add_category(row[0],row[1])
+                for in_var in row[2:]:
+                    color_map.add_input(in_var,row[0],row[1])
+    return color_map
+    
 
 def split_kfolds(df, nfolds, seed=100):
 #     kf = KFold(n_splits=nfolds, shuffle=True, random_state=seed)
@@ -383,16 +478,19 @@ def construct_nodes(modelstr):
     return nodes
 
 
-def write_plots(basefn, best_models, var_map):
+def write_plots(basefn, best_models, var_map, inputs_map, color_map):
     """
     Writes jpg file displaying best models with one per cross-validation.
 
     :param filename: Output filename base
     :param best_models: List of individual objects from population
     :param var_map: dict with x index as key and original name as vallue
+    :param inputs_map: dict with new name as key and original filename name as value
+    :parma color_map: ColorMap for use in plot
     :return: Nothing
     """
 
+    inputs_map.update({'PA':'PA', 'PM':'PM', 'PS':'PS','PD':'PD'})
     for cv,model in enumerate(best_models,1):
         compressed = compress_weights(model.phenotype)
         modelstr = reset_variable_names(compressed, var_map)
@@ -400,9 +498,20 @@ def write_plots(basefn, best_models, var_map):
         finalindex = len(nodes)-1
         node_labels={}
         edge_labels={}
+        node_colors={}
+        categories = set()
+        node_size=8
+        
         for node in nodes:
             node.num = abs(node.num - finalindex)
             node_labels[node.num] = node.label
+            # possible colors: https://matplotlib.org/stable/users/explain/colors/colors.html
+            node_colors[node.num] = color_map.get_input_color(inputs_map[node.label])
+            
+            if node_colors[node.num] != color_map.default_color and \
+                node_colors[node.num]  != color_map.operator_color:
+                categories.add(color_map.inputs[inputs_map[node.label]].category)
+            
             if node.to is not None:
                 node.to = abs(node.to - finalindex)
                 edge_labels[(node.num,node.to)]="{weight:.2f}".format(weight=float(node.weight))
@@ -412,9 +521,30 @@ def write_plots(basefn, best_models, var_map):
             if node.to is not None:
                 edges.append((node.num,node.to))
         plt.clf()
+        fig, ax = plt.subplots()
         Graph(edges, node_layout='dot', arrows=True, node_labels = node_labels, 
-            edge_labels=edge_labels, node_size=5)
+            edge_labels=edge_labels, node_color=node_colors, node_size=node_size, ax=ax)
+            
+            
+        if len(categories) > 0:
+            # add legend
+            node_proxy_artists = []
+            for cat in categories:
+                proxy =  plt.Line2D(
+                    [], [],
+                    linestyle='None',
+                color=color_map.get_category_color(cat),
+                marker='s',
+                markersize=node_size,#//1.25,
+                label=cat
+                )
+                node_proxy_artists.append(proxy)
+            
+            node_legend = ax.legend(handles=node_proxy_artists, loc='lower left')#, title='Categories')
+            ax.add_artist(node_legend)
+        
         outputfn = basefn + ".cv" + str(cv) + ".png"
         plt.title("\n".join(textwrap.wrap(modelstr, 60)))
-        plt.savefig(outputfn)
+        plt.savefig(outputfn, dpi=300)
+
 

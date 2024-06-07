@@ -69,7 +69,7 @@ nmissing = []
 data, train_splits, test_splits, var_map,BNF_GRAMMAR = None,None,None,None,None
 if proc_rank == 0:
     # process the input files to create the appropriate X and Y sets for testing training
-    data = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
+    data, inputs_map = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
         continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
         out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
         missing=params['MISSING'])
@@ -86,6 +86,7 @@ if proc_rank == 0:
         test_df=test_data, rand_seed=params['RANDOM_SEED'])
     
     var_map = data_processing.rename_variables(data)
+    color_map = data_processing.process_var_colormap(params['COLOR_MAP_FILE'])
 
     grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
     # print(grammarstr)
@@ -236,6 +237,6 @@ for cv in range(params['CV']):
 if proc_rank == 0:
     data_processing.write_summary(params['OUT'] + '_summary.txt',
         best_models,params['FITNESS'], var_map, best_fitness_test, nmissing)
-    data_processing.write_plots(params['OUT'], best_models, var_map)
+    data_processing.write_plots(params['OUT'], best_models, var_map, inputs_map, color_map)
     
 

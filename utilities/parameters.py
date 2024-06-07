@@ -42,6 +42,9 @@ params = {
     'TEST_GENO_FILE': None,
     'TEST_CONTIN_FILE': None,
     
+    #plotting files
+    'COLOR_MAP_FILE': None,
+    
     # can be r-squared or balanced accuracy for case/control inputs
     'FITNESS': 'r-squared',
     
@@ -179,6 +182,11 @@ def valid_parameters(parameters):
         if parameters['CV'] != 1:
             print("CV must be set to 1 when using user provided testing set")
     
+    if parameters['COLOR_MAP_FILE']:
+        if not os.path.isfile(parameters['COLOR_MAP_FILE']):
+            print(f"COLOR_MAP_FILE {parameters['COLOR_MAP_FILE']} not found")
+            all_valid = false
+            
     if parameters["GENOME_TYPE"] not in ['standard', 'leap', 'mcge']:
         print("GENOME_TYPE must be one of standard, leap, mcge")
     
@@ -324,7 +332,7 @@ def parse_cmd_args(arguments, has_mpi=False):
     parser.add_argument('--codon_consumption',
                         dest='CODON_CONSUMPTION',
                         type=str,
-                        help='Options are eager and lazy. Specifies whether grammar'
+                        help='Options are eager and lazy. Specifies whether grammar '
                         'will consume codons when only one choice for a rule in the '
                         'grammar.')
     parser.add_argument('--cv',
@@ -427,6 +435,11 @@ def parse_cmd_args(arguments, has_mpi=False):
                         dest='MAX_DEPTH',
                         type=int,
                         help='Sets max depth for mapping with individuals exceeding this being invalid')
+    parser.add_argument('--color_map',
+                        dest='COLOR_MAP_FILE',
+                        type=str,
+                        help="File specifying colors to use for specific inputs")
+                    
     if has_mpi:
         parser.add_argument('--gens-migrate',
                             dest='GENS_MIGRATE',
