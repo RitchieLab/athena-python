@@ -26,12 +26,12 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
             geno_encode: encode genotype data. options are 'add_quad' and 'additive'
 
         Returns: 
-            pandas dataframe, dictionary with new label as key and old label 
-            from files as value
+            pandas dataframe, dictionary with new label as key, old label 
+            from files as value, list of IDs that are not in all the input files
     """
     
     y_df = process_continfile(outcomefn, out_scale)
-    y_df.columns = ['y']
+    y_df.columns = [y_df.columns[0], 'y']
     
     contin_df = None
     inputs_map = {}
@@ -43,13 +43,23 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
         geno_df, geno_map = process_genofile(genofn, geno_encode, missing)
         inputs_map.update(geno_map)
     
+    geno_df = geno_df.sort_values('ID', ascending=False)
+    unmatched = []
+
     dataset_df = y_df
     if genofn:
-        dataset_df = pd.concat([dataset_df, geno_df], axis=1)
+        unmatched.extend(dataset_df[~dataset_df['ID'].isin(geno_df['ID'])]['ID'].tolist())
+        unmatched.extend(geno_df[~geno_df['ID'].isin(dataset_df['ID'])]['ID'].tolist())
+        dataset_df = pd.merge(dataset_df,geno_df,on="ID", validate='1:1')
+
     if continfn:
-        dataset_df = pd.concat([dataset_df, contin_df], axis=1)
-    
-    return dataset_df, inputs_map
+        unmatched.extend(dataset_df[~dataset_df['ID'].isin(contin_df['ID'])]['ID'].tolist())
+        unmatched.extend(contin_df[~contin_df['ID'].isin(dataset_df['ID'])]['ID'].tolist())
+        dataset_df = pd.merge(dataset_df, contin_df, on="ID", validate='1:1')
+
+    dataset_df.drop(columns=['ID'], inplace=True)
+
+    return dataset_df, inputs_map, unmatched
     
 
 def normalize(val):
@@ -74,13 +84,14 @@ def process_continfile(fn, scale, missing=None):
     data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
     
     if missing:
-        data.replace([missing], np.nan, inplace=True)
+        # data.replace([missing], np.nan, inplace=True)
+        data.loc[:,data.columns!='ID'].replace([missing], np.nan, inplace=True)
     
-    data = data.astype(float)
+    data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].astype(float)
     
     if scale:
-        data = data.apply(normalize, axis=0)
-        
+        data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].apply(normalize, axis=0)
+    
     return data
     
     
@@ -122,7 +133,8 @@ def process_genofile(fn, encoding, missing=None):
         geno_map = {labels[i]:labels[i] for i in range(0,len(labels))}
         
     if encoding == 'add_quad':
-        new_df = data[data.columns.repeat(2)]
+        new_df = data[data.loc[:,data.columns!='ID'].columns.repeat(2)]
+
         columns = list(new_df.columns)
         columns[::2]= [ x + "-a" for x in new_df.columns[::2]]
         columns[1::2]= [ x + "-b" for x in new_df.columns[1::2]]
@@ -131,6 +143,8 @@ def process_genofile(fn, encoding, missing=None):
         
         new_df.columns = columns
         add_quad_encoding(new_df)
+        # add back ID column
+        new_df.insert(0,"ID",data['ID'])
         data = new_df
 
     return data, geno_map

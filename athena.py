@@ -69,10 +69,13 @@ nmissing = []
 data, train_splits, test_splits, var_map,BNF_GRAMMAR = None,None,None,None,None
 if proc_rank == 0:
     # process the input files to create the appropriate X and Y sets for testing training
-    data, inputs_map = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
+    data, inputs_map, unmatched = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
         continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
         out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
         missing=params['MISSING'])
+    if(len(unmatched)>0):
+        print("\nWARNING: The following IDs are not found in all data input files and will be ignored:")
+        print(''.join(unmatched))
 
     test_data = None
     if params['TEST_OUTCOME_FILE']:
