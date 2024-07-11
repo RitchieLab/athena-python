@@ -70,7 +70,8 @@ params = {
     'MISSING':None,
     'SELECTION': 'tournament',
     
-    'GENS_MIGRATE': None
+    'GENS_MIGRATE': None,
+    'OUTCOME' : None
 
 }
 
@@ -354,6 +355,10 @@ def parse_cmd_args(arguments, has_mpi=False):
                         type=str,
                         help='Sets name of file containing outcomes (phenotypes) in'
                         ' input data')
+    parser.add_argument('--outcome',
+                        dest='OUTCOME',
+                        type=str,
+                        help='Column header to use in outcome (default is to use the first after the ID)')
     parser.add_argument('--geno_file',
                         dest='GENO_FILE',
                         type=str,

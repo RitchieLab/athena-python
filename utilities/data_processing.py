@@ -13,7 +13,7 @@ import csv
 
 
 def read_input_files(outcomefn, genofn, continfn, out_scale=False,
-    contin_scale=False, geno_encode=None, missing=None):
+    contin_scale=False, geno_encode=None, missing=None, outcome=None):
     """
     Read in data and construct pandas dataframe
 
@@ -24,6 +24,7 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
             out_norm: scale outcome values from 0 to 1.0
             contin_norm: scale each continuous variable from 0 to 1.0
             geno_encode: encode genotype data. options are 'add_quad' and 'additive'
+            outcome: column header in continfn to use for 'y'
 
         Returns: 
             pandas dataframe, dictionary with new label as key, old label 
@@ -31,8 +32,14 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
     """
     
     y_df = process_continfile(outcomefn, out_scale)
-    y_df.columns = [y_df.columns[0], 'y']
-    
+   
+    if outcome is None:
+        dataset_df = y_df[['ID',y_df.columns[1]]]
+    else:
+        dataset_df = y_df[['ID',outcome]]
+
+    dataset_df.columns = ['ID', 'y']
+
     contin_df = None
     inputs_map = {}
     if continfn:
@@ -46,7 +53,6 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
     geno_df = geno_df.sort_values('ID', ascending=False)
     unmatched = []
 
-    dataset_df = y_df
     if genofn:
         unmatched.extend(dataset_df[~dataset_df['ID'].isin(geno_df['ID'])]['ID'].tolist())
         unmatched.extend(geno_df[~geno_df['ID'].isin(dataset_df['ID'])]['ID'].tolist())
