@@ -72,7 +72,7 @@ if proc_rank == 0:
     data, inputs_map, unmatched = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
         continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
         out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
-        missing=params['MISSING'], outcome=params['OUTCOME'])
+        missing=params['MISSING'], outcome=params['OUTCOME'], included_vars=params['INCLUDEDVARS'])
     if(len(unmatched)>0):
         print("\nWARNING: The following IDs are not found in all data input files and will be ignored:")
         print(''.join(unmatched))

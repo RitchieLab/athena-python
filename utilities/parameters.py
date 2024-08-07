@@ -70,8 +70,10 @@ params = {
     'MISSING':None,
     'SELECTION': 'tournament',
     
-    'GENS_MIGRATE': None,
-    'OUTCOME' : None
+    'GENS_MIGRATE': 25,
+    'OUTCOME' : None,
+    
+    'INCLUDEDVARS' : None
 
 }
 
@@ -231,22 +233,22 @@ def load_param_file(file_name):
                 # We can't evaluate, leave value as a string.
                 pass
 
+            if key == 'INCLUDEDVARS':
+                value = value.split()
+
             # Set parameter
             params[key] = value
 
 
-class SortingHelpFormatter(argparse.HelpFormatter):
+class SortedDefaultHelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
     """
-    Custom class for sorting the arguments of the arg parser for printing. When
-    "--help" is called, arguments will be listed in alphabetical order. Without
-    this custom class, arguments will be printed in the order in which they are
-    defined.
+    Sorts the arguments in alphabetical order and inherits from 
+    argparse.ArgumentDefaultsHelpFormatter so that default values
+    are included in help strings.
     """
-
     def add_arguments(self, actions):
         actions = sorted(actions, key=attrgetter('option_strings'))
-        super(SortingHelpFormatter, self).add_arguments(actions)
-
+        super(SortedDefaultHelpFormatter, self).add_arguments(actions)
         
         
 def parse_cmd_args(arguments, has_mpi=False):
@@ -283,70 +285,83 @@ def parse_cmd_args(arguments, has_mpi=False):
     """
 
     parser = argparse.ArgumentParser(
-        formatter_class=SortingHelpFormatter,
+        formatter_class=SortedDefaultHelpFormatter,
         prog='ATHENA',
         usage=argparse.SUPPRESS,
         description="""Welcome to ATHENA - Help.
         The following are the available command line arguments. Please see
         manual for more detailed information on the parameters.""",
-        epilog="""Sample inputs are provided in the example directory.""")
+        epilog="""Sample inputs are provided in the example directory of the distributed package.""")
 
     parser._optionals.title = 'ATHENA command-line usage'
     parser.add_argument('--param_file',
                         dest='PARAM_FILE',
                         type=str,
                         help='Specifies the parameters file to be used. Must '
-                             'include the full file extension. Parametes defined '
+                             'include the full file extension. Parameters defined '
                              'in the file are overriden by any command line arguments')
     parser.add_argument('--popsize',
                         dest='POPULATION_SIZE',
                         type=int,
+                        default=250,
                         help='Sets population size for GE algorithm')
     parser.add_argument('--gens',
                         dest='GENERATIONS',
                         type=int,
+                        default=50,
                         help='Sets number of generations in evolution')
     parser.add_argument('--pcrossover',
                         dest='P_CROSSOVER',
                         type=float,
+                        default=0.8,
                         help='Sets probability of a crossover during selection')
     parser.add_argument('--pmut',
                         dest='P_MUTATION',
                         type=float,
+                        default=0.01,
                         help='Sets probability per codon of mutation')
     parser.add_argument('--nelite',
                         dest='ELITE_SIZE',
                         type=int,
+                        default=1,
                         help='Sets number of best networks carried over to next'
                          'generation')
     parser.add_argument('--hof_size',
                         dest='HALLOFFAME_SIZE',
                         type=int,
+                        default=1,
                         help='Sets number of the best networks to save for reporting. '
                         'Must be >= to elite size')
     parser.add_argument('--codon_size',
                         dest='CODON_SIZE',
                         type=int,
+                        default=250,
                         help='Maximum value of a codon in the genome of an individual'
                         'in the evolutionary population. At a minimum it should be'
                         '>= the largest number of choices for a rule in the grammar')
     parser.add_argument('--codon_consumption',
                         dest='CODON_CONSUMPTION',
                         type=str,
+                        default='eager',
+                        choices=['eager', 'lazy'],
                         help='Options are eager and lazy. Specifies whether grammar '
                         'will consume codons when only one choice for a rule in the '
                         'grammar.')
     parser.add_argument('--cv',
                         dest='CV',
                         type=int,
+                        default=5,
                         help='Sets number of cross-validations to split the data into.')
     parser.add_argument('--out',
                         dest='OUT',
                         type=str,
+                        default='athena_results',
                         help='Sets basename and location for output files and can include relative'
                         ' or full path.')
     parser.add_argument('--genome_type',
                         dest='GENOME_TYPE',
+                        choices=['standard', 'leap', 'mcge'],
+                        default='standard',
                         type=str,
                         help='Sets GE genome type to use (standard, leap or mcge) '
                          'generation')
@@ -375,37 +390,47 @@ def parse_cmd_args(arguments, has_mpi=False):
                         help='Sets name of grammar')
     parser.add_argument('--fitness',
                         dest='FITNESS',
+                        choices=['r-squared', 'balanced_acc'],
+                        default='r-squared',
                         type=str,
                         help='Sets metric for fitness (balanced_acc or r-squared)')
     parser.add_argument('--rand',
                         dest='RANDOM_SEED',
                         type=int,
+                        default=12345,
                         help='Sets random seed for the run')
-    parser.add_argument('--sense_init',
+    parser.add_argument('--init',
                         dest='INIT',
                         type=str,
+                        choices=['random', 'sensible'],
+                        default='sensible',
                         help='Use sensible to use sensible initialization and random '
                         'to use random initialization')
     parser.add_argument('--max_init_tree',
                         dest='MAX_INIT_TREE_DEPTH',
                         type=int,
+                        default='11',
                         help='Sets maximum depth for tree created by sensible '
                         'initialization')
     parser.add_argument('--min_init_tree',
                         dest='MIN_INIT_TREE_DEPTH',
                         type=int,
+                        default=7,
                         help='Sets minimum depth for tree created by sensible '
                         'initialization')
     parser.add_argument('--min_rand_genome',
                         dest='MIN_INIT_GENOME_LENGTH',
                         type=int,
+                        default=30,
                         help='Sets minimum genome length for random intialization')
     parser.add_argument('--max_rand_genome',
                         dest='MAX_INIT_GENOME_LENGTH',
                         type=int,
+                        default=200,
                         help='Sets maximum genome length for random initaliztion')
     parser.add_argument('--geno_encode',
                         dest='GENO_ENCODE',
+                        choices=['add_quad', 'additive'],
                         type=str,
                         help='Sets genotype encoding. Must be either add_quad or additive')
     parser.add_argument('--scale_outcome',
@@ -422,6 +447,8 @@ def parse_cmd_args(arguments, has_mpi=False):
                         help="Sets identifier for missing values input files")
     parser.add_argument('--selection',
                         dest='SELECTION',
+                        choices=['tournament', 'lexicase', 'epsilon_lexicase'],
+                        default='tournament',
                         type=str,
                         help="Sets selection type (tournament, lexicase, epsilon_lexicase)")
     parser.add_argument('--test_outcome',
@@ -439,16 +466,23 @@ def parse_cmd_args(arguments, has_mpi=False):
     parser.add_argument('--max_depth',
                         dest='MAX_DEPTH',
                         type=int,
+                        default=50,
                         help='Sets max depth for mapping with individuals exceeding this being invalid')
     parser.add_argument('--color_map',
                         dest='COLOR_MAP_FILE',
                         type=str,
                         help="File specifying colors to use for specific inputs")
+    parser.add_argument('--included-vars',
+                        dest='INCLUDEDVARS',
+                        nargs='+',
+                        type=str,
+                        help="Variable names to be included in run (accepts multiple values")
                     
     if has_mpi:
         parser.add_argument('--gens-migrate',
                             dest='GENS_MIGRATE',
                             type=int,
+                            default=25,
                             help='Sets generational interval for migrating best individuals for multi-process run')
 
     # Parse command line arguments using all above information.
@@ -476,14 +510,14 @@ def set_params(command_line_args, create_files=True, has_mpi=False):
     This function parses all command line arguments specified by the user.
     If certain parameters are not set then defaults are used (e.g. random
     seeds, elite size). Sets the correct imports given command line
-    arguments. Sets correct grammar file and fitness function. Also
-    initialises save folders and tracker lists in utilities.trackers.
+    arguments. Sets correct grammar file and fitness function.
 
     :param command_line_args: Command line arguments specified by the user.
     :return: Nothing.
     """
 
     cmd_args, unknown = parse_cmd_args(command_line_args, has_mpi)
+
     if unknown:
         # We currently do not parse unknown parameters. Raise error.
         s = "algorithm.parameters.set_params\nError: " \

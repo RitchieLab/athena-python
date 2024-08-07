@@ -13,7 +13,8 @@ import csv
 
 
 def read_input_files(outcomefn, genofn, continfn, out_scale=False,
-    contin_scale=False, geno_encode=None, missing=None, outcome=None):
+    contin_scale=False, geno_encode=None, missing=None, outcome=None,
+    included_vars=None):
     """
     Read in data and construct pandas dataframe
 
@@ -25,6 +26,7 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
             contin_norm: scale each continuous variable from 0 to 1.0
             geno_encode: encode genotype data. options are 'add_quad' and 'additive'
             outcome: column header in continfn to use for 'y'
+            included_vars: list of variable names to include in analysis; all others excluded
 
         Returns: 
             pandas dataframe, dictionary with new label as key, old label 
@@ -40,14 +42,17 @@ def read_input_files(outcomefn, genofn, continfn, out_scale=False,
 
     dataset_df.columns = ['ID', 'y']
 
+    if included_vars:
+        included_vars.insert(0, 'ID')
+
     contin_df = None
     inputs_map = {}
     if continfn:
-        contin_df = process_continfile(continfn, contin_scale, missing)
+        contin_df = process_continfile(continfn, contin_scale, missing, included_vars)
         inputs_map={contin_df.columns[i]:contin_df.columns[i] for i in range(0,len(contin_df.columns))}
     
     if genofn:
-        geno_df, geno_map = process_genofile(genofn, geno_encode, missing)
+        geno_df, geno_map = process_genofile(genofn, geno_encode, missing, included_vars)
         inputs_map.update(geno_map)
     
     geno_df = geno_df.sort_values('ID', ascending=False)
@@ -75,7 +80,7 @@ def normalize(val):
     return newval
 
 
-def process_continfile(fn, scale, missing=None):
+def process_continfile(fn, scale, missing=None, included_vars=None):
     """
     Read in continuous data and construct dataframe from values
 
@@ -83,12 +88,16 @@ def process_continfile(fn, scale, missing=None):
             fn: Phenotypes (outcomes) file
             normalize: boolean for controlling normalization
             missing: string identifying any missing data
-
+            included_vars: restrict set to only variables in list
+            
         Returns: 
             pandas dataframe 
     """
     data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
-    
+
+    if included_vars:
+        data=data.loc[:, data.columns.isin(included_vars)]
+
     if missing:
         # data.replace([missing], np.nan, inplace=True)
         data.loc[:,data.columns!='ID'].replace([missing], np.nan, inplace=True)
@@ -112,19 +121,22 @@ def add_quad_encoding(df):
     df.iloc[:, 1::2] = df.iloc[:, 1::2].astype(str).apply(add_quad_encoding_second)
     return df
 
-def process_genofile(fn, encoding, missing=None):
+def process_genofile(fn, encoding, missing=None, included_vars=None):
     """
     Read in genotype data and construct dataframe from values
-
         Parameters:
             fn: Phenotypes (outcomes) file
             encoding: string for controlling encoding 
             missing: string identifying any missing data
+            included_vars: restrict set to only variables in list
 
         Returns: 
             pandas dataframe and dictionary mapping modified name with original
     """
     data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
+
+    if included_vars:
+        data=data.loc[:, data.columns.isin(included_vars)]
 
     if missing:
         data.replace([missing], np.nan, inplace=True)
