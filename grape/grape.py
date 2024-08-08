@@ -729,7 +729,7 @@ def random_initialisation(ind_class, pop_size, bnf_grammar,
                           max_init_depth, codon_size, codon_consumption,
                           genome_representation):
         """
-        
+        Randomly generated linear genome compatible with both Leap and standard mapping
         """
         population = []
         
@@ -749,6 +749,69 @@ def random_initialisation(ind_class, pop_size, bnf_grammar,
             return population
         else:
             raise ValueError("Unkonwn genome representation")
+        
+            
+def leap_random_initialisation(ind_class, pop_size, bnf_grammar, 
+                          min_init_genome_length, max_init_genome_length,
+                          max_init_depth, codon_size, codon_consumption,
+                          genome_representation):
+        """
+        Randomly generated linear genome compatible with Leap
+        """
+        population = []
+        # generate a complete set of frames for Leap 
+        codon_size = bnf_grammar.nt_rule_size
+        minsize = min_init_genome_length // codon_size + 1
+        maxsize = max_init_genome_length // codon_size + 1
+
+        for i in range(pop_size):
+            genome = []
+            init_genome_length = random.randint(minsize, maxsize) * codon_size
+            for j in range(init_genome_length):
+                genome.append(random.randint(0, codon_size))
+            ind = ind_class(genome, bnf_grammar, max_init_depth, codon_consumption)
+            population.append(ind)
+            
+        if genome_representation == 'list':
+            return population
+        elif genome_representation == 'numpy':
+            for ind in population:
+                ind.genome = np.array(ind.genome)
+            return population
+        else:
+            raise ValueError("Unkonwn genome representation")
+        
+def mcge_random_initializaion(ind_class, pop_size, bnf_grammar, 
+                          min_init_genome_length, max_init_genome_length,
+                          max_init_depth, codon_size, codon_consumption,
+                          genome_representation):
+        """
+        Randomly generated multiplie chromosome genome compatible MCGE
+        """
+        population = []
+
+        for i in range(pop_size):
+            genome = []
+            for i in range(bnf_grammar.nt_rule_size):
+                chrom = []
+                init_genome_length = random.randint(min_init_genome_length, max_init_genome_length)
+                for j in range(init_genome_length):
+                    chrom.append(random.randint(0, codon_size))
+                genome.append(chrom)
+
+            ind = ind_class(genome, bnf_grammar, max_init_depth, codon_consumption)
+            population.append(ind)
+            
+        if genome_representation == 'list':
+            return population
+        elif genome_representation == 'numpy':
+            for ind in population:
+                ind.genome = np.array(ind.genome)
+            return population
+        else:
+            raise ValueError("Unkonwn genome representation")
+
+
     
 def sensible_initialisation(ind_class, pop_size, bnf_grammar, min_init_depth, 
                             max_init_depth, codon_size, codon_consumption,

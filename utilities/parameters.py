@@ -53,8 +53,8 @@ params = {
     'GENO_ENCODE': None,
     
     # Initialization parameters
-    'MIN_INIT_GENOME_LENGTH' : 30,
-    'MAX_INIT_GENOME_LENGTH' : 200,
+    'MIN_INIT_GENOME_LENGTH' : 50,
+    'MAX_INIT_GENOME_LENGTH' : 250,
     # Uses sensible initalization
     'INIT' : 'sensible',
     
@@ -421,12 +421,12 @@ def parse_cmd_args(arguments, has_mpi=False):
     parser.add_argument('--min_rand_genome',
                         dest='MIN_INIT_GENOME_LENGTH',
                         type=int,
-                        default=30,
+                        default=50,
                         help='Sets minimum genome length for random intialization')
     parser.add_argument('--max_rand_genome',
                         dest='MAX_INIT_GENOME_LENGTH',
                         type=int,
-                        default=200,
+                        default=250,
                         help='Sets maximum genome length for random initaliztion')
     parser.add_argument('--geno_encode',
                         dest='GENO_ENCODE',

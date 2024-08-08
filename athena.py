@@ -100,7 +100,7 @@ if nprocs > 1:
         data=data,train_splits=train_splits, test_splits=test_splits, vmap=var_map,
         grammar=BNF_GRAMMAR)
 
-toolbox=alg_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'], params['SELECTION'])
+toolbox=alg_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'], params['SELECTION'], params['INIT'])
 
 REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
                 'fitness_test', 
@@ -123,7 +123,7 @@ for cv in range(params['CV']):
         population = toolbox.populationCreator(pop_size=params['POPULATION_SIZE'],
                                            bnf_grammar=BNF_GRAMMAR,
                                            min_init_genome_length=params['MIN_INIT_GENOME_LENGTH'],
-                                           max_init_genome_length=['MAX_INIT_GENOME_LENGTH'],
+                                           max_init_genome_length=params['MAX_INIT_GENOME_LENGTH'],
                                            max_init_depth=params['MAX_DEPTH'],
                                            codon_size=params['CODON_SIZE'],
                                            codon_consumption=params['CODON_CONSUMPTION'],
