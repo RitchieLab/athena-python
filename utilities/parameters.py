@@ -4,80 +4,7 @@ import os
 
 
 """Algorithm parameters"""
-params = {
-
-    'POPULATION_SIZE': 250,
-    'GENERATIONS': 50,
-    
-    'P_CROSSOVER':0.8,
-    'P_MUTATION':0.01,
-    
-    'ELITE_SIZE':1,
-    # hall of fame must be >= ELITE_SIZE
-    'HALLOFFAME_SIZE':1,
-    
-    'CODON_SIZE':250,
-    'CODON_CONSUMPTION':'eager',
-    
-    # number of cross-validations 
-    'CV':5,
-
-    # Prefix for output files, can include path, i.e results/athena
-    'OUT': 'athena_results',
-
-    # genome representation (also accepts mcge and leap)
-    'GENOME_TYPE': 'standard',
-
-    # Set input files, requires outcome (pheno) file and at least one of geno_file and contin_file
-    'GENO_FILE' : None,
-    'OUTCOME_FILE' : None,
-    'CONTIN_FILE' : None,
-    # Set grammar file
-    'GRAMMAR_FILE': None,
-    # Set parameters file
-    'PARAM_FILE': None,
-    
-    # user-specified testing set
-    'TEST_OUTCOME_FILE': None,
-    'TEST_GENO_FILE': None,
-    'TEST_CONTIN_FILE': None,
-    
-    #plotting files
-    'COLOR_MAP_FILE': None,
-    
-    # can be r-squared or balanced accuracy for case/control inputs
-    'FITNESS': 'r-squared',
-    
-    'RANDOM_SEED': 12345,
-    
-    'GENO_ENCODE': None,
-    
-    # Initialization parameters
-    'MIN_INIT_GENOME_LENGTH' : 50,
-    'MAX_INIT_GENOME_LENGTH' : 250,
-    # Uses sensible initalization
-    'INIT' : 'sensible',
-    
-    'MAX_DEPTH': 50,
-
-    'MAX_INIT_TREE_DEPTH' : 11,
-    'MIN_INIT_TREE_DEPTH' : 7,
-    
-    'GENO_ENCODE' : None,
-    'SCALE_OUTCOME': False,
-    'SCALE_CONTIN': False,
-    
-    'MISSING':None,
-    'SELECTION': 'tournament',
-    
-    'GENS_MIGRATE': 25,
-    'OUTCOME' : None,
-    
-    'INCLUDEDVARS' : None
-
-}
-
-
+params = {}
 
 def less_than(parameters,smaller,bigger):
     """
@@ -199,6 +126,7 @@ def valid_parameters(parameters):
 def load_param_file(file_name):
     """
     Load in a params text file and set the params dictionary directly.
+    Format is key: value
 
     :param file_name: The name/location of a parameters file.
     :return: Nothing.
@@ -217,12 +145,7 @@ def load_param_file(file_name):
 
         for line in [l for l in content if not l.startswith("#")]:
 
-            # Parameters files are parsed by finding the first instance of a
-            # colon.
             split = line.find(":")
-
-            # Everything to the left of the colon is the parameter key,
-            # everything to the right is the parameter value.
             key, value = line[:split], line[split + 1:].strip()
 
             # Evaluate parameters.
@@ -253,35 +176,11 @@ class SortedDefaultHelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
         
 def parse_cmd_args(arguments, has_mpi=False):
     """
-    Parser for command line arguments specified by the user. Specified command
-    line arguments over-write parameter file arguments, which themselves
-    over-write original values in the algorithm.parameters.params dictionary.
+    Parse command line arguments
 
-    The argument parser structure is set up such that each argument has the
-    following information:
-
-        dest: a valid key from the algorithm.parameters.params dictionary
-        type: an expected type for the specified option (i.e. str, int, float)
-        help: a string detailing correct usage of the parameter in question.
-
-    Optional info:
-
-        default: The default setting for this parameter.
-        action : The action to be undertaken when this argument is called.
-
-    NOTE: You cannot add a new parser argument and have it evaluate "None" for
-    its value. All parser arguments are set to "None" by default. We filter
-    out arguments specified at the command line by removing any "None"
-    arguments. Therefore, if you specify an argument as "None" from the
-    command line and you evaluate the "None" string to a None instance, then it
-    will not be included in the eventual parameters.params dictionary. A
-    workaround for this would be to leave "None" command line arguments as
-    strings and to eval them at a later stage.
-
-    :param arguments: Command line arguments specified by the user.
-    :return: A dictionary of parsed command line arguments, along with a
-    dictionary of newly specified command line arguments which do not exist
-    in the params dictionary.
+    :param arguments Command-line arguments passed by user
+    :param has_mpi MPI related arguments included when has_mpi=True
+    :return dict of options
     """
 
     parser = argparse.ArgumentParser(
@@ -454,6 +353,7 @@ def parse_cmd_args(arguments, has_mpi=False):
     parser.add_argument('--test_outcome',
                         dest='TEST_OUTCOME_FILE',
                         type=str,
+                        default=None,
                         help="Set name of outcome file for designated test dataset")
     parser.add_argument('--test_geno',
                         dest='TEST_GENO_FILE',
@@ -485,14 +385,11 @@ def parse_cmd_args(arguments, has_mpi=False):
                             default=25,
                             help='Sets generational interval for migrating best individuals for multi-process run')
 
-    # Parse command line arguments using all above information.
-    args, unknown = parser.parse_known_args(arguments)
+    args = parser.parse_args(arguments)
 
-    # All default args in the parser are set to "None". Only take arguments
-    # which are not "None", i.e. arguments which have been passed in from
-    # the command line.
-    cmd_args = {key: value for key, value in vars(args).items() if value is
-                not None}
+    # convert to dict
+    cmd_args = {key: value for key, value in vars(args).items()}
+    
     # Set "None" values correctly.
     for key in sorted(cmd_args.keys()):
         # Check all specified arguments.
@@ -502,7 +399,7 @@ def parse_cmd_args(arguments, has_mpi=False):
 
             cmd_args[key] = None
 
-    return cmd_args, unknown
+    return cmd_args
 
                          
 def set_params(command_line_args, create_files=True, has_mpi=False):
@@ -513,26 +410,16 @@ def set_params(command_line_args, create_files=True, has_mpi=False):
     arguments. Sets correct grammar file and fitness function.
 
     :param command_line_args: Command line arguments specified by the user.
-    :return: Nothing.
+    :return: dict 
     """
 
-    cmd_args, unknown = parse_cmd_args(command_line_args, has_mpi)
-
-    if unknown:
-        # We currently do not parse unknown parameters. Raise error.
-        s = "algorithm.parameters.set_params\nError: " \
-            "unknown parameters: %s\nYou may wish to check the spelling, " \
-            "add code to recognise this parameter, or use " \
-            "--extra_parameters" % str(unknown)
-        raise Exception(s)
+    cmd_args = parse_cmd_args(command_line_args, has_mpi)
 
     # LOAD PARAMETERS FILE
-    # NOTE that the parameters file overwrites all previously set parameters.
+    # These parameters in the file overwrites all previously set parameters.
     if 'PARAM_FILE' in cmd_args:
         load_param_file(cmd_args['PARAM_FILE'])
 
-    # Join original params dictionary with command line specified arguments.
-    # NOTE that command line arguments overwrite all previously set parameters.
     params.update(cmd_args)
 
     return params
