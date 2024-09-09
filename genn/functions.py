@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+""" Functions used by GE for evolving neural networks"""
 # -*- coding: utf-8 -*-
 
 import numpy as np
@@ -7,8 +7,17 @@ import math
 import warnings
 warnings.filterwarnings('ignore', message='overflow encountered in exp')
     
-# simplified version better matching ATHENA sigmoid function
-def activate_sigmoid(a):
+def activate_sigmoid(a: np.ndarray) -> np.ndarray:
+    """ Sigmoid activation functioning matches behavior of original ATHENA code
+    
+    Args:
+        a: contains values to modify
+    
+    Returns:
+        np.ndarray containing modified values
+    
+    """
+
     if isinstance(a, np.ndarray):
         a = np.where(a <= -709, -708, a)
         a = np.where(a >= 709, 708, a)
@@ -22,23 +31,62 @@ def activate_sigmoid(a):
     
     return a
 
-def PA(inputs):
+def PA(inputs:list) -> np.ndarray:
+    """ Additive node 
+    
+    Args:
+        inputs: np.ndarrays where each value is added
+    
+    Returns:
+        np.ndarray containing the result modified by sigmoid function    
+    """
+
     return activate_sigmoid(sum(inputs))
     
-def PM(inputs):
+def PM(inputs:list) -> np.ndarray:
+    """ Multiplicative node 
+    
+    Args:
+        inputs: np.ndarrays where each value is multiplied
+    
+    Returns:
+        np.ndarray containing the result modified by sigmoid function    
+    """
+
     result = inputs[0]
     for val in inputs[1:]:
         result = result * val
     return activate_sigmoid(result)
     
-def PS(inputs):
+def PS(inputs: list) -> np.ndarray:
+    """ Subtraction node
+
+    Args:
+        inputs: np.ndarrays where first is minuend and all the rest are
+            subtrahends
+    
+    Returns:
+        np.ndarray containing the difference modified by sigmoid function    
+    """
+
     diff = inputs[0]
     for num in inputs[1:]:
         diff = diff - num
     return activate_sigmoid(diff)
     
-# updated PD function to match ATHENA
-def PD(inputs):
+def PD(inputs:list) -> np.ndarray:
+    """ function to match ATHENA handling of division node in network. Uses 
+     protected dividision
+
+    Args:
+        inputs: np.ndarrays where first is numerator and all the rest are
+            denominators
+    
+    Returns:
+        np.ndarray containing the dividend modified by sigmoid function
+
+    """
+
     result = inputs[0]
     anyzeroed = np.full_like(result,False).astype(bool)
     for divisor in inputs[1:]:
@@ -56,51 +104,38 @@ def PD(inputs):
     return activate_sigmoid(result)
 
 
-def add(a,b):
+def add(a:np.ndarray,b:np.ndarray) -> np.ndarray:
+    """ addition operator """
     return a+b
 
-def sub(a,b):
+def sub(a:np.ndarray,b:np.ndarray) -> np.ndarray:
+    """ subtraction operator """
     return a-b
 
-def mult(a,b):
+def mult(a:np.ndarray,b:np.ndarray) -> np.ndarray:
+    """ multiplication operator """
     return a*b
 
-def div(a,b):
-     return a/b if b != 0 else 1.0
-#     with np.errstate(divide='ignore', invalid='ignore'):
-#         return np.where(b == 0, np.ones_like(b), a / b)           
+def div(a:np.ndarray,b:np.ndarray) -> np.ndarray:
+    """ division operator """
+    return a/b if b != 0 else 1.0         
 
-def pdiv(x, y):
+def pdiv(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     """
-    Koza's protected division is:
+    Koza's protected division modified to work with numpy arrays as used in PonyGE2.
+    Returns 1 when denominator is zero
 
-    if y == 0:
-      return 1
-    else:
-      return x / y
-
-    but we want an eval-able expression. The following is eval-able:
-
-    return 1 if y == 0 else x / y
-
-    but if x and y are Numpy arrays, this creates a new Boolean
-    array with value (y == 0). if doesn't work on a Boolean array.
-
-    The equivalent for Numpy is a where statement, as below. However
-    this always evaluates x / y before running np.where, so that
-    will raise a 'divide' error (in Numpy's terminology), which we
-    ignore using a context manager.
-
-    In some instances, Numpy can raise a FloatingPointError. These are
-    ignored with 'invalid = ignore'.
-
-    :param x: numerator np.array
-    :param y: denominator np.array
-    :return: np.array of x / y, or 1 where y is 0.
+    Args:
+        a: numerator
+        b: denominator
+    
+    Returns:
+        numpy array with a/b or 1 when denominator is 0
     """
+
     try:
         with np.errstate(divide='ignore', invalid='ignore'):
-            return np.where(y == 0, np.ones_like(x), x / y)
+            return np.where(b == 0, np.ones_like(a), a / b)
     except ZeroDivisionError:
         # In this case we are trying to divide two constants, one of which is 0
         # Return a constant.

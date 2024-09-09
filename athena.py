@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 @author: scott dudek
+
+Pyhon implementation of ATHENA software
+
 """
 
 import grape.grape as grape
@@ -92,16 +95,18 @@ if proc_rank == 0:
     color_map = data_processing.process_var_colormap(params['COLOR_MAP_FILE'])
 
     grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
-    # print(grammarstr)
     BNF_GRAMMAR = grape.Grammar(grammarstr, params['CODON_CONSUMPTION'])
  
+ # share data to subordinate processes when using paralllelization
 if nprocs > 1:
     data,train_splits, test_splits, var_map, BNF_GRAMMAR = parallel.distribute_data(rank=proc_rank,
         data=data,train_splits=train_splits, test_splits=test_splits, vmap=var_map,
         grammar=BNF_GRAMMAR)
 
+# set up deap toolbox for evolutionary algorithm 
 toolbox=alg_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'], params['SELECTION'], params['INIT'])
 
+# configure report items 
 REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
                 'fitness_test', 
           'best_ind_length', 'avg_length', 
@@ -112,6 +117,7 @@ REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
           'structural_diversity', #'fitness_diversity',
           'selection_time', 'generation_time', 'best_phenotype']
 
+# conduct evolution for specified number of cross-validations
 for cv in range(params['CV']):
     if proc_rank == 0:
         print("\nCV: ", cv+1, "\n")
@@ -201,11 +207,11 @@ for cv in range(params['CV']):
 
     nmissing.append([hof.items[0].nmissing/len(Y_train),nmissing_test[-1]/len(Y_test)])
     
+    # output report files
     if proc_rank == 0:
         print("Best individual:")#,"\n".join(textwrap.wrap(best,80)))
         print("\n".join(textwrap.wrap(data_processing.reset_variable_names(best, var_map),80)))
         print("\nTraining Fitness: ", hof.items[0].fitness.values[0])
-    #     print("Test Fitness: ", alg_setup.fitness_eval(hof.items[0], [X_test,Y_test])[0])
         print("Test Fitness: ", fitness_test[-1])
         print("Depth: ", hof.items[0].depth)
         print("Length of the genome: ", len(hof.items[0].genome))
@@ -237,6 +243,7 @@ for cv in range(params['CV']):
                                  generation_time[value],
                                  best_phenotypes[value]])
 
+# create and write summary files and plots for run
 if proc_rank == 0:
     data_processing.write_summary(params['OUT'] + '_summary.txt',
         best_models,params['FITNESS'], var_map, best_fitness_test, nmissing)

@@ -1,3 +1,7 @@
+""" Modified DEAP to work with GRAPE library. 
+    docstrings modified to conform to google style 
+"""
+
 #    This file is part of DEAP.
 #
 #    DEAP is free software: you can redistribute it and/or modify
@@ -22,20 +26,29 @@ import warnings
 from genn import parallel 
 from deap import tools
 
-def varAnd(population, toolbox, cxpb, mutpb,
-           bnf_grammar, codon_size, max_tree_depth, codon_consumption,
-           genome_representation, max_genome_length):
+def varAnd(population: list, toolbox: 'deap.base.Toolbox', cxpb: float, 
+           mutpb: float, bnf_grammar: "grape.grape.grammar", codon_size: int, 
+           max_tree_depth: int, codon_consumption: str,
+           genome_representation: str, max_genome_length: int) -> list:
     """Part of an evolutionary algorithm applying only the variation part
     (crossover **and** mutation). The modified individuals have their
     fitness invalidated. The individuals are cloned so returned population is
     independent of the input population.
 
-    :param population: A list of individuals to vary.
-    :param toolbox: A :class:`~deap.base.Toolbox` that contains the evolution
+    Args:
+        population: A list of individuals to vary.
+        toolbox: A :class:`~deap.base.Toolbox` that contains the evolution
                     operators.
-    :param cxpb: The probability of mating two individuals.
-    :param mutpb: The probability of mutating an individual.
-    :returns: A list of varied individuals that are independent of their
+        cxpb: The probability of mating two individuals.
+        mutpb: The probability of mutating an individual.
+        bnf_grammar: BNF grammar for mapping
+        codon_size: maximum value in a codon of the genome
+        max_tree_depth: maximum allowed tree depth while mapping genome
+        codon_consumption: type of consumption ('eager' or 'lazy')
+        genome_representation: 'list' or 'numpy'
+        max_genome_length: maximum allowed number of codons in genome
+
+    Returns: A list of varied individuals that are independent of their
               parents.
 
     """
@@ -63,35 +76,50 @@ def varAnd(population, toolbox, cxpb, mutpb,
 class hofWarning(UserWarning):
     pass
     
-def ge_eaSimpleWithElitism(population, toolbox, cxpb, mutpb, ngen, elite_size, 
-                bnf_grammar, codon_size, max_tree_depth, 
-                max_genome_length=None,
-                points_train=None, points_test=None, codon_consumption='eager', 
-                report_items=None,
-                genome_representation='list',
-                stats=None, halloffame=None, rank=0, migrate_interval=None,
-                verbose=__debug__):
+def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: float,
+                mutpb:float, ngen:int, elite_size:int, 
+                bnf_grammar:'grape.grape.grammar', codon_size:int, max_tree_depth:int, 
+                max_genome_length:int=None,
+                points_train:list=None, points_test:list=None, codon_consumption:str='eager', 
+                report_items:list=None,
+                genome_representation:str='list',
+                stats:'deap.tools.Statistics'=None, halloffame:'eap.tools.HallOfFame'=None, 
+                rank:int=0, migrate_interval:int=None,
+                verbose:bool=__debug__) -> tuple [list, 'deap.tools.logbook']:
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_, with some adaptations to run GE
     on GRAPE.
-    :param population: A list of individuals.
-    :param toolbox: A :class:`~deap.base.Toolbox` that contains the evolution
+
+    Args:
+        population: A list of individuals.
+        toolbox: A :class:`~deap.base.Toolbox` that contains the evolution
                     operators.
-    :param cxpb: The probability of mating two individuals.
-    :param mutpb: The probability of mutating an individual.
-    :param ngen: The number of generation.
-    :param elite_size: The number of best individuals to be copied to the 
+        cxpb: The probability of mating two individuals.
+        mutpb: The probability of mutating an individual.
+        ngen: The number of generation.
+        elite_size: The number of best individuals to be copied to the 
                     next generation.
-    :params bnf_grammar, codon_size, max_tree_depth: Parameters 
-                    used to mapper the individuals after crossover and
-                    mutation in order to check if they are valid.
-    :param stats: A :class:`~deap.tools.Statistics` object that is updated
+        bnf_grammar: BNF grammar for mapping
+        codon_size: Maximum value in codon of genome
+        max_tree_depth: Maximum depth for a tree when mapping genome
+        max_genome_length: Maximum number of codons in genome
+        points_train: Points to use in training
+        points_test: Points to use in testing
+        codon_consumption: type of consumption, 'lazy' or 'eager'
+        report_items: list of report items to include 
+        genome_representation: 'list' or 'numpy'
+        stats: A :class:`~deap.tools.Statistics` object that is updated
                   inplace, optional.
-    :param halloffame: A :class:`~deap.tools.HallOfFame` object that will
+        halloffame: A :class:`~deap.tools.HallOfFame` object that will
                        contain the best individuals, optional.
-    :param verbose: Whether or not to log the statistics.
-    :returns: The final population
-    :returns: A class:`~deap.tools.Logbook` with the statistics of the
+        rank: processs rank in MPI run
+        migrate_interval: number of generations between individual transfer
+            for island model (used with parallelized version)
+        verbose: Whether or not to log the statistics.
+
+    Returns: 
+        population: The final population
+        logbook: A class`~deap.tools.Logbook` with the statistics of the
               evolution
     """
     

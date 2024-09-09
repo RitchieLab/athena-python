@@ -1,3 +1,8 @@
+"""Reads data files and transforms data
+
+
+"""
+
 import pandas as pd
 from sklearn.model_selection import KFold, StratifiedKFold
 import re
@@ -12,25 +17,25 @@ import textwrap
 import csv
 
 
-def read_input_files(outcomefn, genofn, continfn, out_scale=False,
-    contin_scale=False, geno_encode=None, missing=None, outcome=None,
-    included_vars=None):
-    """
-    Read in data and construct pandas dataframe
+def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool=False,
+    contin_scale: bool=False, geno_encode: str=None, missing: str=None, outcome: str=None,
+    included_vars: list[str]=None) -> tuple[pd.DataFrame, dict, list]:
+    """Read in data and construct pandas dataframe
 
-        Parameters:
-            outcomefn: Phenotypes (outcomes)
-            genofn: SNP values
-            continfn: any continuous data
-            out_norm: scale outcome values from 0 to 1.0
-            contin_norm: scale each continuous variable from 0 to 1.0
-            geno_encode: encode genotype data. options are 'add_quad' and 'additive'
-            outcome: column header in continfn to use for 'y'
-            included_vars: list of variable names to include in analysis; all others excluded
+    Args:
+        outcomefn: Phenotypes (outcomes) filename
+        genofn: SNP values filename
+        continfn: any continuous data filename
+        out_norm: scale outcome values from 0 to 1.0
+        contin_norm: scale each continuous variable from 0 to 1.0
+        geno_encode: encode genotype data. options are 'add_quad' and 'additive'
+        outcome: column header in continfn to use for 'y'
+        included_vars: list of variable names to include in analysis; all others excluded
 
-        Returns: 
-            pandas dataframe, dictionary with new label as key, old label 
-            from files as value, list of IDs that are not in all the input files
+    Returns:
+        dataset_df: pandas dataframe
+        inputs_map: dictionary with new label as key, original label as value
+        unmatched: list of IDs that are not in all input files
     """
     
     y_df = process_continfile(outcomefn, out_scale)
@@ -80,18 +85,17 @@ def normalize(val):
     return newval
 
 
-def process_continfile(fn, scale, missing=None, included_vars=None):
-    """
-    Read in continuous data and construct dataframe from values
+def process_continfile(fn: str, scale: bool, missing: str=None, included_vars: list[str]=None) -> pd.DataFrame:
+    """Read in continuous data and construct dataframe from values
 
-        Parameters:
-            fn: Phenotypes (outcomes) file
-            normalize: boolean for controlling normalization
-            missing: string identifying any missing data
-            included_vars: restrict set to only variables in list
+    Args:
+        fn: Phenotypes (outcomes) filename
+        scale: normalize values if true
+        missing: identifies any missing data in file
+        included_vars: restrict set to only variables (column names) in list
             
-        Returns: 
-            pandas dataframe 
+    Returns: 
+        pandas dataframe 
     """
     data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
 
@@ -121,17 +125,18 @@ def add_quad_encoding(df):
     df.iloc[:, 1::2] = df.iloc[:, 1::2].astype(str).apply(add_quad_encoding_second)
     return df
 
-def process_genofile(fn, encoding, missing=None, included_vars=None):
-    """
-    Read in genotype data and construct dataframe from values
-        Parameters:
-            fn: Phenotypes (outcomes) file
-            encoding: string for controlling encoding 
-            missing: string identifying any missing data
-            included_vars: restrict set to only variables in list
+def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: list[str]=None) ->  tuple[pd.DataFrame, dict]:
+    """Read in genotype data and construct dataframe from values
 
-        Returns: 
-            pandas dataframe and dictionary mapping modified name with original
+    Args:
+        fn: Phenotypes (outcomes) filename
+        encoding: Genotype encoding type
+        missing: identifies missing data in file
+        included_vars: restrict set to only variables in list
+
+    Returns: 
+        data: pandas dataframe
+        geno_map: dictionary with new label as key, original label as value
     """
     data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
 
@@ -213,19 +218,18 @@ class ColorMapping:
     
     
 
-def process_var_colormap(colorfn=None, node_color='lightgray', var_default='white',
-    geno_encode='additive'):
-    """
-    Create color map for graphical output of networks. 
+def process_var_colormap(colorfn: str=None, node_color: str='lightgray', var_default: str='white',
+    geno_encode: str='additive') -> dict:
+    """Create color map for graphical output of networks. 
 
-        Parameters:
-            colorfn: name of file to process, when no fn provided only the network nodes
-                (PA,PD,PM,PS) are included
-            node_default: Colors for nodes 
-            var_default: Default colors for unspecified variables
+    Args:
+        colorfn: name of file to process, when no fn provided only the network nodes
+            (PA,PD,PM,PS) are included
+        node_default: Colors for nodes not specified in the color map file
+        var_default: Default colors for unspecified variables
 
-        Returns: 
-            color map with node name as key and color as value
+    Returns: 
+        color_map: node name as key and color as value
     """
     color_map = ColorMapping(default_color=var_default, operator_color=node_color)
     
@@ -251,7 +255,6 @@ def process_var_colormap(colorfn=None, node_color='lightgray', var_default='whit
     
 
 def split_kfolds(df, nfolds, seed=100):
-#     kf = KFold(n_splits=nfolds, shuffle=True, random_state=seed)
     kf = KFold(n_splits=nfolds, shuffle=True, random_state=seed)
     
     train_splits=[]
@@ -264,7 +267,6 @@ def split_kfolds(df, nfolds, seed=100):
     return train_splits,test_splits
     
 def split_statkfolds(df, nfolds, seed=100):
-#     kf = KFold(n_splits=nfolds, shuffle=True, random_state=seed)
     kf = StratifiedKFold(n_splits=nfolds, shuffle=True, random_state=seed)
     
     train_splits=[]
@@ -277,7 +279,16 @@ def split_statkfolds(df, nfolds, seed=100):
     return train_splits,test_splits
     
     
-def rename_variables(df):
+def rename_variables(df: pd.DataFrame) -> dict:
+    """ Rename variables in dataframe to be indexed version of x
+
+    Args:
+        df: dataframe to alter
+    
+    Returns:
+        vmap: new names are keys and original names are values
+
+    """
     newcols = {}
     vmap = {}
     oldcols = list(df.drop('y', axis=1).columns)
@@ -290,20 +301,28 @@ def rename_variables(df):
 
     return vmap
 
-def reset_variable_names(model, vmap):
-    """
-    Replace x variables with names in variable map
+def reset_variable_names(model: str, vmap: dict) -> str:
+    """Replace x variables with names in variable map
 
-        Parameters:
-            model: string of model
-            vmap: dict with key as x variable and value as new name
+    Args:
+        model: evolved model containing variables with indexed x values ('x[0],x[1],...)
+        vmap: dict with key as x variable and value as name to replace with
 
-        Returns: 
-            string
+    Returns: 
+        string: model string with variable names updated
     """
     return re.sub(r"((x\[\d+\]))", lambda g: vmap[g.group(1)], model)
 
-def process_grammar_file(grammarfn, data):
+def process_grammar_file(grammarfn: str, data: pd.DataFrame) -> str:
+    """Reads grammar file into string and adds all x variables present in dataframe
+
+    Args:
+        grammarfn: grammar filename to read and modify
+        data: dataset to be used with the grammar
+
+    Returns: 
+        updated_grammar: grammar text modified for number of variables in data
+    """
     with open(grammarfn, "r") as text_file:
         grammarstr = text_file.read()
 
@@ -315,7 +334,21 @@ def process_grammar_file(grammarfn, data):
         updated_grammar += line + "\n"
     return updated_grammar
 
-def prepare_split_data(df, train_indexes, test_indexes):
+def prepare_split_data(df: pd.DataFrame, train_indexes: np.ndarray, 
+                       test_indexes: np.ndarray) -> tuple[np.ndarray,np.ndarray,np.ndarray,np.ndarray]:
+    """Create and return data arrays for training and testing using indexes passed.
+
+    Args:
+        df: data set to split
+        train_indexes: rows in dataset to make training set
+        test_indexes: rows in dataset to make test set
+
+    Returns: 
+        X_train: x values in training
+        Y_train: y values in training
+        X_test: x values for testing
+        Y_test: y values for testing
+    """
     traindf = df.iloc[train_indexes]
     testdf = df.iloc[test_indexes]
     
@@ -329,7 +362,6 @@ def prepare_split_data(df, train_indexes, test_indexes):
             X_train[i,j] = traindf['x'+str(j)].iloc[i]
     for i in range(train_rows):
         Y_train[i] = traindf['y'].iloc[i]
-    # print(X_train)
     
     test_rows=testdf.shape[0]
     test_cols=testdf.shape[1]-1
@@ -348,7 +380,25 @@ def prepare_split_data(df, train_indexes, test_indexes):
     return X_train,Y_train,X_test,Y_test
     
 
-def generate_splits(ncvs, fitness_type, df, have_test_file=False, test_df=None, rand_seed=1234):
+def generate_splits(ncvs: int, fitness_type: str, df: pd.DataFrame, have_test_file: bool=False, test_df: pd.DataFrame=None, 
+                    rand_seed: int=1234) -> tuple[np.ndarray,np.ndarray,pd.DataFrame]:
+    """Generate splits for training and testing based on number of cross-validation intervals
+        requested.
+
+    Args:
+        ncvs: number of splits (cross-validations)
+        fitness_type: for 'r-squared' split into specified number of folds, otherwise split balancing classes in data
+        df: dataset to use for splitting
+        have_test_file: when true use the test_df as the tesing set
+        test_df: when using a test_file contains the testing dataset
+        rand_seed: controls split
+
+
+    Returns: 
+        train_splits: 2-D array of indexes to use in traininig
+        test_splits: 2-D array of indexes to use in testing
+        df: dataset to use with these indexes, concatenated for training and testing when test dataset provided
+    """
     if ncvs > 1:
         if fitness_type== 'r-squared':
             (train_splits, test_splits) = split_kfolds(df, ncvs, 
@@ -385,16 +435,23 @@ def compress_weights(model_str):
     return new_model_str
 
 
-def write_summary(filename, best_models, score_type, var_map, fitness_test,nmissing):
-    """
-    Writes summary file displaying best models and scores across all cross-validations.
+def write_summary(filename: str, best_models: list['deap.creator.Individual'], score_type: str, var_map: dict, 
+                  fitness_test: list[float],nmissing: list[int]) -> None:
+    """Produce summary file reporting results
 
-    :param filename: Output filename
-    :param best_models: List of individual objects from population
-    :param score_type: String with fitness type used
-    :param var_map: dict with x index as keys
-    :return: Nothing
+    Args:
+        filename: name of file to write
+        best_models: deap Individual objects from run
+        score_type: test used for scoring individuals
+        var_map: key is value (x[0],x[1],etc) and value is original column name in dataset
+        fitness_test: contains testing fitness scores for each individual
+        nmissing: number of missing rows for individual
+
+
+    Returns: 
+        None
     """
+
     header = f"CV\tVariables\t{score_type} Training\tTesting\tTraining-missing\tTesting-missing\n"
     
     fh = open(filename, "w")
@@ -510,16 +567,20 @@ def construct_nodes(modelstr):
     return nodes
 
 
-def write_plots(basefn, best_models, var_map, inputs_map, color_map):
-    """
-    Writes jpg file displaying best models with one per cross-validation.
+def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_map: dict, 
+                inputs_map: dict, color_map: ColorMapping) -> None:
+    """Produces png file displaying best models with one per cross-validation.
 
-    :param filename: Output filename base
-    :param best_models: List of individual objects from population
-    :param var_map: dict with x index as key and original name as vallue
-    :param inputs_map: dict with new name as key and original filename name as value
-    :parma color_map: ColorMap for use in plot
-    :return: Nothing
+    Parameters:
+        basefn: name of file to write
+        best_models: deap Individual objects from run
+        var_map: key is value (x[0],x[1],etc) and value is name from dataset adjusted for multiple occurences (Ott encoding)
+        inputs_map: key is name (adjusted for Ott encoding), value is original column name in input dataset
+        color_map: contains colors to use in plot
+
+
+    Returns: 
+        None
     """
 
     inputs_map.update({'PA':'PA', 'PM':'PM', 'PS':'PS','PD':'PD'})

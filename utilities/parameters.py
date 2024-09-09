@@ -1,22 +1,24 @@
+"""Algorithm parameters"""
 import argparse
 from operator import attrgetter
 import os
 
 
-"""Algorithm parameters"""
 params = {}
 
-def less_than(parameters,smaller,bigger):
-    """
-    Check that first value <= bigger
+def less_than(parameters: dict,smaller: float,bigger: float) -> bool:
+    """Check that smaller <= bigger.
 
-    Parameters:
-        parameters: Dictionary with key/value pairs for all parameters
-        smaller: number
-        bigger: numberr
-        
-    Returns: True if smaller <= bigger
+    Args:
+        parameters: number of splits (cross-validations)
+        smaller: key for smaller parameter value
+        bigger: key for bigger parameter value
+
+
+    Returns: 
+        True if smaller <= bigger, False otherwise
     """
+
     if parameters[smaller] > parameters[bigger]:
         print(f"{smaller} must be <= {bigger}")
         return False
@@ -24,11 +26,11 @@ def less_than(parameters,smaller,bigger):
         return True
 
 
-def valid_parameters(parameters):
+def valid_parameters(parameters) -> bool:
     """
     Check that all parameters passed are valid for ATHENA run
 
-        Parameters:
+        Args:
             parameters: Dictionary with key/value pairs for all parameters
 
         Returns: 
@@ -123,13 +125,16 @@ def valid_parameters(parameters):
     return all_valid    
     
 
-def load_param_file(file_name):
+def load_param_file(file_name: str) -> None:
     """
-    Load in a params text file and set the params dictionary directly.
-    Format is key: value
+    Load in a params text file and set the params dictionary directly. The text file must
+        be in the format key: value.
+    
+    Args;
+        file_name: The name/location of a parameters file.
 
-    :param file_name: The name/location of a parameters file.
-    :return: Nothing.
+    Returns:
+        None
     """
 
     try:
@@ -174,13 +179,15 @@ class SortedDefaultHelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
         super(SortedDefaultHelpFormatter, self).add_arguments(actions)
         
         
-def parse_cmd_args(arguments, has_mpi=False):
-    """
-    Parse command line arguments
+def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
+    """Parse command line arguments using argparse. 
 
-    :param arguments Command-line arguments passed by user
-    :param has_mpi MPI related arguments included when has_mpi=True
-    :return dict of options
+    Args:
+        arguments: Command-line arguments passed by user
+        has_mpi: MPI related arguments included when has_mpi=True
+
+    Returns:
+        cmd_args: dict of command line options
     """
 
     parser = argparse.ArgumentParser(
@@ -402,22 +409,26 @@ def parse_cmd_args(arguments, has_mpi=False):
     return cmd_args
 
                          
-def set_params(command_line_args, create_files=True, has_mpi=False):
+def set_params(command_line_args: list, has_mpi: bool=False) -> dict:
     """
-    This function parses all command line arguments specified by the user.
-    If certain parameters are not set then defaults are used (e.g. random
-    seeds, elite size). Sets the correct imports given command line
-    arguments. Sets correct grammar file and fitness function.
+    Sets all parameters for the run. It parses command line arguments first and 
+    then a paramters file if provided. The values in the parameters file will
+    supercede any provided on the command line.
 
-    :param command_line_args: Command line arguments specified by the user.
-    :return: dict 
+    Args:
+        command_line_args: Command line arguments specified by the user.
+        has_mpi: True when mpi detected so that parameters can be distributred to worker processes
+
+    Returns: 
+        params: dict with paramter string as key and parameter value
     """
 
     cmd_args = parse_cmd_args(command_line_args, has_mpi)
 
     # LOAD PARAMETERS FILE
     # These parameters in the file overwrites all previously set parameters.
-    if 'PARAM_FILE' in cmd_args:
+    # if 'PARAM_FILE' in cmd_args:
+    if cmd_args['PARAM_FILE'] is not None:
         load_param_file(cmd_args['PARAM_FILE'])
 
     params.update(cmd_args)

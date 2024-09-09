@@ -1,3 +1,4 @@
+""" Setup of DEAP structures and additional functions used in GENN algorithm """
 # import grape
 from deap import creator, base, tools
 import grape.grape as grape
@@ -7,7 +8,20 @@ from sklearn.metrics import balanced_accuracy_score
 
 INVALID_FITNESS = -1000
 
-def configure_toolbox(genome_type, fitness, selection, init='sensible'):
+def configure_toolbox(genome_type: str, fitness: str, selection: str, 
+                      init:str ='sensible') -> base.Toolbox:
+    """Configure the DEAP toolbox for controlling GE algorithm
+
+    Args:
+        genome_type: Phenotypes (outcomes) filename
+        fitness: SNP values filename
+        selection: any continuous data filename
+        init: scale outcome values from 0 to 1.0
+
+    Returns:
+        DEAP base.Toolbox configured for a GE run
+    """
+
     toolbox = base.Toolbox()
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
     if genome_type == 'standard':
@@ -57,9 +71,17 @@ def configure_toolbox(genome_type, fitness, selection, init='sensible'):
     return toolbox
 
 
-# y actual values
-# y_hat predicted values
-def r_squared(y, y_hat):
+def r_squared(y: np.ndarray, y_hat: np.ndarray) -> float:
+    """Calculate r-squared values
+
+    Args:
+        y: Observed values
+        y_hat: Predicted values
+
+    Returns:
+        r-squared value
+    """
+
     nan_mask = np.isnan(y_hat)
     y_bar = y[~nan_mask].mean()
     ss_tot = ((y[~nan_mask]-y_bar)**2).sum()
@@ -67,7 +89,18 @@ def r_squared(y, y_hat):
     return 1 - (ss_res/ss_tot)
     
 
-def fitness_rsquared(individual, points):
+def fitness_rsquared(individual: 'deap.creator.Individual', points: list) -> float:
+    """Calculate r-squared fitness for this individual using points passed
+
+    Args:
+        individual: solution being evaluated for fitness
+        points: 2-D list containing inputs and outcome for calcualting fitness
+            points[0] contains 2-D np.ndarray of all inputs
+
+    Returns:
+        r-squared fitness
+    """
+
     #points = [X, Y]
     x = points[0]
     y = points[1]
@@ -105,7 +138,19 @@ def fitness_rsquared(individual, points):
     return fitness,
     
     
-def fitness_rsquared_lexicase(individual, points):
+def fitness_rsquared_lexicase(individual: 'deap.creator.Individual', points: list) -> float:
+    """Calculate r-squared fitness for this individual and store differences in
+        predicted vs observed outcomes for use in lexicase selection
+
+    Args:
+        individual: solution being evaluated for fitness
+        points: 2-D list containing inputs and outcome for calcualting fitness
+            points[0] contains 2-D np.ndarray of all inputs
+
+    Returns:
+        r-squared fitness
+    """
+
     #points = [X, Y]
     x = points[0]
     y = points[1]
@@ -149,7 +194,18 @@ def fitness_rsquared_lexicase(individual, points):
     return fitness,
     
 
-def fitness_balacc(individual, points):
+def fitness_balacc(individual: 'deap.creator.Individual', points: list) -> float:
+    """Calculate balanced accuracy as fitness for this individual using points passed
+
+    Args:
+        individual: solution being evaluated for fitness
+        points: 2-D list containing inputs and outcome for calcualting fitness
+            points[0] contains 2-D np.ndarray of all inputs
+
+    Returns:
+        balanced accuracy fitness
+    """
+
     x = points[0]
     y = points[1]
     
@@ -160,10 +216,7 @@ def fitness_balacc(individual, points):
     try:
         pred = eval(individual.phenotype)
         
-#         print(individual.phenotype)
 #         pred2 = eval(compress_weights(individual.phenotype))
-        
-        
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
         return INVALID_FITNESS,
@@ -181,11 +234,7 @@ def fitness_balacc(individual, points):
         fitness = balanced_accuracy_score(y[~nan_mask],pred_nonan)
         individual.nmissing = np.count_nonzero(np.isnan(pred))
         
-        
 #         fitness_compressed = balanced_accuracy_score(y[~nan_mask],pred2)
-        
-#         print(f"{fitness} <--> {fitness_compressed}")        
-        
     except (FloatingPointError, ZeroDivisionError, OverflowError,
             MemoryError, ValueError):
         fitness = INVALID_FITNESS
@@ -201,7 +250,19 @@ def fitness_balacc(individual, points):
     return fitness,
     
 
-def fitness_balacc_lexicase(individual, points):
+def fitness_balacc_lexicase(individual: 'deap.creator.Individual', points: list) -> float:
+    """Calculate balanced accuracy fitness for this individual and store differences in
+        predicted vs observed outcomes for use in lexicase selection
+
+    Args:
+        individual: solution being evaluated for fitness
+        points: 2-D list containing inputs and outcome for calcualting fitness
+            points[0] contains 2-D np.ndarray of all inputs
+
+    Returns:
+        balanced accuracy fitness
+    """
+
     x = points[0]
     y = points[1]
     
