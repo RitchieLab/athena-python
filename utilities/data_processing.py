@@ -219,7 +219,8 @@ class ColorMapping:
 
 def process_var_colormap(colorfn: str=None, node_color: str='lightgray', var_default: str='white',
     geno_encode: str='additive') -> dict:
-    """Create color map for graphical output of networks. 
+    """Create color map for graphical output of networks. Files format is tab-delimited
+        in order of category, color, inputs
 
     Args:
         colorfn: name of file to process, when no fn provided only the network nodes
@@ -241,7 +242,7 @@ def process_var_colormap(colorfn: str=None, node_color: str='lightgray', var_def
         with open(colorfn) as csv_file:
             #skip header
             heading = next(csv_file)
-            reader = csv.reader(csv_file)
+            reader = csv.reader(csv_file, delimiter='\t')
             
             for row in reader:
                 if not row:
