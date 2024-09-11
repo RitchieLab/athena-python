@@ -55,7 +55,7 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
     if continfn:
         contin_df = process_continfile(continfn, contin_scale, missing, included_vars)
         inputs_map={contin_df.columns[i]:contin_df.columns[i] for i in range(0,len(contin_df.columns))}
-    
+
     if genofn:
         geno_df, geno_map = process_genofile(genofn, geno_encode, missing, included_vars)
         inputs_map.update(geno_map)
@@ -79,8 +79,8 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
     
 
 def normalize(val):
-    minval = min(val)
-    diff = max(val) - minval
+    minval = np.nanmin(val)
+    diff = np.nanmax(val) - minval
     newval = (val - minval) / diff 
     return newval
 
@@ -103,14 +103,13 @@ def process_continfile(fn: str, scale: bool, missing: str=None, included_vars: l
         data=data.loc[:, data.columns.isin(included_vars)]
 
     if missing:
-        # data.replace([missing], np.nan, inplace=True)
-        data.loc[:,data.columns!='ID'].replace([missing], np.nan, inplace=True)
-    
+        data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].replace(missing, np.nan)
+        
     data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].astype(float)
-    
+
     if scale:
         data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].apply(normalize, axis=0)
-    
+
     return data
     
     
@@ -144,8 +143,8 @@ def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: l
         data=data.loc[:, data.columns.isin(included_vars)]
 
     if missing:
-        data.replace([missing], np.nan, inplace=True)
-        
+        # data.replace([missing], np.nan, inplace=True)
+        data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].replace(missing, np.nan)
     
 #     oldcols = list(data.drop('y', axis=1).columns)
     labels = list(data.columns)

@@ -986,7 +986,7 @@ def mcge_random_initializaion(ind_class: 'deap.creator.MetaCreator', pop_size:in
     
 def sensible_initialisation(ind_class: 'deap.creator.MetaCreator', pop_size:int, 
                           bnf_grammar:'grape.grape.Grammar', 
-                          min_init_genome_length:int, max_init_genome_length:int,
+                          min_init_depth:int, 
                           max_init_depth:int, codon_size:int, codon_consumption:str,
                           genome_representation:str) -> list:
     """Sensible initialization for standard linear genome. Half the generated individuals
@@ -997,8 +997,7 @@ def sensible_initialisation(ind_class: 'deap.creator.MetaCreator', pop_size:int,
         ind_class: Deap creator
         pop_size: number of individuals to create
         bnf_grammar: BNF grammar 
-        min_init_genome_length: minimum number of codons in genome
-        max_init_genome_length: maximum number of codons in genome
+        min_init_depth: minimum depth for tree in mapping genome
         max_init_depth: maximum depth for tree in mapping genome
         codon_size: maximum to be stored in codon
         codon_consumption: type of consumption when mapping (ie. lazy or eager)
