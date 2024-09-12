@@ -155,14 +155,16 @@ def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: l
         geno_map = {labels[i]:labels[i] for i in range(0,len(labels))}
         
     if encoding == 'add_quad':
+        orig_columns = data.loc[:,data.columns!='ID'].columns
         new_df = data[data.loc[:,data.columns!='ID'].columns.repeat(2)]
 
         columns = list(new_df.columns)
         columns[::2]= [ x + "-a" for x in new_df.columns[::2]]
         columns[1::2]= [ x + "-b" for x in new_df.columns[1::2]]
         
-        geno_map = {columns[i]:data.columns[i//2] for i in range(0,len(columns))}
-        
+        # map back to original columns 
+        geno_map = {columns[i]:orig_columns[(i)//2] for i in range(0,len(columns))}
+
         new_df.columns = columns
         add_quad_encoding(new_df)
         # add back ID column
@@ -243,6 +245,7 @@ def process_var_colormap(colorfn: str=None, node_color: str='lightgray', var_def
             #skip header
             heading = next(csv_file)
             reader = csv.reader(csv_file, delimiter='\t')
+            # reader = csv.reader(csv_file, delim_whitespace=True)
             
             for row in reader:
                 if not row:
@@ -250,7 +253,9 @@ def process_var_colormap(colorfn: str=None, node_color: str='lightgray', var_def
                 # set category color
                 color_map.add_category(row[0],row[1])
                 for in_var in row[2:]:
-                    color_map.add_input(in_var,row[0],row[1])
+                    for var in in_var.split():
+                        color_map.add_input(var,row[0],row[1])
+
     return color_map
     
 
@@ -544,7 +549,7 @@ def construct_nodes(modelstr):
                 function_nodes.append(item.num)
                 item=stack.pop()
             
-            # element after should be a node
+            # element after wil be a node
             item = stack.pop()
             if not isinstance(item, Node):
                 node = Node(num=len(nodes), label=item)
@@ -616,7 +621,9 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
         plt.clf()
         fig, ax = plt.subplots()
         Graph(edges, node_layout='dot', arrows=True, node_labels = node_labels, 
-            edge_labels=edge_labels, node_color=node_colors, node_size=node_size, ax=ax)
+            edge_labels=edge_labels, node_color=node_colors, node_size=node_size, ax=ax,
+            scale=(2,2), edge_label_fontdict=dict(size=6), node_label_fontdict=dict(size=4))
+            # node_label_offset=(0,0.1))
             
             
         if len(categories) > 0:
@@ -633,11 +640,11 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
                 )
                 node_proxy_artists.append(proxy)
             
-            node_legend = ax.legend(handles=node_proxy_artists, loc='lower left')#, title='Categories')
+            node_legend = ax.legend(handles=node_proxy_artists, loc='lower left', fontsize=7)#, title='Categories')
             ax.add_artist(node_legend)
         
         outputfn = basefn + ".cv" + str(cv) + ".png"
-        plt.title("\n".join(textwrap.wrap(modelstr, 60)))
+        plt.title("\n".join(textwrap.wrap(modelstr, 80)), fontsize=8)
         plt.savefig(outputfn, dpi=300)
 
 
