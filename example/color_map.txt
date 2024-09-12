@@ -1,0 +1,6 @@
+Category	Color	Inputs
+APOE	orange	SNP3 SNP92 SNP22
+ABCA7	lightblue	SNP12 SNP27
+Environmental	lightgreen	C30 C2 
+Response to cytokine	royalblue	SNP79
+
