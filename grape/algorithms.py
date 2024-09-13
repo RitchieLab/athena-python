@@ -1,5 +1,7 @@
 """ Modified DEAP to work with GRAPE library. 
     docstrings modified to conform to google style 
+
+    Original code at https://github.com/bdsul/grape
 """
 
 #    This file is part of DEAP.
