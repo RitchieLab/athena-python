@@ -1,5 +1,5 @@
 # athena-python
-Python implementation and expansion of ATHENA to include recent trends in evolutionary computing.
+Python implementation and expansion of ATHENA to include recent advances in evolutionary computing.
 
 ## What is ATHENA ?
 The Analysis Tool for Heritable and Environmental Network Associations (ATHENA) is a software package that combines statistical and biological variable selection methods with machine learning modeling techniques to identify complex prediction models that can include non-linear interactions and different types of high-throughput data.
