@@ -126,7 +126,7 @@ for cv in range(params['CV']):
         train_splits[cv], test_splits[cv])
     
     if params['INIT'] == 'random':
-        population = toolbox.populationCreator(pop_size=params['POPULATION_SIZE'],
+        population = toolbox.populationCreator(pop_size=params['POP_SIZE'],
                                            bnf_grammar=BNF_GRAMMAR,
                                            min_init_genome_length=params['MIN_INIT_GENOME_LENGTH'],
                                            max_init_genome_length=params['MAX_INIT_GENOME_LENGTH'],
@@ -136,7 +136,7 @@ for cv in range(params['CV']):
                                            genome_representation=GENOME_REPRESENTATION
                                            )
     else:
-        population = toolbox.populationCreator(pop_size=params['POPULATION_SIZE'],
+        population = toolbox.populationCreator(pop_size=params['POP_SIZE'],
                                            bnf_grammar=BNF_GRAMMAR,
                                            min_init_depth=params['MIN_INIT_TREE_DEPTH'],
                                            max_init_depth=params['MAX_INIT_TREE_DEPTH'],
@@ -146,7 +146,7 @@ for cv in range(params['CV']):
                                             )
                                             
     # define the hall-of-fame object:
-    hof = tools.HallOfFame(params['HALLOFFAME_SIZE'])
+    hof = tools.HallOfFame(params['HOF_SIZE'])
     
     # prepare the statistics object:
     stats = tools.Statistics(key=lambda ind: ind.fitness.values)
@@ -159,8 +159,8 @@ for cv in range(params['CV']):
     # perform the Grammatical Evolution flow:
     population, logbook = algorithms.ge_eaSimpleWithElitism(population, toolbox, 
                                               cxpb=params['P_CROSSOVER'], 
-                                              mutpb=params['P_MUTATION'],
-                                              ngen=params['GENERATIONS'], 
+                                              mutpb=params['P_MUT'],
+                                              ngen=params['GENS'], 
                                               elite_size=params['ELITE_SIZE'],
                                               bnf_grammar=BNF_GRAMMAR,
                                               codon_size=params['CODON_SIZE'],
@@ -220,7 +220,7 @@ for cv in range(params['CV']):
         import csv    
         header = REPORT_ITEMS
         
-        with open(params['OUT'] +'.cv'+ str(cv+1) + ".csv", "w", encoding='UTF8', newline='') as csvfile:
+        with open(params['OUT'] +'.cv'+ str(cv+1) + ".log", "w", encoding='UTF8', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter='\t')
             writer.writerow(header)
             for value in range(len(max_fitness_values)):

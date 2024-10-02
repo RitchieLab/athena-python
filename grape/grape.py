@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue May 10 06:53:28 2022
 
-@author: allan
+Modified code from GRAPE: Grammatical Algorithms in Python for Evolution for use with ATHENA and includes multi-chromosome and LEAP genome implementations
 
+"""
 
-Modified codeo from GRAPE: Grammatical Algorithms in Python for Evolution for use with ATHENA and includes multi-chromosome and LEAP genome implementations
+"""
 
 Original license:
 
@@ -950,9 +950,9 @@ def leap_random_initialisation(ind_class: 'deap.creator.MetaCreator', pop_size:i
 
     population = []
     # generate a complete set of frames for Leap 
-    codon_size = bnf_grammar.nt_rule_size
-    minsize = min_init_genome_length // codon_size + 1
-    maxsize = max_init_genome_length // codon_size + 1
+    frame_size = bnf_grammar.nt_rule_size
+    minsize = min_init_genome_length // frame_size + 1
+    maxsize = max_init_genome_length // frame_size + 1
 
     for i in range(pop_size):
         genome = []

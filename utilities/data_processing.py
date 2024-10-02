@@ -26,8 +26,8 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
         outcomefn: Phenotypes (outcomes) filename
         genofn: SNP values filename
         continfn: any continuous data filename
-        out_norm: scale outcome values from 0 to 1.0
-        contin_norm: scale each continuous variable from 0 to 1.0
+        out_scale: scale outcome values from 0 to 1.0
+        contin_scale: scale each continuous variable from 0 to 1.0
         geno_encode: encode genotype data. options are 'add_quad' and 'additive'
         outcome: column header in continfn to use for 'y'
         included_vars: list of variable names to include in analysis; all others excluded
@@ -60,7 +60,7 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
         geno_df, geno_map = process_genofile(genofn, geno_encode, missing, included_vars)
         inputs_map.update(geno_map)
     
-    geno_df = geno_df.sort_values('ID', ascending=False)
+    dataset_df = dataset_df.sort_values('ID', ascending=False)
     unmatched = []
 
     if genofn:
@@ -219,15 +219,15 @@ class ColorMapping:
     
     
 
-def process_var_colormap(colorfn: str=None, node_color: str='lightgray', var_default: str='white',
-    geno_encode: str='additive') -> dict:
+def process_var_colormap(colorfn: str=None, node_color: str='lightgray', 
+    var_default: str='white') -> ColorMapping:
     """Create color map for graphical output of networks. Files format is tab-delimited
         in order of category, color, inputs
 
     Args:
         colorfn: name of file to process, when no fn provided only the network nodes
             (PA,PD,PM,PS) are included
-        node_default: Colors for nodes not specified in the color map file
+        node_color: color for the operator nodes
         var_default: Default colors for unspecified variables
 
     Returns: 
@@ -482,12 +482,12 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
     for i,model in enumerate(best_models):
         compressed = compress_weights(model.phenotype)
         compressed = reset_variable_names(compressed, var_map)
-        fh.write(f"\t{i+1}\t{compressed}\n")
+        fh.write(f"{i+1}\t{compressed}\n")
         
     fh.write("\n***** Original Networks *****")
     fh.write("\nCV\tModel\n")
     for i,model in enumerate(best_models):
-        fh.write(f"\t{i+1}\t{model.phenotype}\n")
+        fh.write(f"{i+1}\t{model.phenotype}\n")
     
     fh.close()
 

@@ -1,0 +1,28 @@
+site_name: ATHENA Documentation
+
+theme:
+  name: "material"
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - index.md
+  - Manual:
+    - manual/installation.md
+    - manual/parameters.md
+    - manual/input_files.md
+    - manual/output_files.md
+  - tutorials.md
+  - methodology.md
+  - Code Reference:
+    - GENN:
+      - code_reference/alg_setup.md
+      - code_reference/functions.md
+      - code_reference/parallel.md
+    - Grape:
+      - code_reference/algorithms.md
+      - code_reference/grape.md
+    - Utilites:
+      - code_reference/data_processing.md
+      - code_reference/parameters.md
