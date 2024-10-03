@@ -1,0 +1,1197 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../tutorials/">
+      
+      
+        <link rel="next" href="../code_reference/alg_setup/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>Methodology - ATHENA Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.35f28582.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ATHENA Documentation" class="md-header__button md-logo" aria-label="ATHENA Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATHENA Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Methodology
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ATHENA Documentation" class="md-nav__button md-logo" aria-label="ATHENA Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ATHENA Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Manual
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manual/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manual/parameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manual/input_files/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input Files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manual/output_files/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Output Files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Methodology
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Methodology
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Missing data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encoding-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Encoding / normalization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grammatical-evolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grammatical Evolution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Grammatical Evolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grammar
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#genomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genomes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fitness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fitness
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initialization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Initialization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random" class="md-nav__link">
+    <span class="md-ellipsis">
+      random
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensible" class="md-nav__link">
+    <span class="md-ellipsis">
+      sensible
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crossover" class="md-nav__link">
+    <span class="md-ellipsis">
+      Crossover
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mutation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mutation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Code Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    GENN
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            GENN
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/alg_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alg setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/parallel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parallel
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Grape
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Grape
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/algorithms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Algorithms
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/grape/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Grape
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Utilites
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            Utilites
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/data_processing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data processing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/parameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Missing data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encoding-normalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Encoding / normalization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grammatical-evolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grammatical Evolution
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Grammatical Evolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#grammar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grammar
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#genomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genomes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fitness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fitness
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initialization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Initialization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random" class="md-nav__link">
+    <span class="md-ellipsis">
+      random
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensible" class="md-nav__link">
+    <span class="md-ellipsis">
+      sensible
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crossover" class="md-nav__link">
+    <span class="md-ellipsis">
+      Crossover
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mutation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mutation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Methodology</h1>
+
+<p><strong>ATHENA</strong> utilizes machine learning techniques to analyze high-throughput categorical (i.e. single nucleotide polymorphisms) and quantitative (i.e. gene expression levels) predictor variables to generate multivariable models that predict either a categorical (i.e. disease status) or quantitative (i.e. cholesterol levels) outcomes.</p>
+<h2 id="data">Data</h2>
+<h3 id="filtering">Filtering</h3>
+<p>The default behavior for <strong>ATHENA</strong> is to include all input variables included in the data set and use the first outcome variable in that file. The parameter <a href="../manual/parameters/#data-options">INCLUDEDVARS</a> specifies the names of variables to include in a run. The parameter <a href="../manual/parameters/#data-options">OUTCOME</a> specifies the name of the outcome to use.</p>
+<h3 id="missing-data">Missing data</h3>
+<p><strong>ATHENA</strong> handles missing data in the input variables by skipping any samples for a network when any single variable in the network is missing. The percentage of missing data for a network is reported in the summary file at the end of the run. The algorithm functions best with no missing data, so it the input data set should be as complete as possible.</p>
+<h3 id="encoding-normalization">Encoding / normalization</h3>
+<p>Continuous input and outcome variables can be normalized using the parameters <a href="../manual/parameters/#data-options">SCALE_CONTIN</a> and <a href="../manual/parameters/#data-options">SCALE_OUTCOME</a>. The variables will be scaled from 0 to 1 using min-max normalization.</p>
+<p>For genotypes, the encoding can be set as additive (-1,0,1) or the genotype representation created by Jurg Ott can be used. This method creates 2 new "dummy" variables for each SNP genotype: one to encode for linear, or allelic effect and to encode to a non-linear or quadratic effect. The additive encoding in <strong>ATHENA</strong> corresponds to the Linear column below:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Genotype</strong></th>
+<th><strong>Original</strong></th>
+<th><strong>Linear</strong></th>
+<th><strong>Quadratic</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AA</td>
+<td>0</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>Aa</td>
+<td>1</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td>aa</td>
+<td>2</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cross-validation">Cross validation</h3>
+<p><strong>ATHENA</strong> utilizes cross validatino to evaluate the evolved models on unseen data. The data are divided into equal parts and one part is left out of each cross validation to act as the test set for the evolved models. The parameter <a href="../manual/parameters/#data-options">CV</a> controls the number of cross validations used. If CV is set to 1, then all the data will be used for training and there will be not test score reported.</p>
+<p>As an alternative, ATHENA will accept data files that are designated as test files (TEST_OUTCOME_FILE,TEST_GENO_FILE,TEST_CONTIN_FILE). In this case, these files will be used as the test set and a single run is performed.</p>
+<h2 id="grammatical-evolution">Grammatical Evolution</h2>
+<h3 id="grammar">Grammar</h3>
+<p><strong>ATHENA</strong> uses a context-free grammar to map the genomes in the population to final networks. The grammar can be modified to change the final networks. </p>
+<p>For example, the sample grammar file begins its mapping:</p>
+<pre><code>&lt;p&gt; ::= &lt;pn&gt;(&lt;pinput&gt;)
+&lt;pn&gt; ::= PA
+    | PS
+    | PM
+    | PD
+&lt;pinput&gt; ::= [&lt;winput&gt;,&lt;winput&gt;]
+    | [&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;]
+    | [&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;]
+    | [&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;]
+&lt;winput&gt; ::= (&lt;cop&gt; * &lt;v&gt;)
+        | (&lt;cop&gt; * &lt;p&gt;)
+</code></pre>
+<p>It can be altered to insure that another layer always appears in the final networks by inserting another non-terminal:</p>
+<pre><code>&lt;p&gt; ::= &lt;pn&gt;(&lt;pinput1&gt;)
+&lt;pn&gt; ::= PA
+    | PS
+    | PM
+    | PD
+&lt;pinput&gt; ::= [(&lt;cop&gt; * &lt;p&gt;),(&lt;cop&gt; * &lt;p&gt;)]
+    | [(&lt;cop&gt; * &lt;p&gt;), (&lt;cop&gt; * &lt;p&gt;), (&lt;cop&gt; * &lt;p&gt;)]
+&lt;pinput&gt; ::= [&lt;winput&gt;,&lt;winput&gt;]
+    | [&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;]
+&lt;winput&gt; ::= (&lt;cop&gt; * &lt;v&gt;)
+    | (&lt;cop&gt; * &lt;p&gt;)
+</code></pre>
+<p>Alternatively, the grammar can be modified to include only specific node types:</p>
+<pre><code>&lt;p&gt; ::= &lt;pn&gt;(&lt;pinput&gt;)
+&lt;pn&gt; ::= PA
+&lt;pinput&gt; ::= [&lt;winput&gt;,&lt;winput&gt;]
+    | [&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;]
+    | [&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;]
+    | [&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;,&lt;winput&gt;]
+&lt;winput&gt; ::= (&lt;cop&gt; * &lt;v&gt;)
+        | (&lt;cop&gt; * &lt;p&gt;)
+</code></pre>
+<h3 id="genomes">Genomes</h3>
+<p><strong>ATHENA</strong> has three genome types available for use. </p>
+<ol>
+<li>Standard linear - each production rule consumes a codon sequentially.</li>
+<li>Multi-chromosomal genome grammatical evolution <a href="https://core.ac.uk/download/pdf/12529831.pdf">(link)</a> - each non-terminal has its own linear list of codons and codons are consumed sequentially only for that non-terminal.</li>
+<li>LEAP <a href="https://dl.acm.org/doi/10.1145/3583133.3590680">(link)</a> - a linear genome divided into frames. A frame consists of a complete set of codons that match the number of non-terminals in the grammar.</li>
+</ol>
+<p>The genomes primarily affect the behavior of the <a href="#Crossover">crossover operator</a>. The MCGE and LEAP genomes both maintain the context of the codons along the genome. In the standard linear genome, a codon may be used for different non-terminals depending on the codons that precede it.</p>
+<h3 id="fitness">Fitness</h3>
+<p><strong>ATHENA</strong> offers two fitness metrics, balanced accuracy and r-squared. <a href="https://en.wikipedia.org/wiki/Precision_and_recall#Imbalanced_data">Balanced accuracy</a> should be used with binary outcomes (i.e. disease status). <a href="https://en.wikipedia.org/wiki/Coefficient_of_determination">R squared</a> should be used with continuous outcome variables (i.e. cholesterol levels).</p>
+<h3 id="initialization">Initialization</h3>
+<p>Two options exist for initializing the population used in grammatical evolution, sensible and random.</p>
+<h4 id="random">random</h4>
+<p>For the standard genome type, genomes are randomly generated codon by codon. The length is set by the parameters MIN_INIT_GENOME_LENGTH and MAX_INIT_GENOME_LENGTH and each codon is less than or equal to the CODON_SIZE parameter.</p>
+<p>For the MCGE genome type, each chromosome's size is set by the parameters MIN_INIT_GENOME_LENGTH and MAX_INIT_GENOME_LENGTH.</p>
+<p>For the LEAP genome type, the values MIN_INIT_GENOME_LENGTH and MIN_INIT_GENOME_LENGTH are divided by the frame size to determine the minimum and maximum number of frames in a genome. For example, if the number of non-terminals is 8, MIN_INIT_GENOME_LENGTH is 80 and the MAX_INIT_GENOME_LENGTH is 400, then the number of complete frames generated will be between 10 and 50 (length / number of non-terminals).</p>
+<h4 id="sensible">sensible</h4>
+<p>Sensible initialization operates similarly for all types of genomes. The process generates complete trees using the grammar passed to the software to generate trees. For each non-terminal used, a codon is created and saved to the genome. The parameters MIN_INIT_TREE_DEPTH and MAX_INIT_TREE_DEPTH set the limits on the size of the trees. Sensible initialization in <strong>ATHENA</strong> generates trees grown to the maximum depth specified for 50% of the intiial population. For the other half, the trees are guaranteed to be at least as deep as the MIN_INIT_TREE_DEPTH while being no more than the depth of MAX_INIT_TREE_DEPTH.</p>
+<h3 id="selection">Selection</h3>
+<p>The selection of individuals for the next generation during evolution can be set to either tournament, lexicase or epsilon-lexiscase. The tournament is a standard pairwise selection with the better of the two being selected. If lexicase type selection is desired, then <a href="https://discourse.pushlanguage.org/t/lexicase-selection/90">lexicase</a> is appropriate for use with binary outcomes (case/control) while <a href="https://discourse.pushlanguage.org/t/epsilon-lexicase-selection/571">epsilon-lexicase</a> should be used with continuous outcomes.</p>
+<h3 id="crossover">Crossover</h3>
+<p><strong>ATHENA</strong> utilizes one point effective crossover. For the standard linear chromosome the codons past the point of crossover in each genome are crossed. For LEAP genomes, crossover occurs between the frames (a set of contiguous codons with each position corresponding to a non-terminal) to maintain the context of each codon. For MCGE, crossover occurs between a single matching chromosome in each genome.</p>
+<h3 id="mutation">Mutation</h3>
+<p>Mutation is a straightforward process as each codon in all types of genomes are checked against the mutation rate (P_MUT) for possible mutation. If a codon is mutated, the codon value is changed to a random integer up the maximum value specified (CODON_SIZE).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1186 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../installation/">
+      
+      
+        <link rel="next" href="../input_files/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>Parameters - ATHENA Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#using-athena" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ATHENA Documentation" class="md-header__button md-logo" aria-label="ATHENA Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATHENA Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Parameters
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ATHENA Documentation" class="md-nav__button md-logo" aria-label="ATHENA Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ATHENA Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Manual
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#using-athena" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using ATHENA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reporting-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reporting Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parellization-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parellization Options
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input_files/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input Files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output_files/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Output Files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodology
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Code Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    GENN
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            GENN
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code_reference/alg_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alg setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code_reference/functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code_reference/parallel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parallel
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Grape
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Grape
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code_reference/algorithms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Algorithms
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code_reference/grape/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Grape
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Utilites
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            Utilites
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code_reference/data_processing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data processing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code_reference/parameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#using-athena" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using ATHENA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      File Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reporting-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reporting Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parellization-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parellization Options
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h2 id="using-athena">Using ATHENA</h2>
+<p>ATHENA can be run from the command-line by executing "athena.py" (or "python athena.py") and specifying the desired inputs, outputs and other optional settings. Options can be either passed on the command-line or can be included in a paramters file that can be passed to ATHENA on the command-line. </p>
+<p>Every option (except for the parameter file option) is available on both the command-line and in the parameter file. The available options are the same no matter where they appear, but are formatted differently. Options on the command line are lower-case, start with two dashes and may contain single dashes to separate words (such as outcome-file), while in a configuration file the same option would be in upper-case, contain no dashes and instead use underscores to separate words (i.e. OUTCOME_FILE).</p>
+<p>Parameters in the parameter file take precedence over any passed on the command-line. Many parameters have default values. </p>
+<p>All options are listed here in both their command line and parameter file forms. If an option allows or requires any further arguments, they are also noted along with their default values, if any. Arguments which are required are enclosed in &lt;angle brackets&gt;, while arguments which are optional are enclosed in [square brackets].</p>
+<h1 id="file-options">File Options</h1>
+<table>
+<thead>
+<tr>
+<th><strong>Command-line</strong></th>
+<th><strong>Parameter file</strong></th>
+<th><strong>Arguments</strong></th>
+<th><strong>Information</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--color-map-file</code></td>
+<td>COLOR_MAP_FILE</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File for specifying colors in output plots</td>
+</tr>
+<tr>
+<td><code>--contin-file</code></td>
+<td>CONTIN_FILE</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File containing continuous input data</td>
+</tr>
+<tr>
+<td><code>--geno-file</code></td>
+<td>GENO_FILE</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File containing genotypic input data</td>
+</tr>
+<tr>
+<td><code>--grammar-file</code></td>
+<td>GRAMMAR_FILE</td>
+<td>&lt;STR&gt;</td>
+<td>Default: <em>NONE</em>. File containing BNF grammar for GE</td>
+</tr>
+<tr>
+<td><code>--outcome-file</code></td>
+<td>OUTCOME_FILE</td>
+<td>&lt;STR&gt;</td>
+<td>Default: <em>NONE</em>. File containing outcome variables</td>
+</tr>
+<tr>
+<td><code>--param-file</code></td>
+<td></td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File containing parameters</td>
+</tr>
+<tr>
+<td><code>--test-contin-file</code></td>
+<td>TEST_CONTIN_FILE</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File containing test continuous input data</td>
+</tr>
+<tr>
+<td><code>--test-geno-file</code></td>
+<td>TEST_GENO_FILE</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File containing test genotypic input data</td>
+</tr>
+<tr>
+<td><code>--test-outcome-file</code></td>
+<td>TEST_OUTCOME_FILE</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File containing test outcome variables</td>
+</tr>
+</tbody>
+</table>
+<h1 id="data-options">Data Options</h1>
+<table>
+<thead>
+<tr>
+<th><strong>Command-line</strong></th>
+<th><strong>Parameter file</strong></th>
+<th><strong>Arguments</strong></th>
+<th><strong>Information</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--cv</code></td>
+<td>CV</td>
+<td>[INT]</td>
+<td>Default: <em>5</em>. Number of cross-validations to split data</td>
+</tr>
+<tr>
+<td><code>--geno-encode</code></td>
+<td>GENO_ENCODE</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>.  Sets genotype encoding. Must be either add_quad or additive</td>
+</tr>
+<tr>
+<td><code>--includedvars</code></td>
+<td>INCLUDEDVARS</td>
+<td>[STR STR ...]</td>
+<td>Default: <em>NONE</em>. Variable names to be included in run (accepts multiple arguments)</td>
+</tr>
+<tr>
+<td><code>--missing</code></td>
+<td>MISSING</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. Value denoting missing data in input files</td>
+</tr>
+<tr>
+<td><code>--outcome</code></td>
+<td>OUTCOME</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. Column header designating which variable to use. Uses first when not designated.</td>
+</tr>
+<tr>
+<td><code>--scale-contin</code></td>
+<td>SCALE_CONTIN</td>
+<td></td>
+<td>Default: <em>False</em>. Scale continuous input variables from 0-1.0</td>
+</tr>
+<tr>
+<td><code>--scale-outcome</code></td>
+<td>SCALE_OUTCOME</td>
+<td></td>
+<td>Default: <em>False</em>. Scale outcome variables form 0-1.0</td>
+</tr>
+</tbody>
+</table>
+<h1 id="reporting-options">Reporting Options</h1>
+<table>
+<thead>
+<tr>
+<th><strong>Command-line</strong></th>
+<th><strong>Parameter file</strong></th>
+<th><strong>Arguments</strong></th>
+<th><strong>Information</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--hof-size</code></td>
+<td>HOF_SIZE</td>
+<td>[INT]</td>
+<td>Default: <em>1</em>. Sets number of the best networks to save for reporting. Must be &gt;= to elite size</td>
+</tr>
+<tr>
+<td><code>--out</code></td>
+<td>OUT</td>
+<td>[STR]</td>
+<td>Default: <em>athena_results</em>. Specifies name prefix for output file</td>
+</tr>
+</tbody>
+</table>
+<h1 id="algorithm-options">Algorithm Options</h1>
+<table>
+<thead>
+<tr>
+<th><strong>Command-line</strong></th>
+<th><strong>Parameter file</strong></th>
+<th><strong>Arguments</strong></th>
+<th><strong>Information</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--codon-consumption</code></td>
+<td>CODON_CONSUMPTION</td>
+<td>[STR]</td>
+<td>Default: <em>eager</em>. Whether grammar will consume codons when only one choice for a rule in the grammar.</td>
+</tr>
+<tr>
+<td><code>--codon-size</code></td>
+<td>CODON_SIZE</td>
+<td>[INT]</td>
+<td>Default: <em>NONE</em>. Maximum value of a codon in the genome of an individual in the evolutionary population. At a minimum it should be&gt;= the largest number of choices for a rule in the grammar</td>
+</tr>
+<tr>
+<td><code>--fitness</code></td>
+<td>FITNESS</td>
+<td>[STR]</td>
+<td>Default: <em>balanced_acc</em>. Metric for fitness (balanced_acc or r-squared)</td>
+</tr>
+<tr>
+<td><code>--genome-type</code></td>
+<td>GENOME_TYPE</td>
+<td>[STR]</td>
+<td>Default: <em>standard</em>. GE genome type to use (standard, leap or mcge) generation</td>
+</tr>
+<tr>
+<td><code>--gens</code></td>
+<td>GENS</td>
+<td>[INT]</td>
+<td>Default: <em>50</em>. Number of generations in evolution</td>
+</tr>
+<tr>
+<td><code>--init</code></td>
+<td>INIT</td>
+<td>[STR]</td>
+<td>Default: <em>sensible</em>. Initialization procedure (sensible or random)</td>
+</tr>
+<tr>
+<td><code>--max-depth</code></td>
+<td>MAX_DEPTH</td>
+<td>[INT]</td>
+<td>Default: <em>50</em>. Max depth for mapping with individuals exceeding this being invalid</td>
+</tr>
+<tr>
+<td><code>--max-init-tree-depth</code></td>
+<td>MAX_INIT_TREE_DEPTH</td>
+<td>[INT]</td>
+<td>Default: <em>11</em> Maximum depth for tree created by sensible initialization</td>
+</tr>
+<tr>
+<td><code>--max-init-genome-length</code></td>
+<td>MAX_INIT_GENOME_LENGTH</td>
+<td>[INT]</td>
+<td>Default: <em>250</em>. Maximum genome length for random initializtion</td>
+</tr>
+<tr>
+<td><code>--min-init-tree-depth</code></td>
+<td>MIN_INIT_TREE_DEPTH</td>
+<td>[INT]</td>
+<td>Default: <em>7</em>. Minimum depth for tree created by sensible initialization</td>
+</tr>
+<tr>
+<td><code>--min-init-genome-length</code></td>
+<td>MIN_INIT_GENOME_LENGTH</td>
+<td>[INT]</td>
+<td>Default: <em>50</em>. Minimum genome length for random initializtion</td>
+</tr>
+<tr>
+<td><code>--nelite</code></td>
+<td>NELITE</td>
+<td>[INT]</td>
+<td>Default: <em>1</em>. number of best networks carried over to</td>
+</tr>
+<tr>
+<td>next generation</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>--p-crossover</code></td>
+<td>P_CROSSOVER</td>
+<td>[FLOAT]</td>
+<td>Default: <em>0.8</em>. Probability of a crossover during selection</td>
+</tr>
+<tr>
+<td><code>--p-mut</code></td>
+<td>P_MUT</td>
+<td>[FLOAT]</td>
+<td>Default: <em>0.01</em>. Probability of a crossover during selection</td>
+</tr>
+<tr>
+<td><code>--pop-size</code></td>
+<td>POP_SIZE</td>
+<td>[INT]</td>
+<td>Default: <em>250</em>. Population size for GE algorithm</td>
+</tr>
+<tr>
+<td><code>--random-seed</code></td>
+<td>RANDOM_SEED</td>
+<td>[INT]</td>
+<td>Default: <em>12345</em>. Random seed</td>
+</tr>
+<tr>
+<td><code>--selection</code></td>
+<td>SELECTION</td>
+<td>[STR]</td>
+<td>Default: <em>tournament</em>. Selection type (tournament, lexicase, epsilon_lexicase)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="parellization-options">Parellization Options</h1>
+<table>
+<thead>
+<tr>
+<th><strong>Command-line</strong></th>
+<th><strong>Parameter file</strong></th>
+<th><strong>Arguments</strong></th>
+<th><strong>Information</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--gens-migrate</code></td>
+<td>GENS_MIGRATE</td>
+<td>[INT]</td>
+<td>Default: <em>25</em>. Generational interval for migrating best individuals for multi-process run</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>
