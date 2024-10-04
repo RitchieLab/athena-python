@@ -249,4 +249,8 @@ if proc_rank == 0:
         best_models,params['FITNESS'], var_map, best_fitness_test, nmissing)
     data_processing.write_plots(params['OUT'], best_models, var_map, inputs_map, color_map)
     
+def main():
+    print("ATHENA")
 
+if __name__ == "__main__":
+    main()

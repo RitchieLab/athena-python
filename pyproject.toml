@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "athena-ge"
+version = "0.0.1"
+authors = [
+  { name="Scott Dudek", email="Scott.Dudek@pennmedicine.upenn.edu" },
+]
+description = "Python implementation of ATHENA grammatical evolution"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "deap",
+    "scikit-learn",
+    "netgraph",
+    "networkx",
+    "pandas" 
+]
+
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GPL-3.0 license",
+    "Operating System :: OS Independent",
+]
+
+
+[project.optional-dependencies]
+parallel = [
+    "mpi4py",
+]
+
+[project.scripts]
+athena = "athenage.athena:main"
+"athena.py" = "athenage.athena:main"
+
+[project.urls]
+Homepage = "https://github.com/RitchieLab/athena-python"
+Issues = "https://github.com/RitchieLab/athena-python/issues"
+
