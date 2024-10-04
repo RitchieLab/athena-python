@@ -285,15 +285,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#compiling-prior-knowledge" class="md-nav__link">
-    <span class="md-ellipsis">
-      Compiling Prior Knowledge
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -784,15 +775,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#compiling-prior-knowledge" class="md-nav__link">
-    <span class="md-ellipsis">
-      Compiling Prior Knowledge
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -828,15 +810,10 @@
 <p>The ATHENA code can be accessed on <a href="https://github.com/RitchieLab/athena-python">GitHub</a>. The current method to use it is to clone the repository </p>
 <pre><code>git clone https://github.com/RitchieLab/athena-python.git
 </code></pre>
-<pre><code>python setup.py install
+<p>Then from the main directory:</p>
+<pre><code>pip install .
 </code></pre>
-<p>This will place the Biofilter and LOKI files in your system’s usual place for Python-based software, which is typically alongside Python itself. The installation can also be done in a different location by using the “<code>--prefix</code>” or “<code>--exec-prefix</code>” options.</p>
-<h2 id="compiling-prior-knowledge">Compiling Prior Knowledge</h2>
-<p>The LOKI prior knowledge database <strong>must</strong> be generated before Biofilter can be used. This is done with the “<code>loki-build.py</code>” script which was installed along with Biofilter. There are several options for this utility which are detailed below, but to get started, you just need “<code>--knowledge</code>” and “<code>--update</code>”:</p>
-<pre><code>loki-build.py --knowledge loki.db --update
-</code></pre>
-<p>This will download and process the bulk data files from all supported knowledge sources, storing the result in the file “<code>loki.db</code>” (which we recommend naming after the current date, such as “loki-20240521.db”). The update process may take as few as 4 hours or as many as 24 depending on the speed of your internet connection, processor and filesystem, and requires up to 30 GB of free disk space: 10-20 GB of temporary storage (“C:\TEMP” on Windows, “/tmp” on Linux, etc) plus another 5-10 GB for the final knowledge database file.</p>
-<p>By default, the LOKI build script will delete all sources’ bulk data downloads after they have been processed. If the knowledge database will be updated frequently, it is recommended to keep these bulk files available so that any unchanged files will not need to be downloaded again. This can be accomplished with the “<code>--archive</code>” option.</p>
+<p>This will place the ATHENA and files in your system’s usual place for Python-based software, which is typically alongside Python itself. It will also add the commmand 'athena.py' to your path. The installation can also be done in a different location by using the “<code>--prefix</code>” or “<code>--exec-prefix</code>” options. </p>
 
 
 
