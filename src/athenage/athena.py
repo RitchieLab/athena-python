@@ -104,7 +104,7 @@ if nprocs > 1:
         grammar=BNF_GRAMMAR)
 
 # set up deap toolbox for evolutionary algorithm 
-toolbox=alg_setup.configure_toolbox(params['GENOME_TYPE'], params['FITNESS'], params['SELECTION'], params['INIT'])
+toolbox=alg_setup.configure_toolbox(params['FITNESS'], params['SELECTION'], params['INIT'])
 
 # configure report items 
 REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
@@ -133,7 +133,8 @@ for cv in range(params['CV']):
                                            max_init_depth=params['MAX_DEPTH'],
                                            codon_size=params['CODON_SIZE'],
                                            codon_consumption=params['CODON_CONSUMPTION'],
-                                           genome_representation=GENOME_REPRESENTATION
+                                           genome_representation=GENOME_REPRESENTATION,
+                                           genome_type=params['GENOME_TYPE']
                                            )
     else:
         population = toolbox.populationCreator(pop_size=params['POP_SIZE'],
@@ -142,9 +143,10 @@ for cv in range(params['CV']):
                                            max_init_depth=params['MAX_INIT_TREE_DEPTH'],
                                            codon_size=params['CODON_SIZE'],
                                            codon_consumption=params['CODON_CONSUMPTION'],
-                                           genome_representation=GENOME_REPRESENTATION
+                                           genome_representation=GENOME_REPRESENTATION,
+                                           genome_type=params['GENOME_TYPE']
                                             )
-                                            
+                        
     # define the hall-of-fame object:
     hof = tools.HallOfFame(params['HOF_SIZE'])
     
@@ -214,8 +216,8 @@ for cv in range(params['CV']):
         print("\nTraining Fitness: ", hof.items[0].fitness.values[0])
         print("Test Fitness: ", fitness_test[-1])
         print("Depth: ", hof.items[0].depth)
-        print("Length of the genome: ", len(hof.items[0].genome))
-        print(f'Used portion of the genome: {hof.items[0].used_codons/len(hof.items[0].genome):.2f}')
+        print("Length of the genome: ", hof.items[0].genome.total_codons())
+        print(f'Used portion of the genome: {hof.items[0].genome.used_codons()/hof.items[0].genome.total_codons():.2f}')
     
         import csv    
         header = REPORT_ITEMS
@@ -250,7 +252,7 @@ if proc_rank == 0:
     data_processing.write_plots(params['OUT'], best_models, var_map, inputs_map, color_map)
     
 def main():
-    print("ATHENA")
+    pass
 
 if __name__ == "__main__":
     main()

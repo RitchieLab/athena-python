@@ -8,12 +8,11 @@ from sklearn.metrics import balanced_accuracy_score
 
 INVALID_FITNESS = -1000
 
-def configure_toolbox(genome_type: str, fitness: str, selection: str, 
+def configure_toolbox(fitness: str, selection: str, 
                       init:str ='sensible') -> base.Toolbox:
     """Configure the DEAP toolbox for controlling GE algorithm
 
     Args:
-        genome_type: Phenotypes (outcomes) filename
         fitness: SNP values filename
         selection: any continuous data filename
         init: scale outcome values from 0 to 1.0
@@ -24,32 +23,13 @@ def configure_toolbox(genome_type: str, fitness: str, selection: str,
 
     toolbox = base.Toolbox()
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-    if genome_type == 'standard':
-        creator.create('Individual', grape.Individual, fitness=creator.FitnessMax)
-        if init == 'sensible':
-            toolbox.register("populationCreator", grape.sensible_initialisation, creator.Individual) 
-        else:
-            toolbox.register("populationCreator", grape.random_initialisation, creator.Individual) 
-        toolbox.register("mate", grape.crossover_onepoint)
-        toolbox.register("mutate", grape.mutation_int_flip_per_codon)
-    elif genome_type == 'leap':
-        creator.create('Individual', grape.LeapIndividual, fitness=creator.FitnessMax)
-        if init=='sensible':
-            toolbox.register("populationCreator", grape.leap_sensible_initialisation, creator.Individual) 
-        else:
-            toolbox.register("populationCreator", grape.leap_random_initialisation, creator.Individual) 
-        toolbox.register("mate", grape.leap_crossover_onepoint)#_leap2)
-        toolbox.register("mutate", grape.leap_mutation_int_flip_per_codon)#_leap)
-    elif genome_type == 'mcge':
-        creator.create('Individual', grape.MCGEIndividual, fitness=creator.FitnessMax)
-        if init=='sensible':
-            toolbox.register("populationCreator", grape.mcge_sensible_initialisation, creator.Individual) 
-        else:
-            toolbox.register("populationCreator", grape.mcge_random_initializaion, creator.Individual) 
-        toolbox.register("mate", grape.mcge_crossover_onepoint)#_leap2)
-        toolbox.register("mutate", grape.mcge_mutation_int_flip_per_codon)#_leap)
+    creator.create('Individual', grape.Individual, fitness=creator.FitnessMax)
+    if init == 'sensible':
+        toolbox.register("populationCreator", grape.sensible_initialization, creator.Individual) 
     else:
-        raise ValueError("genome_type must be standard, leap or mcge")
+        toolbox.register("populationCreator", grape.random_initialization, creator.Individual) 
+    toolbox.register("mate", grape.crossover_onepoint)
+    toolbox.register("mutate", grape.mutation_int_flip_per_codon)
     
     if fitness=='r-squared':
         if selection == 'epsilon_lexicase':

@@ -181,7 +181,8 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
     fitness_diversity = len(unique_fitnesses)/(len(points_train[1])+1) if 'fitness_diversity' in report_items else 0 #TODO generalise for other problems, because it only works if the fitness is proportional to the number of testcases correctly predicted
     behavioural_diversity = len(unique_behaviours)/len(population) if 'behavioural_diversity' in report_items else 0
 
-    length = [len(ind.genome) for ind in valid]
+    # length = [len(ind.genome) for ind in valid]
+    length = [ind.genome.total_codons() for ind in valid]
     nodes = [ind.nodes for ind in valid]
     depth = [ind.depth for ind in valid]
     used_codons = [ind.used_codons for ind in valid]
@@ -212,7 +213,8 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
     # Update the hall of fame with the generated individuals
     if halloffame is not None:
         halloffame.update(valid)
-        best_ind_length = len(halloffame.items[0].genome) 
+        # best_ind_length = len(halloffame.items[0].genome) 
+        best_ind_length = halloffame.items[0].genome.total_codons()
         best_ind_nodes = halloffame.items[0].nodes
         best_ind_depth = halloffame.items[0].depth
         best_ind_used_codons = halloffame.items[0].used_codons
@@ -346,7 +348,8 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
         behavioural_diversity = len(unique_behaviours)/len(population) if 'behavioural_diversity' in report_items else 0
                   
           
-        length = [len(ind.genome) for ind in valid]
+        # length = [len(ind.genome) for ind in valid]
+        length = [ind.genome.total_codons() for ind in valid]
         nodes = [ind.nodes for ind in valid]
         depth = [ind.depth for ind in valid]
         used_codons = [ind.used_codons for ind in valid]
@@ -378,7 +381,8 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
         # Update the hall of fame with the generated individuals
         if halloffame is not None:
             halloffame.update(valid)
-            best_ind_length = len(halloffame.items[0].genome)
+            # best_ind_length = len(halloffame.items[0].genome)
+            best_ind_length = halloffame.items[0].genome.total_codons()
             best_ind_nodes = halloffame.items[0].nodes
             best_ind_depth = halloffame.items[0].depth
             best_ind_used_codons = halloffame.items[0].used_codons
