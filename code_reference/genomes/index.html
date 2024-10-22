@@ -1,0 +1,3441 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../grape/">
+      
+      
+        <link rel="next" href="../data_processing/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>Genomes - ATHENA Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#src.athenage.grape.genomes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ATHENA Documentation" class="md-header__button md-logo" aria-label="ATHENA Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATHENA Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Genomes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ATHENA Documentation" class="md-nav__button md-logo" aria-label="ATHENA Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ATHENA Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Manual
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Manual
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manual/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manual/parameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manual/input_files/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input Files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manual/output_files/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Output Files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodology
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Code Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    GENN
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            GENN
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alg_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alg setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parallel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parallel
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Grape
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Grape
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../algorithms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Algorithms
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grape/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Grape
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Genomes
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Genomes
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      genomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Genome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.all_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      all_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.consumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      consumed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.crossover_onepoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      crossover_onepoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.effective_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      effective_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.get_next_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_next_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.random_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      random_fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.reset_map_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_map_index
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome" class="md-nav__link">
+    <span class="md-ellipsis">
+      LeapGenome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LeapGenome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.add_tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_tail
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.all_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      all_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.consumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      consumed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.crossover_onepoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      crossover_onepoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.effective_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      effective_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.finalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      finalize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.get_next_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_next_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.new_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      new_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.random_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      random_fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.reset_map_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_map_index
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCGEGenome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCGEGenome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.add_tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_tail
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.all_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      all_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.consumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      consumed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.crossover_onepoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      crossover_onepoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.effective_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      effective_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.get_next_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_next_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.random_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      random_fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.reset_map_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_map_index
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.set_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.size" class="md-nav__link">
+    <span class="md-ellipsis">
+      size
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Utilites
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            Utilites
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data_processing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data processing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      genomes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Genome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Genome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.all_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      all_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.consumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      consumed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.crossover_onepoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      crossover_onepoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.effective_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      effective_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.get_next_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_next_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.random_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      random_fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.Genome.reset_map_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_map_index
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome" class="md-nav__link">
+    <span class="md-ellipsis">
+      LeapGenome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LeapGenome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.add_tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_tail
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.all_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      all_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.consumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      consumed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.crossover_onepoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      crossover_onepoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.effective_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      effective_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.finalize" class="md-nav__link">
+    <span class="md-ellipsis">
+      finalize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.get_next_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_next_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.new_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      new_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.random_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      random_fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.LeapGenome.reset_map_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_map_index
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCGEGenome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCGEGenome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.add_tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_tail
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.all_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      all_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.consumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      consumed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.crossover_onepoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      crossover_onepoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.effective_cross_loc" class="md-nav__link">
+    <span class="md-ellipsis">
+      effective_cross_loc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.get_next_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_next_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.random_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      random_fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.reset_map_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      reset_map_index
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.set_codon" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_codon
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.athenage.grape.genomes.MCGEGenome.size" class="md-nav__link">
+    <span class="md-ellipsis">
+      size
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Genomes</h1>
+
+<p>Provides Genome classes for the <code>ATHENA</code> project 
+providing for alternative genome types with corresponding
+mapping and initialization approaches.</p>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="src.athenage.grape.genomes"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="src.athenage.grape.genomes.Genome" class="doc doc-heading">
+            <code>Genome</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>A GE genome.</p>
+
+              <details class="quote">
+                <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Genome</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A GE genome.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_rules</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span> <span class="o">=</span> <span class="n">codon_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_codons</span><span class="p">(</span><span class="n">n_rules</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">init_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_rules</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span><span class="o">=</span><span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">add_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_codons</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_codons</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">random_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">genome_length</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Fill genome with random codons &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">genome_length</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">consumed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="s2">&quot;Returns True if all codons have been used&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">reset_map_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the genome so that get_next_codon starts with first codon&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">get_next_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Get next codon from genome for mapping</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rule_used: index of rule used in grammar</span>
+
+<span class="sd">        Returns: </span>
+<span class="sd">            codon: codon value </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">codon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_read</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">codon</span>
+
+    <span class="k">def</span> <span class="nf">used_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span>
+
+    <span class="k">def</span> <span class="nf">total_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">codon_idx</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">invalid</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">codon_idx</span><span class="p">]</span><span class="o">=</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">effective_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list that contains the position for crossover&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">next_read</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">all_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return location for a cross over entire genome&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">))]</span>
+
+    <span class="k">def</span> <span class="nf">crossover_onepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome2</span><span class="p">:</span><span class="n">Genome</span><span class="p">,</span> <span class="n">pos1</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">pos2</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Genome</span><span class="p">,</span><span class="n">Genome</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; cross over genomes and return new ones </span>
+<span class="sd">        Args:</span>
+<span class="sd">            genome2:second geome to cross with this one</span>
+<span class="sd">            pos1: codon position for cross on in the genome</span>
+<span class="sd">            pos2: codon position for cross on second genome</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            new_genome1: Genome</span>
+<span class="sd">            new_genome2: Genome   </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_genome1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">new_genome2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">genome2</span><span class="p">)</span>
+
+        <span class="n">new_genome1</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pos1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pos2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]</span>
+        <span class="n">new_genome2</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pos2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pos1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]</span>
+
+        <span class="k">return</span> <span class="n">new_genome1</span><span class="p">,</span> <span class="n">new_genome2</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.Genome.all_cross_loc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">all_cross_loc</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return location for a cross over entire genome</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">all_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return location for a cross over entire genome&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">))]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.Genome.consumed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">consumed</span><span class="p">(</span><span class="n">rule_used</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Returns True if all codons have been used</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">consumed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="s2">&quot;Returns True if all codons have been used&quot;</span>
+    <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.Genome.crossover_onepoint" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">crossover_onepoint</span><span class="p">(</span><span class="n">genome2</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>cross over genomes and return new ones 
+Args:
+    genome2:second geome to cross with this one
+    pos1: codon position for cross on in the genome
+    pos2: codon position for cross on second genome</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>new_genome1</code></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="src.athenage.grape.genomes.Genome" href="#src.athenage.grape.genomes.Genome">Genome</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Genome</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>new_genome2</code></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="src.athenage.grape.genomes.Genome" href="#src.athenage.grape.genomes.Genome">Genome</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Genome</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">crossover_onepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome2</span><span class="p">:</span><span class="n">Genome</span><span class="p">,</span> <span class="n">pos1</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">pos2</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Genome</span><span class="p">,</span><span class="n">Genome</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; cross over genomes and return new ones </span>
+<span class="sd">    Args:</span>
+<span class="sd">        genome2:second geome to cross with this one</span>
+<span class="sd">        pos1: codon position for cross on in the genome</span>
+<span class="sd">        pos2: codon position for cross on second genome</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        new_genome1: Genome</span>
+<span class="sd">        new_genome2: Genome   </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">new_genome1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">new_genome2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">genome2</span><span class="p">)</span>
+
+    <span class="n">new_genome1</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pos1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pos2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]</span>
+    <span class="n">new_genome2</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pos2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pos1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]</span>
+
+    <span class="k">return</span> <span class="n">new_genome1</span><span class="p">,</span> <span class="n">new_genome2</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.Genome.effective_cross_loc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">effective_cross_loc</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return a list that contains the position for crossover</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">effective_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list that contains the position for crossover&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">next_read</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.Genome.get_next_codon" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_next_codon</span><span class="p">(</span><span class="n">rule_used</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get next codon from genome for mapping</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>rule_used</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>index of rule used in grammar</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>codon</code></td>            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>codon value</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_next_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get next codon from genome for mapping</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rule_used: index of rule used in grammar</span>
+
+<span class="sd">    Returns: </span>
+<span class="sd">        codon: codon value </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">codon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_read</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">codon</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.Genome.random_fill" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">random_fill</span><span class="p">(</span><span class="n">genome_length</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fill genome with random codons</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">genome_length</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Fill genome with random codons &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">genome_length</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.Genome.reset_map_index" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reset_map_index</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Reset the genome so that get_next_codon starts with first codon</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reset_map_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset the genome so that get_next_codon starts with first codon&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">next_read</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="src.athenage.grape.genomes.LeapGenome" class="doc doc-heading">
+            <code>LeapGenome</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="src.athenage.grape.genomes.Genome" href="#src.athenage.grape.genomes.Genome">Genome</a></code></p>
+
+
+        <p>A GE genome.</p>
+
+              <details class="quote">
+                <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">LeapGenome</span><span class="p">(</span><span class="n">Genome</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A GE genome.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_rules</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_rules</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">init_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_rules</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">init_codons</span><span class="p">(</span><span class="n">n_rules</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">=</span> <span class="n">n_rules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_frame</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">new_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Return new frame initialized to be empty &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">add_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span>  <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">codon_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">+</span> <span class="n">rule_used</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">codon_idx</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># fill unused codons with random values</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">:]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_frame</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">codon_idx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">codon_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert any unset codons to hold random values&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">:]]</span>
+
+    <span class="k">def</span> <span class="nf">add_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_codons</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span>  <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert n_codons to complete frames&quot;&quot;&quot;</span>
+        <span class="n">n_codons</span> <span class="o">=</span> <span class="n">n_codons</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">-</span> <span class="p">(</span><span class="n">n_codons</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_codons</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">random_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">genome_length</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Fill genome with frames containing random codons&quot;&quot;&quot;</span>
+        <span class="n">genome_length</span> <span class="o">=</span> <span class="n">genome_length</span> <span class="o">+</span> <span class="p">(</span><span class="n">genome_length</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">genome_length</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">consumed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="s2">&quot;Returns True if all codons have been used&quot;</span>
+        <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">))</span> <span class="ow">or</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="ow">and</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)))):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">reset_map_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the genome so that get_next_codon starts with first frame&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">get_next_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Get next codon from genome for mapping</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rule_used: index of rule used in grammar</span>
+
+<span class="sd">        Returns: </span>
+<span class="sd">            codon: codon value or False if no next codon</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">codon_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">+</span> <span class="n">rule_used</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">codon_idx</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">used_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span>
+
+    <span class="k">def</span> <span class="nf">effective_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list that contains the frame for crossover&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">all_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return location for a cross over entire genome&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">crossover_onepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome2</span><span class="p">:</span> <span class="n">LeapGenome</span><span class="p">,</span> <span class="n">pos1</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">pos2</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">LeapGenome</span><span class="p">,</span><span class="n">LeapGenome</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; cross over genomes and return new ones </span>
+<span class="sd">        Args:</span>
+<span class="sd">            genome2: LeapGenome to cross with</span>
+<span class="sd">            pos1: contains frame to cross for this genome</span>
+<span class="sd">            pso2: contains frame to cross at second genome</span>
+
+<span class="sd">        Returns;</span>
+<span class="sd">            new_genome1: LeapGenome</span>
+<span class="sd">            new_genome2: LeapGenome    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_genome1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">new_genome2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">genome2</span><span class="p">)</span>
+
+        <span class="n">pt1</span> <span class="o">=</span> <span class="n">pos1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span>
+        <span class="n">pt2</span> <span class="o">=</span> <span class="n">pos2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span>
+
+        <span class="n">new_genome1</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pt1</span><span class="p">]</span> <span class="o">+</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pt2</span><span class="p">:]</span>
+        <span class="n">new_genome2</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pt2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pt1</span><span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">new_genome1</span><span class="p">,</span> <span class="n">new_genome2</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.add_tail" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_tail</span><span class="p">(</span><span class="n">n_codons</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert n_codons to complete frames</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_codons</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span>  <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert n_codons to complete frames&quot;&quot;&quot;</span>
+    <span class="n">n_codons</span> <span class="o">=</span> <span class="n">n_codons</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">-</span> <span class="p">(</span><span class="n">n_codons</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_codons</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.all_cross_loc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">all_cross_loc</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return location for a cross over entire genome</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">all_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return location for a cross over entire genome&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span><span class="o">//</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.consumed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">consumed</span><span class="p">(</span><span class="n">rule_used</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Returns True if all codons have been used</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">consumed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="s2">&quot;Returns True if all codons have been used&quot;</span>
+    <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">))</span> <span class="ow">or</span>
+    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="ow">and</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)))):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.crossover_onepoint" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">crossover_onepoint</span><span class="p">(</span><span class="n">genome2</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>cross over genomes and return new ones 
+Args:
+    genome2: LeapGenome to cross with
+    pos1: contains frame to cross for this genome
+    pso2: contains frame to cross at second genome</p>
+<p>Returns;
+    new_genome1: LeapGenome
+    new_genome2: LeapGenome</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">crossover_onepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome2</span><span class="p">:</span> <span class="n">LeapGenome</span><span class="p">,</span> <span class="n">pos1</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">pos2</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">LeapGenome</span><span class="p">,</span><span class="n">LeapGenome</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; cross over genomes and return new ones </span>
+<span class="sd">    Args:</span>
+<span class="sd">        genome2: LeapGenome to cross with</span>
+<span class="sd">        pos1: contains frame to cross for this genome</span>
+<span class="sd">        pso2: contains frame to cross at second genome</span>
+
+<span class="sd">    Returns;</span>
+<span class="sd">        new_genome1: LeapGenome</span>
+<span class="sd">        new_genome2: LeapGenome    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_genome1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">new_genome2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">genome2</span><span class="p">)</span>
+
+    <span class="n">pt1</span> <span class="o">=</span> <span class="n">pos1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span>
+    <span class="n">pt2</span> <span class="o">=</span> <span class="n">pos2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span>
+
+    <span class="n">new_genome1</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pt1</span><span class="p">]</span> <span class="o">+</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pt2</span><span class="p">:]</span>
+    <span class="n">new_genome2</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pt2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">pt1</span><span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">new_genome1</span><span class="p">,</span> <span class="n">new_genome2</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.effective_cross_loc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">effective_cross_loc</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return a list that contains the frame for crossover</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">effective_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list that contains the frame for crossover&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.finalize" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">finalize</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert any unset codons to hold random values</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert any unset codons to hold random values&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">:]]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.get_next_codon" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_next_codon</span><span class="p">(</span><span class="n">rule_used</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get next codon from genome for mapping</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>rule_used</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>index of rule used in grammar</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>codon</code></td>            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>codon value or False if no next codon</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_next_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get next codon from genome for mapping</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rule_used: index of rule used in grammar</span>
+
+<span class="sd">    Returns: </span>
+<span class="sd">        codon: codon value or False if no next codon</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)]</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">codon_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span> <span class="o">+</span> <span class="n">rule_used</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">codon_idx</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.new_frame" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">new_frame</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return new frame initialized to be empty</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">new_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Return new frame initialized to be empty &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.random_fill" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">random_fill</span><span class="p">(</span><span class="n">genome_length</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fill genome with frames containing random codons</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">genome_length</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Fill genome with frames containing random codons&quot;&quot;&quot;</span>
+    <span class="n">genome_length</span> <span class="o">=</span> <span class="n">genome_length</span> <span class="o">+</span> <span class="p">(</span><span class="n">genome_length</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">genome_length</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.LeapGenome.reset_map_index" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reset_map_index</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Reset the genome so that get_next_codon starts with first frame</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reset_map_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset the genome so that get_next_codon starts with first frame&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="src.athenage.grape.genomes.MCGEGenome" class="doc doc-heading">
+            <code>MCGEGenome</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="src.athenage.grape.genomes.Genome" href="#src.athenage.grape.genomes.Genome">Genome</a></code></p>
+
+
+        <p>A GE genome.</p>
+
+              <details class="quote">
+                <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">MCGEGenome</span><span class="p">(</span><span class="n">Genome</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A GE genome.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_rules</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_rules</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">init_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_rules</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rules</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rules</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">add_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">val</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns average size of a chromosome&quot;&quot;&quot;</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">chr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">total</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">add_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_codons</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Add tail to each chrom&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_codons</span><span class="p">):</span>
+                <span class="nb">chr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span> 
+
+    <span class="k">def</span> <span class="nf">random_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">genome_length</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Fill genome with chromosomes that equal genome length&quot;&quot;&quot;</span>
+        <span class="n">chrom_length</span> <span class="o">=</span> <span class="n">genome_length</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chrom_length</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">consumed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="s2">&quot;Returns True if all codons have been used&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">])</span> <span class="k">else</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">reset_map_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the genome so that get_next_codon starts with first frame&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">))]</span>
+
+    <span class="k">def</span> <span class="nf">get_next_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Get next codon from genome for mapping</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rule_used: index of rule used in grammar</span>
+
+<span class="sd">        Returns: </span>
+<span class="sd">            codon: codon value or False if no next codon</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">codon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">codon</span>
+
+    <span class="k">def</span> <span class="nf">used_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">total_codons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">chr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">total</span>
+
+    <span class="k">def</span> <span class="nf">set_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">codon_idx</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">invalid</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Sets specified codon. Calculates chromosome and position for codon to match index passed</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            codon_idx: overall codon position to alter</span>
+<span class="sd">            value: new codon value</span>
+<span class="sd">            invalid: when True use all codons to calculate position</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">invalid</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chrnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">codon_idx</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">]):</span>
+                    <span class="n">codon_idx</span> <span class="o">-=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">][</span><span class="n">codon_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chrnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">codon_idx</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">]:</span>
+                    <span class="n">codon_idx</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">][</span><span class="n">codon_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">effective_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list that contains the frame for crossover&quot;&quot;&quot;</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">chr_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)):</span>
+            <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">positions</span>
+
+    <span class="k">def</span> <span class="nf">all_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return location for a cross over entire genome&quot;&quot;&quot;</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">chr_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">):</span>
+            <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">])))</span>
+        <span class="k">return</span> <span class="n">positions</span>
+
+    <span class="k">def</span> <span class="nf">crossover_onepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome2</span><span class="p">:</span> <span class="n">MCGEGenome</span><span class="p">,</span> <span class="n">pos1</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">pos2</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">MCGEGenome</span><span class="p">,</span><span class="n">MCGEGenome</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; cross over genomes and return new ones </span>
+<span class="sd">        Args:</span>
+<span class="sd">            genome2: MCGEGenome to cross with</span>
+<span class="sd">            pos1: contains [chrom,position] to cross for this genome</span>
+<span class="sd">            pso2: contains [chrom,position]  to cross at second genome</span>
+
+<span class="sd">        Returns;</span>
+<span class="sd">            new_genome1: MCGEGenome created after crossover</span>
+<span class="sd">            new_genome2: MCGEGenome created after crossover</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_genome1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">new_genome2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">genome2</span><span class="p">)</span>
+
+        <span class="c1">#select chromosome for crossover</span>
+        <span class="n">chr_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">new_genome1</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">pos1</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]]</span> <span class="o">+</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="n">pos2</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]:]</span>
+        <span class="n">new_genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]</span>  <span class="o">=</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">pos2</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="n">pos1</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]:]</span>
+        <span class="k">return</span> <span class="n">new_genome1</span><span class="p">,</span> <span class="n">new_genome2</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.add_tail" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_tail</span><span class="p">(</span><span class="n">n_codons</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Add tail to each chrom</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">add_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_codons</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Add tail to each chrom&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_codons</span><span class="p">):</span>
+            <span class="nb">chr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span> 
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.all_cross_loc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">all_cross_loc</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return location for a cross over entire genome</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">all_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return location for a cross over entire genome&quot;&quot;&quot;</span>
+    <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">chr_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">):</span>
+        <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="n">positions</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.consumed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">consumed</span><span class="p">(</span><span class="n">rule_used</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Returns True if all codons have been used</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">consumed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="s2">&quot;Returns True if all codons have been used&quot;</span>
+    <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">])</span> <span class="k">else</span> <span class="kc">False</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.crossover_onepoint" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">crossover_onepoint</span><span class="p">(</span><span class="n">genome2</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>cross over genomes and return new ones 
+Args:
+    genome2: MCGEGenome to cross with
+    pos1: contains [chrom,position] to cross for this genome
+    pso2: contains [chrom,position]  to cross at second genome</p>
+<p>Returns;
+    new_genome1: MCGEGenome created after crossover
+    new_genome2: MCGEGenome created after crossover</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">crossover_onepoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome2</span><span class="p">:</span> <span class="n">MCGEGenome</span><span class="p">,</span> <span class="n">pos1</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">pos2</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">MCGEGenome</span><span class="p">,</span><span class="n">MCGEGenome</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; cross over genomes and return new ones </span>
+<span class="sd">    Args:</span>
+<span class="sd">        genome2: MCGEGenome to cross with</span>
+<span class="sd">        pos1: contains [chrom,position] to cross for this genome</span>
+<span class="sd">        pso2: contains [chrom,position]  to cross at second genome</span>
+
+<span class="sd">    Returns;</span>
+<span class="sd">        new_genome1: MCGEGenome created after crossover</span>
+<span class="sd">        new_genome2: MCGEGenome created after crossover</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_genome1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">new_genome2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">genome2</span><span class="p">)</span>
+
+    <span class="c1">#select chromosome for crossover</span>
+    <span class="n">chr_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">new_genome1</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">pos1</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]]</span> <span class="o">+</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="n">pos2</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]:]</span>
+    <span class="n">new_genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]</span>  <span class="o">=</span> <span class="n">genome2</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">pos2</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">][</span><span class="n">pos1</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]:]</span>
+    <span class="k">return</span> <span class="n">new_genome1</span><span class="p">,</span> <span class="n">new_genome2</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.effective_cross_loc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">effective_cross_loc</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Return a list that contains the frame for crossover</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">effective_cross_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list that contains the frame for crossover&quot;&quot;&quot;</span>
+    <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">chr_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)):</span>
+        <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">chr_idx</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">positions</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.get_next_codon" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_next_codon</span><span class="p">(</span><span class="n">rule_used</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get next codon from genome for mapping</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>rule_used</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>index of rule used in grammar</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>codon</code></td>            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>codon value or False if no next codon</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_next_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_used</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Get next codon from genome for mapping</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rule_used: index of rule used in grammar</span>
+
+<span class="sd">    Returns: </span>
+<span class="sd">        codon: codon value or False if no next codon</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">codon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">rule_used</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">codon</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.random_fill" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">random_fill</span><span class="p">(</span><span class="n">genome_length</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Fill genome with chromosomes that equal genome length</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">random_fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">genome_length</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Fill genome with chromosomes that equal genome length&quot;&quot;&quot;</span>
+    <span class="n">chrom_length</span> <span class="o">=</span> <span class="n">genome_length</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chrom_length</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">codon_size</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.reset_map_index" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reset_map_index</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Reset the genome so that get_next_codon starts with first frame</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reset_map_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset the genome so that get_next_codon starts with first frame&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">))]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.set_codon" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">set_codon</span><span class="p">(</span><span class="n">codon_idx</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">invalid</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Sets specified codon. Calculates chromosome and position for codon to match index passed</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>codon_idx</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>overall codon position to alter</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>value</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>new codon value</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>invalid</code></td>
+            <td>
+                  <code>bool</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>when True use all codons to calculate position</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>None</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_codon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">codon_idx</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">invalid</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Sets specified codon. Calculates chromosome and position for codon to match index passed</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        codon_idx: overall codon position to alter</span>
+<span class="sd">        value: new codon value</span>
+<span class="sd">        invalid: when True use all codons to calculate position</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">invalid</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chrnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">codon_idx</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">]):</span>
+                <span class="n">codon_idx</span> <span class="o">-=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">][</span><span class="n">codon_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chrnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">codon_idx</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">]:</span>
+                <span class="n">codon_idx</span> <span class="o">-=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumed_codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">[</span><span class="n">chrnum</span><span class="p">][</span><span class="n">codon_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">break</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.athenage.grape.genomes.MCGEGenome.size" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">size</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Returns average size of a chromosome</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/athenage/grape/genomes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns average size of a chromosome&quot;&quot;&quot;</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="nb">chr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">chr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">codons</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -620,6 +620,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genomes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Genomes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1533,7 +1554,11 @@ for island model (used with parallelized version)</p>
 <span class="normal">445</span>
 <span class="normal">446</span>
 <span class="normal">447</span>
-<span class="normal">448</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ge_eaSimpleWithElitism</span><span class="p">(</span><span class="n">population</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">:</span><span class="s1">&#39;deap.base.Toolbox&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ge_eaSimpleWithElitism</span><span class="p">(</span><span class="n">population</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">:</span><span class="s1">&#39;deap.base.Toolbox&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                 <span class="n">mutpb</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">ngen</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">elite_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> 
                 <span class="n">bnf_grammar</span><span class="p">:</span><span class="s1">&#39;grape.grape.grammar&#39;</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">max_tree_depth</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> 
                 <span class="n">max_genome_length</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1636,7 +1661,8 @@ for island model (used with parallelized version)</p>
     <span class="n">fitness_diversity</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_fitnesses</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points_train</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;fitness_diversity&#39;</span> <span class="ow">in</span> <span class="n">report_items</span> <span class="k">else</span> <span class="mi">0</span> <span class="c1">#TODO generalise for other problems, because it only works if the fitness is proportional to the number of testcases correctly predicted</span>
     <span class="n">behavioural_diversity</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_behaviours</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;behavioural_diversity&#39;</span> <span class="ow">in</span> <span class="n">report_items</span> <span class="k">else</span> <span class="mi">0</span>
 
-    <span class="n">length</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="o">.</span><span class="n">genome</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
+    <span class="c1"># length = [len(ind.genome) for ind in valid]</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">genome</span><span class="o">.</span><span class="n">total_codons</span><span class="p">()</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
     <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">nodes</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
     <span class="n">depth</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">depth</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
     <span class="n">used_codons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">used_codons</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
@@ -1667,7 +1693,8 @@ for island model (used with parallelized version)</p>
     <span class="c1"># Update the hall of fame with the generated individuals</span>
     <span class="k">if</span> <span class="n">halloffame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">halloffame</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
-        <span class="n">best_ind_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">genome</span><span class="p">)</span> 
+        <span class="c1"># best_ind_length = len(halloffame.items[0].genome) </span>
+        <span class="n">best_ind_length</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">genome</span><span class="o">.</span><span class="n">total_codons</span><span class="p">()</span>
         <span class="n">best_ind_nodes</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span>
         <span class="n">best_ind_depth</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">depth</span>
         <span class="n">best_ind_used_codons</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">used_codons</span>
@@ -1801,7 +1828,8 @@ for island model (used with parallelized version)</p>
         <span class="n">behavioural_diversity</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_behaviours</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">population</span><span class="p">)</span> <span class="k">if</span> <span class="s1">&#39;behavioural_diversity&#39;</span> <span class="ow">in</span> <span class="n">report_items</span> <span class="k">else</span> <span class="mi">0</span>
 
 
-        <span class="n">length</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="o">.</span><span class="n">genome</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
+        <span class="c1"># length = [len(ind.genome) for ind in valid]</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">genome</span><span class="o">.</span><span class="n">total_codons</span><span class="p">()</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">nodes</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
         <span class="n">depth</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">depth</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
         <span class="n">used_codons</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="o">.</span><span class="n">used_codons</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">valid</span><span class="p">]</span>
@@ -1833,7 +1861,8 @@ for island model (used with parallelized version)</p>
         <span class="c1"># Update the hall of fame with the generated individuals</span>
         <span class="k">if</span> <span class="n">halloffame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">halloffame</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
-            <span class="n">best_ind_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">genome</span><span class="p">)</span>
+            <span class="c1"># best_ind_length = len(halloffame.items[0].genome)</span>
+            <span class="n">best_ind_length</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">genome</span><span class="o">.</span><span class="n">total_codons</span><span class="p">()</span>
             <span class="n">best_ind_nodes</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span>
             <span class="n">best_ind_depth</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">depth</span>
             <span class="n">best_ind_used_codons</span> <span class="o">=</span> <span class="n">halloffame</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">used_codons</span>
