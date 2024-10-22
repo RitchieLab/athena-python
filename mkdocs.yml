@@ -23,6 +23,7 @@ nav:
     - Grape:
       - code_reference/algorithms.md
       - code_reference/grape.md
+      - code_reference/genomes.md
     - Utilites:
       - code_reference/data_processing.md
       - code_reference/parameters.md

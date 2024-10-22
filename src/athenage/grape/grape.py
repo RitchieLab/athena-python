@@ -104,7 +104,7 @@ def sensible_initialization(ind_class: 'deap.creator.MetaCreator', pop_size:int,
                           min_init_depth:int, 
                           max_init_depth:int, codon_size:int, codon_consumption:str,
                           genome_representation:str, genome_type:str) -> list:
-    """Sensible initialization for standard linear genome. Half the generated individuals
+    """Sensible initialization ensures valid individuals. Half the generated individuals
     are up to the depth of the max_init_depth and half are limited to that depth but may be
     smaller
 
@@ -279,7 +279,7 @@ def random_initialization(ind_class: 'deap.creator.MetaCreator', pop_size:int,
                           min_init_genome_length:int, max_init_genome_length:int,
                           max_init_depth:int, codon_size:int, codon_consumption:str,
                           genome_representation:str, genome_type:str) -> list:
-    """Randomly generated linear genome compatible with standard chromosome mapping
+    """Randomly generated genomes that may be invalid when mapped
 
     Args:
         ind_class: Deap creator
@@ -325,7 +325,7 @@ def mapper_eager(genome: "grape.grape.Genome", grammar: "grape.grape.grammar",
         
 
     Returns:
-        phenotype: 
+        phenotype: mapped phenotype 
         nodes: number of nodes in tree
         depth: max depth of tree used in mapping
         used_codons: number of codons consumed in mapping
@@ -390,7 +390,7 @@ def mapper_eager(genome: "grape.grape.Genome", grammar: "grape.grape.grammar",
 
 def mapper_lazy(genome: list, grammar: "grape.grape.grammar",
                   max_depth: int) -> tuple[str, int, int, int, bool, list]:
-    """Maps GE multi-chromosome genome (MCGE). Uses lazy mapping so that 
+    """ Uses lazy mapping so that 
     only nonterminals with more than one option in the grammar 
     consume a codon in the genome
 
@@ -470,7 +470,7 @@ def mapper_lazy(genome: list, grammar: "grape.grape.grammar",
 def reMap(ind: 'deap.creator.Individual', genome: list, 
           bnf_grammar:'grape.grape.Grammar', max_tree_depth:int, 
           codon_consumption:str) -> 'deap.creator.Individual':
-    """Maps standard GE genome in individual to produce new phenotype
+    """Maps GE genome in individual to produce new phenotype
 
     Args:
         ind: individual to mutate
@@ -503,7 +503,7 @@ def mutation_int_flip_per_codon(ind:'deap.creator.Individual', mut_probability:f
                                 codon_consumption:str, 
                                 max_genome_length:int=None) -> 'deap.creator.Individual':
     """Mutation operator for GE genome. Each codon within the effective used codons
-    of the genome are checked
+    of the genome is checked
 
     Args:
         ind: individual to mutate
@@ -552,7 +552,7 @@ def crossover_onepoint(parent1: 'deap.creator.Individual', parent2: 'deap.creato
                        bnf_grammar: 'grape.grape.Grammar', max_depth: int, codon_consumption:str, 
                     genome_representation:str='list', 
                     max_genome_length:int=None) -> tuple['deap.creator.Individual','deap.creator.Individual']:
-    """One point crossover for standard linear GE genome individuals
+    """One point crossover for GE individuals
 
     Args:
         parent1: individual to cross
