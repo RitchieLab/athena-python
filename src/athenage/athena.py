@@ -9,7 +9,7 @@ Pyhon implementation of ATHENA software
 
 import grape.grape as grape
 import grape.algorithms as algorithms
-from genn.functions import activate_sigmoid, PA, PM, PS, PD, pdiv
+from genn.functions import activate, PA, PM, PS, PD, pdiv
 from genn import alg_setup
 from genn import parallel 
 
@@ -146,7 +146,7 @@ for cv in range(params['CV']):
                                            genome_representation=GENOME_REPRESENTATION,
                                            genome_type=params['GENOME_TYPE']
                                             )
-                        
+
     # define the hall-of-fame object:
     hof = tools.HallOfFame(params['HOF_SIZE'])
     
@@ -179,7 +179,6 @@ for cv in range(params['CV']):
 
     import textwrap
 
-    
     max_fitness_values, mean_fitness_values = logbook.select("max", "avg")
     min_fitness_values, std_fitness_values = logbook.select("min", "std")
     best_ind_length = logbook.select("best_ind_length")

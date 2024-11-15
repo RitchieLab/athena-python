@@ -159,8 +159,8 @@ def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: l
         new_df = data[data.loc[:,data.columns!='ID'].columns.repeat(2)]
 
         columns = list(new_df.columns)
-        columns[::2]= [ x + "-a" for x in new_df.columns[::2]]
-        columns[1::2]= [ x + "-b" for x in new_df.columns[1::2]]
+        columns[::2]= [ x + "_a" for x in new_df.columns[::2]]
+        columns[1::2]= [ x + "_b" for x in new_df.columns[1::2]]
         
         # map back to original columns 
         geno_map = {columns[i]:orig_columns[(i)//2] for i in range(0,len(columns))}
@@ -423,7 +423,18 @@ def generate_splits(ncvs: int, fitness_type: str, df: pd.DataFrame, have_test_fi
 
     return train_splits, test_splits, df
 
+def format_number(num, max_decimals=2):
+    """Formats a number as a string with a maximum number of decimals, only if needed."""
+    return f"{num:.{max_decimals}f}".rstrip('0').rstrip('.')
+
 def compress_weights(model_str):
+    """ Compresses weights/constants to simplify the model string"""
+    if re.search(r"[PA|PD|PM|PS]", model_str):
+        return compress_weights_nn(model_str)
+    else:
+        return compress_weights_sr(model_str)
+
+def compress_weights_nn(model_str):
     pattern = re.compile(r"([f|p].*?)\s\*\s[x|P]")
     new_model_str = model_str
     m = pattern.search(new_model_str)
@@ -434,9 +445,52 @@ def compress_weights(model_str):
             match_start -= 1
             i -= 1
         value = eval(new_model_str[match_start:m.end(1)])
-        value = "{weight:.2f}".format(weight=float(value))
+        # value = "{weight:.2f}".format(weight=float(value))
+        value = format_number(value,3)
         new_model_str = new_model_str[:match_start] + str(value) + new_model_str[m.end(1):]
         m = pattern.search(new_model_str)
+    return new_model_str
+
+def compress_weights_sr(model_str):
+    new_model_str = model_str
+    float_pattern = re.compile(r"float\(\d*\.\d*\)")
+
+    m = float_pattern.search(new_model_str)
+    while m:
+        value = eval(new_model_str[m.start():m.end()])
+        new_model_str = new_model_str[:m.start()] + str(value) + new_model_str[m.end():]
+        m = float_pattern.search(new_model_str)
+
+    pdiv_pattern = re.compile(r"pdiv\([^\(|pdiv].*?\)")
+    pdiv_exclude = re.compile(r"x|\(pdiv")
+    op_pattern = re.compile(r"\([^\(][0-9\+|\-|\*  .]+?\)")
+    anymatch = True
+    while anymatch:
+        anymatch = False
+        i = 0
+        m = pdiv_pattern.search(new_model_str[i:])
+        while m:
+            if pdiv_exclude.search(new_model_str[m.start():m.end()]):
+                i = m.start() + 4
+            else:
+                value = eval(new_model_str[m.start():m.end()])
+                value = format_number(value,3)
+                new_model_str = new_model_str[:m.start()] + str(value) + new_model_str[m.end():]
+                anymatch = True
+            m = pdiv_pattern.search(new_model_str, i)
+
+        i=0
+        m = op_pattern.search(new_model_str)
+        while m:
+            if pdiv_exclude.search(new_model_str[m.start():m.end()]):
+                i = m.start() + 2
+            else:
+                value = eval(new_model_str[m.start():m.end()])
+                value = format_number(value,3)
+                new_model_str = new_model_str[:m.start()] + str(value) + new_model_str[m.end():]
+                anymatch = True
+            m = op_pattern.search(new_model_str, i)
+
     return new_model_str
 
 
@@ -483,7 +537,7 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
         compressed = compress_weights(model.phenotype)
         compressed = reset_variable_names(compressed, var_map)
         fh.write(f"{i+1}\t{compressed}\n")
-        
+    
     fh.write("\n***** Original Networks *****")
     fh.write("\nCV\tModel\n")
     for i,model in enumerate(best_models):
@@ -500,13 +554,63 @@ class Node:
         self.to = to
         self.num = num
 
-def construct_nodes(modelstr):
+
+def construct_nodes(modelstr:str) -> list:
     """
     Returns node objects representing the network
 
-    :param modelstr: String containing GE network
-    :return: nodes constructed from the model
-    """    
+     Parameters:
+        modelstr: String containing GE network
+     Returns
+       nodes constructed from the model
+    """ 
+    if re.search(r"PA|PS|PD|PM", modelstr):
+        return construct_nodes_nn(modelstr)
+    else:
+        return construct_nodes_sr(modelstr)
+
+def construct_nodes_sr(modelstr:str) -> list:
+    """
+    Returns node objects representing the network
+
+     Parameters:
+        modelstr: String containing GE symbolic regression model
+     Returns
+       nodes constructed from the model
+    """ 
+
+    model = modelstr.replace('activate(','')
+    model = model[:-1]
+    postfix_stack = infix_to_postfix(model)
+
+    operators = {"+":2,"-":2,"*":2,"pdiv":2}
+    stack = deque()
+    nodes=[]
+
+    for i in range(len(postfix_stack)):
+        if postfix_stack[i] not in operators:
+            nodes.append(Node(label=postfix_stack[i], num=len(nodes)))
+            stack.append(nodes[-1])
+        else:
+            m = operators[postfix_stack[i]]
+            for j in range(m):
+                n = stack.pop()
+                n.to = len(nodes)
+            nodes.append(Node(label=postfix_stack[i], num=len(nodes)))
+            stack.append(nodes[-1])
+    return nodes
+
+
+def construct_nodes_nn(modelstr:str) -> list:
+    """
+    Returns node objects representing the network
+
+     Parameters:
+        modelstr: String containing GE neural network model
+     Returns
+       nodes constructed from the model
+    """ 
+
     model = modelstr.replace('([', ' [').replace('])', '] ').replace('(', ' ( ').replace(')', ' ) ')
     ignore = {','}
     elements = model.split()
@@ -549,7 +653,7 @@ def construct_nodes(modelstr):
                 function_nodes.append(item.num)
                 item=stack.pop()
             
-            # element after wil be a node
+            # element after will be a node
             item = stack.pop()
             if not isinstance(item, Node):
                 node = Node(num=len(nodes), label=item)
@@ -604,15 +708,19 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
             node.num = abs(node.num - finalindex)
             node_labels[node.num] = node.label
             # possible colors: https://matplotlib.org/stable/users/explain/colors/colors.html
-            node_colors[node.num] = color_map.get_input_color(inputs_map[node.label])
-            
+            if node.label in inputs_map:
+                node_colors[node.num] = color_map.get_input_color(inputs_map[node.label])
+            else:
+                node_colors[node.num] = color_map.get_input_color(node.label)
+        
             if node_colors[node.num] != color_map.default_color and \
                 node_colors[node.num]  != color_map.operator_color:
                 categories.add(color_map.inputs[inputs_map[node.label]].category)
             
             if node.to is not None:
                 node.to = abs(node.to - finalindex)
-                edge_labels[(node.num,node.to)]="{weight:.2f}".format(weight=float(node.weight))
+                if node.weight:
+                    edge_labels[(node.num,node.to)]="{weight:.2f}".format(weight=float(node.weight))
 
         edges = []
         for node in nodes:
@@ -648,3 +756,63 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
         plt.savefig(outputfn, dpi=300)
 
 
+# Define operator precedence
+precedence = {
+    '+': 1,
+    '-': 1,
+    '*': 2,
+    '/': 2,
+    '(': 0,  # '(' has the lowest precedence
+}
+
+# Helper function to check if a string is a valid function name (letters, numbers, and underscores)
+def is_function(s):
+    # return re.match(r'^[a-zA-Z_][a-zA-Z_0-9]*$', s) is not None
+    return re.match(r'pdiv',s) is not None
+
+# Function to convert infix to postfix
+def infix_to_postfix(expression):
+    def get_precedence(op):
+        return precedence.get(op, -1)
+    
+    output = []
+    stack = []
+    
+    # Tokenize the expression using regex
+    # This regex captures:
+    # - variables/functions (letters, numbers, underscores)
+    # - negative numbers (e.g., -4.8 or -3)
+    # - operators +, -, *, /, (, ), and commas for function arguments
+    tokens = re.findall(r'\d+\.\d+|\d+|-\d+\.\d+|-\d+|[A-Za-z_][A-Za-z0-9_]*|[-+*/()=,]', expression)
+
+    # Process the tokens
+    for token in tokens:
+        if is_function(token):  # If token is a function name (e.g., 'pdiv')
+            stack.append(token)
+        
+        elif re.match(r'\d*\.\d+|\d+', token) or re.match(r'-\d*\.\d+|-\d+', token):  # If token is a number (constant)
+            output.append(token)
+        
+        elif token == '(':  # Left parenthesis
+            stack.append(token)
+        
+        elif token == ')':  # Right parenthesis
+            # Pop until left parenthesis is encountered
+            while stack and stack[-1] != '(':
+                output.append(stack.pop())
+            stack.pop()  # Pop the '(' itself
+        
+        elif token in precedence:  # If token is an operator
+            # Pop operators from the stack while they have greater precedence
+            while (stack and get_precedence(stack[-1]) >= get_precedence(token)):
+                output.append(stack.pop())
+            stack.append(token)
+        elif re.match(r'^[a-zA-Z_][a-zA-Z_0-9]*$', token): #variables
+            output.append(token)
+
+    # Pop all remaining operators in the stack
+    while stack:
+        output.append(stack.pop())
+    
+    return output
+    # return ' '.join(output)

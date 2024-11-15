@@ -7,7 +7,7 @@ import math
 import warnings
 warnings.filterwarnings('ignore', message='overflow encountered in exp')
     
-def activate_sigmoid(a: np.ndarray) -> np.ndarray:
+def activate(a: np.ndarray) -> np.ndarray:
     """ Sigmoid activation functioning matches behavior of original ATHENA code
     
     Args:
@@ -41,7 +41,7 @@ def PA(inputs:list) -> np.ndarray:
         np.ndarray containing the result modified by sigmoid function    
     """
 
-    return activate_sigmoid(sum(inputs))
+    return activate(sum(inputs))
     
 def PM(inputs:list) -> np.ndarray:
     """ Multiplicative node 
@@ -56,7 +56,7 @@ def PM(inputs:list) -> np.ndarray:
     result = inputs[0]
     for val in inputs[1:]:
         result = result * val
-    return activate_sigmoid(result)
+    return activate(result)
     
 def PS(inputs: list) -> np.ndarray:
     """ Subtraction node
@@ -72,7 +72,7 @@ def PS(inputs: list) -> np.ndarray:
     diff = inputs[0]
     for num in inputs[1:]:
         diff = diff - num
-    return activate_sigmoid(diff)
+    return activate(diff)
     
 def PD(inputs:list) -> np.ndarray:
     """ function to match ATHENA handling of division node in network. Uses 
@@ -101,7 +101,7 @@ def PD(inputs:list) -> np.ndarray:
             return 1.0
     
     result[anyzeroed]=1000
-    return activate_sigmoid(result)
+    return activate(result)
 
 
 def add(a:np.ndarray,b:np.ndarray) -> np.ndarray:

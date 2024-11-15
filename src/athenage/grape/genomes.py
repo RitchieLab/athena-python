@@ -70,7 +70,7 @@ class Genome:
         """Return location for a cross over entire genome"""
         return [random.randint(1,len(self.codons))]
 
-    def crossover_onepoint(self, genome2:Genome, pos1:list, pos2:list) -> tuple[Genome,Genome]:
+    def crossover_onepoint(self, genome2:"Genome", pos1:list, pos2:list) -> tuple["Genome","Genome"]:
         """ cross over genomes and return new ones 
         Args:
             genome2:second geome to cross with this one
@@ -175,7 +175,7 @@ class LeapGenome(Genome):
         """Return location for a cross over entire genome"""
         return [random.randint(1,len(self.codons)//self.frame_size-1)]
 
-    def crossover_onepoint(self, genome2: LeapGenome, pos1:list, pos2:list) -> tuple[LeapGenome,LeapGenome]:
+    def crossover_onepoint(self, genome2:"LeapGenome", pos1:list, pos2:list) -> tuple["LeapGenome","LeapGenome"]:
         """ cross over genomes and return new ones 
         Args:
             genome2: LeapGenome to cross with
@@ -302,7 +302,7 @@ class MCGEGenome(Genome):
             positions.append(random.randint(1,len(self.codons[chr_idx])))
         return positions
 
-    def crossover_onepoint(self, genome2: MCGEGenome, pos1:list, pos2:list) -> tuple[MCGEGenome,MCGEGenome]:
+    def crossover_onepoint(self, genome2:"MCGEGenome", pos1:list, pos2:list) -> tuple["MCGEGenome","MCGEGenome"]:
         """ cross over genomes and return new ones 
         Args:
             genome2: MCGEGenome to cross with

@@ -2,7 +2,7 @@
 # import grape
 from deap import creator, base, tools
 import grape.grape as grape
-from genn.functions import activate_sigmoid, PA, PM, PS, PD, pdiv
+from genn.functions import activate, PA, PM, PS, PD, pdiv
 import numpy as np
 from sklearn.metrics import balanced_accuracy_score
 
@@ -80,8 +80,6 @@ def fitness_rsquared(individual: 'deap.creator.Individual', points: list) -> flo
     Returns:
         r-squared fitness
     """
-
-    #points = [X, Y]
     x = points[0]
     y = points[1]
     
