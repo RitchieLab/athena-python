@@ -104,7 +104,8 @@ if nprocs > 1:
         grammar=BNF_GRAMMAR)
 
 # set up deap toolbox for evolutionary algorithm 
-toolbox=alg_setup.configure_toolbox(params['FITNESS'], params['SELECTION'], params['INIT'])
+toolbox=alg_setup.configure_toolbox(params['FITNESS'], params['SELECTION'], params['CROSSOVER'],
+                                    params['INIT'])
 
 # configure report items 
 REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',

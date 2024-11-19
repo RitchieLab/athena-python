@@ -53,9 +53,9 @@ All options are listed here in both their command line and parameter file forms.
 | `--max-init-genome-length` | MAX_INIT_GENOME_LENGTH | [INT] |Default: *250*. Maximum genome length for random initializtion |                   
 | `--min-init-tree-depth` | MIN_INIT_TREE_DEPTH | [INT] |Default: *7*. Minimum depth for tree created by sensible initialization|
 | `--min-init-genome-length` | MIN_INIT_GENOME_LENGTH | [INT] |Default: *50*. Minimum genome length for random initializtion |     
-| `--nelite` | NELITE | [INT] |Default: *1*. number of best networks carried over to
-                        next generation |
+| `--nelite` | NELITE | [INT] |Default: *1*. number of best networks carried over to next generation |
 | `--p-crossover` | P_CROSSOVER | [FLOAT] |Default: *0.8*. Probability of a crossover during selection |
+| `--crossover` | CROSSOVER | [STR] |Default: *onepoint*. Crossver operator type|
 | `--p-mut` | P_MUT | [FLOAT] |Default: *0.01*. Probability of a crossover during selection|
 | `--pop-size` | POP_SIZE | [INT] |Default: *250*. Population size for GE algorithm|
 | `--random-seed` | RANDOM_SEED | [INT] |Default: *12345*. Random seed |

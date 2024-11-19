@@ -8,13 +8,14 @@ from sklearn.metrics import balanced_accuracy_score
 
 INVALID_FITNESS = -1000
 
-def configure_toolbox(fitness: str, selection: str, 
+def configure_toolbox(fitness: str, selection: str, crosstype:str ='match',
                       init:str ='sensible') -> base.Toolbox:
     """Configure the DEAP toolbox for controlling GE algorithm
 
     Args:
         fitness: SNP values filename
-        selection: any continuous data filename
+        selection: type of selection operator
+        crosstype: type of crossover operator
         init: scale outcome values from 0 to 1.0
 
     Returns:
@@ -28,7 +29,10 @@ def configure_toolbox(fitness: str, selection: str,
         toolbox.register("populationCreator", grape.sensible_initialization, creator.Individual) 
     else:
         toolbox.register("populationCreator", grape.random_initialization, creator.Individual) 
-    toolbox.register("mate", grape.crossover_onepoint)
+    if crosstype == 'onepoint':
+        toolbox.register("mate", grape.crossover_onepoint)
+    elif crosstype == 'match':
+         toolbox.register("mate", grape.crossover_match)
     toolbox.register("mutate", grape.mutation_int_flip_per_codon)
     
     if fitness=='r-squared':

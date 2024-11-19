@@ -11,6 +11,7 @@ class Genome:
 
     def init_codons(self, n_rules:int) -> None:
         self.codons = []
+        self.rule_match =[]
         self.next_read=0
     
     def add_codon(self,val:int, rule_used:int) -> None:
@@ -24,12 +25,12 @@ class Genome:
 
     def add_tail(self, n_codons:int) -> None:
         for i in range(n_codons):
-            self.codons.append(random.randint(0,self.codon_size))
+            self.codons.append(random.randrange(0,self.codon_size))
     
     def random_fill(self,genome_length:int) -> None:
         """ Fill genome with random codons """
         for i in range(genome_length):
-            self.codons.append(random.randint(0, self.codon_size))
+            self.codons.append(random.randrange(0, self.codon_size))
 
     def consumed(self, rule_used:int) -> bool:
         "Returns True if all codons have been used"
@@ -38,9 +39,10 @@ class Genome:
     def reset_map_index(self) -> None:
         """Reset the genome so that get_next_codon starts with first codon"""
         self.next_read = 0
+        self.rule_match = []
 
     def get_next_codon(self, rule_used:int) -> int:
-        """ Get next codon from genome for mapping
+        """ Get next codon from genome for mapping. Store rule used requested for the codon.
 
         Args:
             rule_used: index of rule used in grammar
@@ -49,9 +51,21 @@ class Genome:
             codon: codon value 
         """
         codon = self.codons[self.next_read]
+        self.rule_match.append(rule_used)
         self.next_read += 1
 
         return codon
+    
+    def rule_used(self, codon_idx: int) -> int:
+        """ Get rule used for the codon during mapping
+
+        Args:
+            codon_idx: index of codon to check 
+        
+        Returns: 
+            int of the rule used in grammar
+        """        
+        return self.rule_match[codon_idx]
 
     def used_codons(self) -> int:
         return self.next_read
@@ -64,11 +78,11 @@ class Genome:
 
     def effective_cross_loc(self) -> list:
         """Return a list that contains the position for crossover"""
-        return [random.randint(1,self.next_read)]
+        return [random.randrange(1,self.next_read)]
 
     def all_cross_loc(self) -> list:
         """Return location for a cross over entire genome"""
-        return [random.randint(1,len(self.codons))]
+        return [random.randrange(1,len(self.codons))]
 
     def crossover_onepoint(self, genome2:"Genome", pos1:list, pos2:list) -> tuple["Genome","Genome"]:
         """ cross over genomes and return new ones 
@@ -111,7 +125,7 @@ class LeapGenome(Genome):
         codon_idx = self.last_frame * self.frame_size + rule_used
         if self.codons[codon_idx] != -1:
             # fill unused codons with random values
-            self.codons[-self.frame_size:] = [random.randint(0,self.codon_size) if x == -1 else x for x in self.codons[-self.frame_size:]]
+            self.codons[-self.frame_size:] = [random.randrange(0,self.codon_size) if x == -1 else x for x in self.codons[-self.frame_size:]]
             self.codons.extend(self.new_frame())
             self.last_frame += 1
             codon_idx += self.frame_size
@@ -120,19 +134,19 @@ class LeapGenome(Genome):
     
     def finalize(self)  -> None:
         """Convert any unset codons to hold random values"""
-        self.codons[-self.frame_size:] = [random.randint(0,self.codon_size) if x == -1 else x for x in self.codons[-self.frame_size:]]
+        self.codons[-self.frame_size:] = [random.randrange(0,self.codon_size) if x == -1 else x for x in self.codons[-self.frame_size:]]
     
     def add_tail(self, n_codons:int)  -> None:
         """Convert n_codons to complete frames"""
         n_codons = n_codons + self.frame_size - (n_codons % self.frame_size)
         for i in range(n_codons):
-            self.codons.append(random.randint(0,self.codon_size))
+            self.codons.append(random.randrange(0,self.codon_size))
 
     def random_fill(self,genome_length:int) -> None:
         """ Fill genome with frames containing random codons"""
         genome_length = genome_length + (genome_length % self.frame_size)
         for i in range(genome_length):
-            self.codons.append(random.randint(0, self.codon_size))
+            self.codons.append(random.randrange(0, self.codon_size))
 
     def consumed(self,rule_used:int) -> bool:
         "Returns True if all codons have been used"
@@ -169,11 +183,11 @@ class LeapGenome(Genome):
     
     def effective_cross_loc(self) -> list:
         """Return a list that contains the frame for crossover"""
-        return [random.randint(1,self.last_frame)]
+        return [random.randrange(1,self.last_frame)]
 
     def all_cross_loc(self) -> list:
         """Return location for a cross over entire genome"""
-        return [random.randint(1,len(self.codons)//self.frame_size-1)]
+        return [random.randrange(1,len(self.codons)//self.frame_size-1)]
 
     def crossover_onepoint(self, genome2:"LeapGenome", pos1:list, pos2:list) -> tuple["LeapGenome","LeapGenome"]:
         """ cross over genomes and return new ones 
@@ -224,14 +238,14 @@ class MCGEGenome(Genome):
         """ Add tail to each chrom"""
         for chr in self.codons:
             for i in range(n_codons):
-                chr.append(random.randint(0,self.codon_size)) 
+                chr.append(random.randrange(0,self.codon_size)) 
 
     def random_fill(self,genome_length:int) -> None:
         """ Fill genome with chromosomes that equal genome length"""
         chrom_length = genome_length // len(self.codons) + 1
         for i in range(len(self.codons)):
             for j in range(chrom_length):
-                self.codons[i].append(random.randint(0, self.codon_size))
+                self.codons[i].append(random.randrange(0, self.codon_size))
 
     def consumed(self,rule_used:int) -> bool:
         "Returns True if all codons have been used"
@@ -292,14 +306,14 @@ class MCGEGenome(Genome):
         """Return a list that contains the frame for crossover"""
         positions = []
         for chr_idx in range(len(self.codons)):
-            positions.append(random.randint(0,self.consumed_codons[chr_idx]))
+            positions.append(random.randrange(0,self.consumed_codons[chr_idx]))
         return positions
 
     def all_cross_loc(self) -> list:
         """Return location for a cross over entire genome"""
         positions = []
         for chr_idx in range(self.codons):
-            positions.append(random.randint(1,len(self.codons[chr_idx])))
+            positions.append(random.randrange(1,len(self.codons[chr_idx])))
         return positions
 
     def crossover_onepoint(self, genome2:"MCGEGenome", pos1:list, pos2:list) -> tuple["MCGEGenome","MCGEGenome"]:
@@ -317,7 +331,7 @@ class MCGEGenome(Genome):
         new_genome2 = copy.deepcopy(genome2)
 
         #select chromosome for crossover
-        chr_idx = random.randint(0,len(self.codons)-1)
+        chr_idx = random.randrange(0,len(self.codons))
 
         new_genome1.codons[chr_idx] = self.codons[chr_idx][0:pos1[chr_idx]] + genome2.codons[chr_idx][pos2[chr_idx]:]
         new_genome2.codons[chr_idx]  = genome2.codons[chr_idx][0:pos2[chr_idx]] + self.codons[chr_idx][pos1[chr_idx]:]

@@ -599,6 +599,79 @@ def crossover_onepoint(parent1: 'deap.creator.Individual', parent2: 'deap.creato
     return new_ind0, new_ind1   
 
 
+def crossover_match(parent1: 'deap.creator.Individual', parent2: 'deap.creator.Individual', 
+                       bnf_grammar: 'grape.grape.Grammar', max_depth: int, codon_consumption:str, 
+                    genome_representation:str='list', 
+                    max_genome_length:int=None) -> tuple['deap.creator.Individual','deap.creator.Individual']:
+    """One point crossover for GE individuals restricted to locations where identical rule selections are made
+
+    Args:
+        parent1: individual to cross
+        parent2: second individual to cross
+        bnf_grammar: BNF grammar 
+        max_depth: maximum depth allowed for a tree during mapping
+        codon_consumption: type of consumption when mapping (ie. lazy or eager)
+        genome_representation: either list or numpy
+        max_genome_length: maximum allowed length of genome when not None
+        
+    Returns:
+        new_ind0: new individual resulting from crossover
+        new_ind1: second new individual resulting from crossover
+    """ 
+
+    # restrict crossover to effective genome when individual is valid
+    if parent1.invalid: #used_codons = 0
+        pos1 = parent1.genome.all_cross_loc()
+    else:
+        pos1 = parent1.genome.effective_cross_loc()
+    rule1_idx = parent1.genome.rule_used(pos1[0])
+
+    if parent2.invalid:
+        pos2 = parent2.genome.all_cross_loc()
+        check_len = parent2.genome.used_codons()
+    else:
+        pos2 = parent2.genome.effective_cross_loc()
+        check_len = parent2.genome.total_codons()
+
+    # start with selected position and then move up or down list to find match
+    if random.random() < 0.5:
+        range1 = range(pos2[0],1, check_len)
+        range2 = range(pos2[0]-1, -1, -1)
+    else:
+        range1 = range(pos2[0], -1, -1)
+        range2 = range(pos2[0]+1,1, check_len)
+
+    found = False
+    for i in range1:
+        if parent2.genome.rule_used(i) == rule1_idx:
+            found = True
+            pos2 = [i]
+    if not found:
+        for i in range2:
+            if parent2.genome.rule_used(i) == rule1_idx:
+                found = True
+                pos2 = [i]
+
+    new_genome1, new_genome2 = parent1.genome.crossover_onepoint(parent2.genome, pos1, pos2)
+
+    new_ind0 = reMap(parent1, new_genome1, bnf_grammar, max_depth, codon_consumption)
+    new_ind1 = reMap(parent2, new_genome2, bnf_grammar, max_depth, codon_consumption)
+
+    if new_ind0.depth > max_depth:
+        new_ind0.invalid = True
+    if new_ind1.depth > max_depth:
+        new_ind1.invalid = True
+
+    if max_genome_length:
+        if len(new_ind0.genome) > max_genome_length:
+            new_ind0.invalid = True
+        if len(new_ind1.genome) > max_genome_length:
+            new_ind1.invalid = True
+
+    del new_ind0.fitness.values, new_ind1.fitness.values
+    return new_ind0, new_ind1   
+
+
 class Grammar:
     """
     BNF Grammar 
@@ -897,7 +970,6 @@ def selTournRoulette(individuals: list, k:int, fit_attr:str="fitness") -> list:
     # set the probabilities for each individual to be selected
     # if all identical then make all probabilities equal
     if individuals[0].fitness.values[0] == individuals[-1].fitness.values[0]:
-        print(" ")
         psum = [i.fitness/float(n) for i in individuals]
     else:
         maxfit = individuals[-1].fitness.values[0]

@@ -88,7 +88,12 @@ def valid_parameters(parameters) -> bool:
     if parameters['CODON_CONSUMPTION'] not in ['eager', 'lazy']:
          print("CODON_CONSUMPTION must be either eager or lazy")
          all_valid = False
-    
+
+    if parameters['CROSSOVER'] not in ['onepoint', 'match']:
+         print("CROSSOVER must be either onepoint or match")
+         all_valid = False
+
+
     if parameters['GENO_ENCODE'] and parameters['GENO_ENCODE'] not in \
         ['add_quad', 'additive']:
         print("GENO_ENCODE must be either 'add_quad or additive")
@@ -221,6 +226,13 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
                         type=float,
                         default=0.8,
                         help='Sets probability of a crossover during selection')
+    parser.add_argument('--crossover',
+                        dest='CROSSOVER',
+                        type=str,
+                        default='onepoint',
+                        choices=['onepoint', 'match'],
+                        help='Options are onepoint and match. Specifies type of'
+                        'crossover to use')
     parser.add_argument('--p-mut',
                         dest='P_MUT',
                         type=float,
