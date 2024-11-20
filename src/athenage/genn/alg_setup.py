@@ -29,10 +29,15 @@ def configure_toolbox(fitness: str, selection: str, crosstype:str ='match',
         toolbox.register("populationCreator", grape.sensible_initialization, creator.Individual) 
     else:
         toolbox.register("populationCreator", grape.random_initialization, creator.Individual) 
+
     if crosstype == 'onepoint':
         toolbox.register("mate", grape.crossover_onepoint)
     elif crosstype == 'match':
-         toolbox.register("mate", grape.crossover_match)
+        toolbox.register("mate", grape.crossover_match)
+    elif crosstype == 'block':
+        toolbox.register("mate", grape.crossover_block)
+        
+    toolbox.register("mate", grape.crossover_block)
     toolbox.register("mutate", grape.mutation_int_flip_per_codon)
     
     if fitness=='r-squared':

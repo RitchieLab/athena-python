@@ -14,12 +14,12 @@ All options are listed here in both their command line and parameter file forms.
 | `--color-map-file ` | COLOR_MAP_FILE |[STR] | Default: *NONE*. File for specifying colors in output plots|
 | `--contin-file` | CONTIN_FILE | [STR] |Default: *NONE*. File containing continuous input data |
 | `--geno-file` | GENO_FILE | [STR] |Default: *NONE*. File containing genotypic input data |
-| `--grammar-file` | GRAMMAR_FILE | <STR\> |Default: *NONE*. File containing BNF grammar for GE |
-| `--outcome-file` | OUTCOME_FILE | <STR\> |Default: *NONE*. File containing outcome variables |
+| `--grammar-file` | GRAMMAR_FILE | [STR] |Default: *NONE*. File containing BNF grammar for GE |
+| `--outcome-file` | OUTCOME_FILE | [STR] |Default: *NONE*. File containing outcome (phenotype) variables |
 | `--param-file` |  | [STR] |Default: *NONE*. File containing parameters |
 | `--test-contin-file` | TEST_CONTIN_FILE | [STR] |Default: *NONE*. File containing test continuous input data |
 | `--test-geno-file` | TEST_GENO_FILE | [STR] |Default: *NONE*. File containing test genotypic input data |
-| `--test-outcome-file` | TEST_OUTCOME_FILE | [STR] |Default: *NONE*. File containing test outcome variables |
+| `--test-outcome-file` | TEST_OUTCOME_FILE | [STR] |Default: *NONE*. File containing test outcome (phenotype) variables |
 
 # Data Options
 | **Command-line** | **Parameter file** | **Arguments** | **Information** |
@@ -42,20 +42,20 @@ All options are listed here in both their command line and parameter file forms.
 # Algorithm Options
 | **Command-line** | **Parameter file** | **Arguments** | **Information** |
 |---|---|---|---|
-| `--codon-consumption` | CODON_CONSUMPTION | [STR] |Default: *eager*. Whether grammar will consume codons when only one choice for a rule in the grammar. |
+| `--codon-consumption` | CODON_CONSUMPTION | [STR] |Default: *eager*. Whether grammar will consume codons when only one choice for a rule in the grammar. (eager, lazy) |
 | `--codon-size` | CODON_SIZE | [INT] |Default: *NONE*. Maximum value of a codon in the genome of an individual in the evolutionary population. At a minimum it should be>= the largest number of choices for a rule in the grammar|
 | `--fitness` | FITNESS | [STR] |Default: *balanced_acc*. Metric for fitness (balanced_acc or r-squared)|
 | `--genome-type` | GENOME_TYPE | [STR] |Default: *standard*. GE genome type to use (standard, leap or mcge) generation |
 | `--gens` | GENS | [INT] |Default: *50*. Number of generations in evolution |
 | `--init` | INIT | [STR] |Default: *sensible*. Initialization procedure (sensible or random)|
-| `--max-depth` | MAX_DEPTH | [INT] |Default: *50*. Max depth for mapping with individuals exceeding this being invalid |
+| `--max-depth` | MAX_DEPTH | [INT] |Default: *100*. Max depth for mapping with individuals exceeding this being invalid |
 | `--max-init-tree-depth` | MAX_INIT_TREE_DEPTH | [INT] |Default: *11* Maximum depth for tree created by sensible initialization |
 | `--max-init-genome-length` | MAX_INIT_GENOME_LENGTH | [INT] |Default: *250*. Maximum genome length for random initializtion |                   
 | `--min-init-tree-depth` | MIN_INIT_TREE_DEPTH | [INT] |Default: *7*. Minimum depth for tree created by sensible initialization|
 | `--min-init-genome-length` | MIN_INIT_GENOME_LENGTH | [INT] |Default: *50*. Minimum genome length for random initializtion |     
 | `--nelite` | NELITE | [INT] |Default: *1*. number of best networks carried over to next generation |
 | `--p-crossover` | P_CROSSOVER | [FLOAT] |Default: *0.8*. Probability of a crossover during selection |
-| `--crossover` | CROSSOVER | [STR] |Default: *onepoint*. Crossver operator type|
+| `--crossover` | CROSSOVER | [STR] |Default: *onepoint*. Crossver operator type. (onepoint, match, block)|
 | `--p-mut` | P_MUT | [FLOAT] |Default: *0.01*. Probability of a crossover during selection|
 | `--pop-size` | POP_SIZE | [INT] |Default: *250*. Population size for GE algorithm|
 | `--random-seed` | RANDOM_SEED | [INT] |Default: *12345*. Random seed |

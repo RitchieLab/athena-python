@@ -103,6 +103,26 @@ class Genome:
         new_genome2.codons = genome2.codons[0:pos2[0]] + self.codons[pos1[0]:]
 
         return new_genome1, new_genome2
+    
+    def crossover_twopoint(self, genome2:"Genome", pos1:list, pos2:list) -> tuple["Genome","Genome"]:
+        """ cross over genomes and return new ones 
+        Args:
+            genome2:second geome to cross with this one
+            pos1: codon positions designating start/end of slice for this genome
+            pos2: codon positions designating start/end of slice for second genome
+
+        Returns:
+            new_genome1: Genome
+            new_genome2: Genome   
+        """
+
+        new_genome1 = copy.deepcopy(self)
+        new_genome2 = copy.deepcopy(genome2)
+        
+        new_genome1.codons = self.codons[0:pos1[0]] + genome2.codons[pos2[0]:pos2[1]+1] + self.codons[pos1[1]+1:]
+        new_genome2.codons = genome2.codons[0:pos2[0]] + self.codons[pos1[0]:pos1[1]+1] + genome2.codons[pos2[1]+1:]
+
+        return new_genome1, new_genome2
 
 class LeapGenome(Genome):
     """

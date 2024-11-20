@@ -411,7 +411,6 @@ def mapper_lazy(genome: list, grammar: "grape.grape.grammar",
             used to monitor population diversity
     """  
     
-    # idx_genome = 0
     genome.reset_map_index()
     phenotype = grammar.start_rule
     next_NT = re.search(r"\<(\w+)\>",phenotype).group()
@@ -430,7 +429,7 @@ def mapper_lazy(genome: list, grammar: "grape.grape.grammar",
         else: #we consume one codon, and add the index to the structure
             index_production_chosen = genome.get_next_codon(NT_index) % grammar.n_rules[NT_index]
             structure.append(index_production_chosen)
-            idx_genome += 1
+            # idx_genome += 1
         
         phenotype = phenotype.replace(next_NT, grammar.production_rules[NT_index][index_production_chosen][0], 1)
         list_depth[idx_depth] += 1
@@ -492,10 +491,134 @@ def reMap(ind: 'deap.creator.Individual', genome: list,
         ind.used_codons, ind.invalid, ind.n_wraps, \
         ind.structure = mapper_eager(genome, bnf_grammar, max_tree_depth)
     else:
-        raise ValueError("Unknown mapper")    
+        raise ValueError("Unknown mapper")
         
     return ind
 
+
+def submap_eager(genome: "grape.grape.Genome", grammar: "grape.grape.grammar",
+                  start_codon: int, start_rule: int) -> tuple[str, int, int, int, bool, list]:
+    """Maps GE  genome. Uses eager mapping so that 
+    every nonterminal in the grammar consumes a codon in the genome
+
+    Args:
+        genome: list of codons in genome
+        grammar: BNF grammar used to create individual phenotype
+        start_codon: Index in genome of starting codon
+        start_rule: Index of nonterminal in grammar
+        
+
+    Returns:
+        codon_end: ending codon for subtree of the expression tree
+    """
+
+    genome.reset_map_index()
+    start_codon = start_codon[0]
+    n_codons_used=0
+    genome.next_read = start_codon
+    next_NT = grammar.non_terminals[start_rule]
+    phenotype = next_NT
+    
+    # while next_NT and idx_genome < len(genome):
+    while next_NT:
+        NT_index = grammar.non_terminals.index(next_NT)
+        if genome.consumed(NT_index):
+            break
+        index_production_chosen = genome.get_next_codon(NT_index) % grammar.n_rules[NT_index]
+        n_codons_used += 1
+        phenotype = phenotype.replace(next_NT, grammar.production_rules[NT_index][index_production_chosen][0], 1)
+
+        next_ = re.search(r"\<(\w+)\>",phenotype)
+        if next_:
+            next_NT = next_.group()
+        else:
+            next_NT = None
+        
+    if next_NT:
+        invalid = True
+    else:
+        invalid = False
+    
+    return start_codon + n_codons_used -1 
+
+
+def submap_lazy(genome: "grape.grape.Genome", grammar: "grape.grape.grammar",
+                  start_codon: int, start_rule: int) -> tuple[str, int, int, int, bool, list]:
+    """ Uses lazy mapping so that 
+    only nonterminals with more than one option in the grammar 
+    consume a codon in the genome
+
+    Args:
+        genome: list of codons in genome
+        grammar: BNF grammar used to create individual phenotype
+        start_codon: Index in genome of starting codon
+        start_rule: Index of nonterminal in grammar
+        
+
+    Returns:
+        codon_end: ending codon for subtree of the expression tree
+    """  
+    
+    genome.reset_map_index()
+    start_codon = start_codon[0]
+    n_codons_used=0
+    genome.next_read = start_codon
+    next_NT = grammar.non_terminals[start_rule]
+    phenotype = next_NT
+
+    while next_NT:
+        NT_index = grammar.non_terminals.index(next_NT)
+        if genome.consumed(NT_index):
+            break        
+        if grammar.n_rules[NT_index] == 1: #there is a single PR for this non-terminal
+            index_production_chosen = 0        
+        else: #we consume one codon, and add the index to the structure
+            index_production_chosen = genome.get_next_codon(NT_index) % grammar.n_rules[NT_index]
+            n_codons_used += 1
+        
+        phenotype = phenotype.replace(next_NT, grammar.production_rules[NT_index][index_production_chosen][0], 1)
+
+        next_ = re.search(r"\<(\w+)\>",phenotype)
+        if next_:
+            next_NT = next_.group()
+        else:
+            next_NT = None
+    
+    if next_NT:
+        invalid = True
+    else:
+        invalid = False
+   
+    return start_codon + n_codons_used -1 
+
+
+def submap(ind: 'deap.creator.Individual', genome: list, 
+          bnf_grammar:'grape.grape.Grammar', start_codon: int,
+          start_rule:int, codon_consumption:str) -> int:
+    """Maps GE genome in individual to produce new phenotype
+
+    Args:
+        ind: individual to mutate
+        bnf_grammar: BNF grammar 
+        start_codon: Index of starting codon for the subtree
+        start_rule: Index of rule for starting codon
+        codon_consumption: type of consumption when mapping (ie. lazy or eager)
+        
+    Returns:
+        pos_end: index of ending position in genome for the subtree
+    """ 
+
+    # set initial ending to be rest of genome
+    pos_end = ind.genome.total_codons()-1
+    ind.genome = genome
+    if codon_consumption == 'lazy':
+        pos_end= submap_lazy(genome, bnf_grammar, start_codon, start_rule)
+    elif codon_consumption == 'eager':
+        pos_end = submap_eager(genome, bnf_grammar, start_codon, start_rule)
+    else:
+        raise ValueError("Unknown mapper")    
+        
+    return pos_end
 
 
 def mutation_int_flip_per_codon(ind:'deap.creator.Individual', mut_probability:float, 
@@ -635,22 +758,24 @@ def crossover_match(parent1: 'deap.creator.Individual', parent2: 'deap.creator.I
 
     # start with selected position and then move up or down list to find match
     if random.random() < 0.5:
-        range1 = range(pos2[0],1, check_len)
+        range1 = range(pos2[0],check_len, 1)
         range2 = range(pos2[0]-1, -1, -1)
     else:
         range1 = range(pos2[0], -1, -1)
-        range2 = range(pos2[0]+1,1, check_len)
+        range2 = range(pos2[0]+1,check_len,1)
 
     found = False
     for i in range1:
         if parent2.genome.rule_used(i) == rule1_idx:
             found = True
             pos2 = [i]
+            break
     if not found:
         for i in range2:
             if parent2.genome.rule_used(i) == rule1_idx:
                 found = True
                 pos2 = [i]
+                break
 
     new_genome1, new_genome2 = parent1.genome.crossover_onepoint(parent2.genome, pos1, pos2)
 
@@ -670,6 +795,91 @@ def crossover_match(parent1: 'deap.creator.Individual', parent2: 'deap.creator.I
 
     del new_ind0.fitness.values, new_ind1.fitness.values
     return new_ind0, new_ind1   
+
+
+
+def crossover_block(parent1: 'deap.creator.Individual', parent2: 'deap.creator.Individual', 
+                       bnf_grammar: 'grape.grape.Grammar', max_depth: int, codon_consumption:str, 
+                    genome_representation:str='list', 
+                    max_genome_length:int=None) -> tuple['deap.creator.Individual','deap.creator.Individual']:
+    """Two point crossover for GE individuals restricted to locations where identical rule selections are made
+    Starts at matching point and ends with the expression tree portion terminated from that point.
+
+    Args:
+        parent1: individual to cross
+        parent2: second individual to cross
+        bnf_grammar: BNF grammar 
+        max_depth: maximum depth allowed for a tree during mapping
+        codon_consumption: type of consumption when mapping (ie. lazy or eager)
+        genome_representation: either list or numpy
+        max_genome_length: maximum allowed length of genome when not None
+        
+    Returns:
+        new_ind0: new individual resulting from crossover
+        new_ind1: second new individual resulting from crossover
+    """ 
+
+    # restrict crossover to effective genome when individual is valid
+    if parent1.invalid: #used_codons = 0
+        pos1 = parent1.genome.all_cross_loc()
+    else:
+        pos1 = parent1.genome.effective_cross_loc()
+    rule1_idx = parent1.genome.rule_used(pos1[0])
+
+    pos1_end = submap(parent1, parent1.genome, bnf_grammar, pos1, rule1_idx, codon_consumption)
+
+    if parent2.invalid:
+        pos2 = parent2.genome.all_cross_loc()
+        check_len = parent2.genome.total_codons()
+    else:
+        pos2 = parent2.genome.effective_cross_loc()
+        check_len = parent2.genome.used_codons()
+
+    # start with selected position and then move up or down list to find match
+    if random.random() < 0.5:
+        range1 = range(pos2[0],check_len, 1)
+        range2 = range(pos2[0]-1, -1, -1)
+    else:
+        range1 = range(pos2[0], -1, -1)
+        range2 = range(pos2[0]+1,check_len,1)
+
+    found = False
+    for i in range1:
+        if parent2.genome.rule_used(i) == rule1_idx:
+            found = True
+            pos2 = [i]
+            break
+    if not found:
+        for i in range2:
+            if parent2.genome.rule_used(i) == rule1_idx:
+                found = True
+                pos2 = [i]
+                break
+    
+    rule2_idx = parent2.genome.rule_used(pos2[0])
+    
+    pos2_end = submap(parent2, parent2.genome, bnf_grammar, pos2, rule2_idx, codon_consumption)
+
+    new_genome1, new_genome2 = parent1.genome.crossover_twopoint(parent2.genome, 
+                                                                 [pos1[0],pos1_end], [pos2[0],pos2_end])
+
+    new_ind0 = reMap(parent1, new_genome1, bnf_grammar, max_depth, codon_consumption)
+    new_ind1 = reMap(parent2, new_genome2, bnf_grammar, max_depth, codon_consumption)
+
+    if new_ind0.depth > max_depth:
+        new_ind0.invalid = True
+    if new_ind1.depth > max_depth:
+        new_ind1.invalid = True
+
+    if max_genome_length:
+        if len(new_ind0.genome) > max_genome_length:
+            new_ind0.invalid = True
+        if len(new_ind1.genome) > max_genome_length:
+            new_ind1.invalid = True
+
+    del new_ind0.fitness.values, new_ind1.fitness.values
+    return new_ind0, new_ind1   
+
 
 
 class Grammar:

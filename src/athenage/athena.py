@@ -96,7 +96,7 @@ if proc_rank == 0:
 
     grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
     BNF_GRAMMAR = grape.Grammar(grammarstr, params['CODON_CONSUMPTION'])
- 
+
  # share data to subordinate processes when using paralllelization
 if nprocs > 1:
     data,train_splits, test_splits, var_map, BNF_GRAMMAR = parallel.distribute_data(rank=proc_rank,

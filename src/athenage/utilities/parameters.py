@@ -89,8 +89,8 @@ def valid_parameters(parameters) -> bool:
          print("CODON_CONSUMPTION must be either eager or lazy")
          all_valid = False
 
-    if parameters['CROSSOVER'] not in ['onepoint', 'match']:
-         print("CROSSOVER must be either onepoint or match")
+    if parameters['CROSSOVER'] not in ['onepoint', 'match', 'block']:
+         print("CROSSOVER must be either onepoint, match or block")
          all_valid = False
 
 
@@ -230,8 +230,8 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
                         dest='CROSSOVER',
                         type=str,
                         default='onepoint',
-                        choices=['onepoint', 'match'],
-                        help='Options are onepoint and match. Specifies type of'
+                        choices=['onepoint', 'match', 'block'],
+                        help='Options are onepoint, match and block. Specifies type of'
                         'crossover to use')
     parser.add_argument('--p-mut',
                         dest='P_MUT',
@@ -385,7 +385,7 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
     parser.add_argument('--max-depth',
                         dest='MAX_DEPTH',
                         type=int,
-                        default=50,
+                        default=100,
                         help='Sets max depth for mapping with individuals exceeding this being invalid')
     parser.add_argument('--color-map-file',
                         dest='COLOR_MAP_FILE',
