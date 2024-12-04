@@ -840,7 +840,7 @@ docstrings modified to conform to google style </p>
 
 
 <h2 id="src.athenage.grape.algorithms.ge_eaSimpleWithElitism" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">ge_eaSimpleWithElitism</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">,</span> <span class="n">mutpb</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">elite_size</span><span class="p">,</span> <span class="n">bnf_grammar</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">,</span> <span class="n">max_tree_depth</span><span class="p">,</span> <span class="n">max_genome_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">points_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">points_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">codon_consumption</span><span class="o">=</span><span class="s1">&#39;eager&#39;</span><span class="p">,</span> <span class="n">report_items</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">genome_representation</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">halloffame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">migrate_interval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">__debug__</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">ge_eaSimpleWithElitism</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">,</span> <span class="n">mutpb</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">elite_size</span><span class="p">,</span> <span class="n">bnf_grammar</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">,</span> <span class="n">max_tree_depth</span><span class="p">,</span> <span class="n">max_genome_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">points_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">points_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">codon_consumption</span><span class="o">=</span><span class="s1">&#39;eager&#39;</span><span class="p">,</span> <span class="n">report_items</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">genome_representation</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">halloffame</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">migrate_interval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">switch_crosstype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">switch_cross_gens</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">__debug__</span><span class="p">)</span></code>
 
 </h2>
 
@@ -1135,6 +1135,34 @@ for island model (used with parallelized version)</p>
             </td>
           </tr>
           <tr class="doc-section-item">
+            <td><code>switch_crosstype</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>designates crossover type to switch to during run</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>switch_cross_gens</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>generation at which to switch crossover type</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
             <td><code>verbose</code></td>
             <td>
                   <code>bool</code>
@@ -1187,8 +1215,7 @@ for island model (used with parallelized version)</p>
 
             <details class="quote">
               <summary>Source code in <code>src/athenage/grape/algorithms.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 81</span>
-<span class="normal"> 82</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
 <span class="normal"> 83</span>
 <span class="normal"> 84</span>
 <span class="normal"> 85</span>
@@ -1558,7 +1585,14 @@ for island model (used with parallelized version)</p>
 <span class="normal">449</span>
 <span class="normal">450</span>
 <span class="normal">451</span>
-<span class="normal">452</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ge_eaSimpleWithElitism</span><span class="p">(</span><span class="n">population</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">:</span><span class="s1">&#39;deap.base.Toolbox&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ge_eaSimpleWithElitism</span><span class="p">(</span><span class="n">population</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">:</span><span class="s1">&#39;deap.base.Toolbox&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                 <span class="n">mutpb</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">ngen</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">elite_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> 
                 <span class="n">bnf_grammar</span><span class="p">:</span><span class="s1">&#39;grape.grape.grammar&#39;</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">max_tree_depth</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> 
                 <span class="n">max_genome_length</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1567,6 +1601,7 @@ for island model (used with parallelized version)</p>
                 <span class="n">genome_representation</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span>
                 <span class="n">stats</span><span class="p">:</span><span class="s1">&#39;deap.tools.Statistics&#39;</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">halloffame</span><span class="p">:</span><span class="s1">&#39;eap.tools.HallOfFame&#39;</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                 <span class="n">rank</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">migrate_interval</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">switch_crosstype</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">switch_cross_gens</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="n">__debug__</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span> <span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="s1">&#39;deap.tools.logbook&#39;</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This algorithm reproduce the simplest evolutionary algorithm as</span>
 <span class="sd">    presented in chapter 7 of [Back2000]_, with some adaptations to run GE</span>
@@ -1597,6 +1632,8 @@ for island model (used with parallelized version)</p>
 <span class="sd">        rank: processs rank in MPI run</span>
 <span class="sd">        migrate_interval: number of generations between individual transfer</span>
 <span class="sd">            for island model (used with parallelized version)</span>
+<span class="sd">        switch_crosstype: designates crossover type to switch to during run</span>
+<span class="sd">        switch_cross_gens: generation at which to switch crossover type</span>
 <span class="sd">        verbose: Whether or not to log the statistics.</span>
 
 <span class="sd">    Returns: </span>
@@ -1929,6 +1966,9 @@ for island model (used with parallelized version)</p>
         <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">logbook</span><span class="o">.</span><span class="n">stream</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">switch_crosstype</span> <span class="ow">and</span> <span class="n">switch_cross_gens</span> <span class="o">==</span> <span class="n">gen</span><span class="p">:</span>
+            <span class="n">set_crossover</span><span class="p">(</span><span class="n">toolbox</span><span class="p">,</span> <span class="n">switch_crosstype</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">population</span><span class="p">,</span> <span class="n">logbook</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2133,8 +2173,7 @@ independent of the input population.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/athenage/grape/algorithms.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
-<span class="normal">32</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
@@ -2178,7 +2217,8 @@ independent of the input population.</p>
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
-<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">varAnd</span><span class="p">(</span><span class="n">population</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">:</span> <span class="s1">&#39;deap.base.Toolbox&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">varAnd</span><span class="p">(</span><span class="n">population</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">:</span> <span class="s1">&#39;deap.base.Toolbox&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
            <span class="n">mutpb</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">bnf_grammar</span><span class="p">:</span> <span class="s2">&quot;grape.grape.grammar&quot;</span><span class="p">,</span> <span class="n">codon_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
            <span class="n">max_tree_depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">codon_consumption</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
            <span class="n">genome_representation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_genome_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>

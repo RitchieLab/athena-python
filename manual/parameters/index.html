@@ -896,14 +896,14 @@
 <tr>
 <td><code>--grammar-file</code></td>
 <td>GRAMMAR_FILE</td>
-<td>&lt;STR&gt;</td>
+<td>[STR]</td>
 <td>Default: <em>NONE</em>. File containing BNF grammar for GE</td>
 </tr>
 <tr>
 <td><code>--outcome-file</code></td>
 <td>OUTCOME_FILE</td>
-<td>&lt;STR&gt;</td>
-<td>Default: <em>NONE</em>. File containing outcome variables</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. File containing outcome (phenotype) variables</td>
 </tr>
 <tr>
 <td><code>--param-file</code></td>
@@ -927,7 +927,7 @@
 <td><code>--test-outcome-file</code></td>
 <td>TEST_OUTCOME_FILE</td>
 <td>[STR]</td>
-<td>Default: <em>NONE</em>. File containing test outcome variables</td>
+<td>Default: <em>NONE</em>. File containing test outcome (phenotype) variables</td>
 </tr>
 </tbody>
 </table>
@@ -1026,7 +1026,7 @@
 <td><code>--codon-consumption</code></td>
 <td>CODON_CONSUMPTION</td>
 <td>[STR]</td>
-<td>Default: <em>eager</em>. Whether grammar will consume codons when only one choice for a rule in the grammar.</td>
+<td>Default: <em>eager</em>. Whether grammar will consume codons when only one choice for a rule in the grammar. (eager, lazy)</td>
 </tr>
 <tr>
 <td><code>--codon-size</code></td>
@@ -1062,7 +1062,7 @@
 <td><code>--max-depth</code></td>
 <td>MAX_DEPTH</td>
 <td>[INT]</td>
-<td>Default: <em>50</em>. Max depth for mapping with individuals exceeding this being invalid</td>
+<td>Default: <em>100</em>. Max depth for mapping with individuals exceeding this being invalid</td>
 </tr>
 <tr>
 <td><code>--max-init-tree-depth</code></td>
@@ -1092,19 +1092,31 @@
 <td><code>--nelite</code></td>
 <td>NELITE</td>
 <td>[INT]</td>
-<td>Default: <em>1</em>. number of best networks carried over to</td>
-</tr>
-<tr>
-<td>next generation</td>
-<td></td>
-<td></td>
-<td></td>
+<td>Default: <em>1</em>. number of best networks carried over to next generation</td>
 </tr>
 <tr>
 <td><code>--p-crossover</code></td>
 <td>P_CROSSOVER</td>
 <td>[FLOAT]</td>
 <td>Default: <em>0.8</em>. Probability of a crossover during selection</td>
+</tr>
+<tr>
+<td><code>--crossover</code></td>
+<td>CROSSOVER</td>
+<td>[STR]</td>
+<td>Default: <em>onepoint</em>. Crossover operator type. (onepoint, match, block)</td>
+</tr>
+<tr>
+<td><code>--crossover2</code></td>
+<td>CROSSOVER2</td>
+<td>[STR]</td>
+<td>Default: <em>NONE</em>. Crossover operator type for algorithm to switch to. (onepoint, match, block)</td>
+</tr>
+<tr>
+<td><code>--gen-cross-switch</code></td>
+<td>GEN_CROSS_SWITCH</td>
+<td>[INT]</td>
+<td>Default: <em>NONE</em>. Generation at which to switch crossover operator</td>
 </tr>
 <tr>
 <td><code>--p-mut</code></td>
