@@ -55,7 +55,9 @@ All options are listed here in both their command line and parameter file forms.
 | `--min-init-genome-length` | MIN_INIT_GENOME_LENGTH | [INT] |Default: *50*. Minimum genome length for random initializtion |     
 | `--nelite` | NELITE | [INT] |Default: *1*. number of best networks carried over to next generation |
 | `--p-crossover` | P_CROSSOVER | [FLOAT] |Default: *0.8*. Probability of a crossover during selection |
-| `--crossover` | CROSSOVER | [STR] |Default: *onepoint*. Crossver operator type. (onepoint, match, block)|
+| `--crossover` | CROSSOVER | [STR] |Default: *onepoint*. Crossover operator type. (onepoint, match, block)|
+| `--crossover2` | CROSSOVER2| [STR] |Default: *NONE*. Crossover operator type for algorithm to switch to. (onepoint, match, block)|
+| `--gen-cross-switch` | GEN_CROSS_SWITCH | [INT] |Default: *NONE*. Generation at which to switch crossover operator|
 | `--p-mut` | P_MUT | [FLOAT] |Default: *0.01*. Probability of a crossover during selection|
 | `--pop-size` | POP_SIZE | [INT] |Default: *250*. Population size for GE algorithm|
 | `--random-seed` | RANDOM_SEED | [INT] |Default: *12345*. Random seed |

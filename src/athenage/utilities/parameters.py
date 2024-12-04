@@ -93,7 +93,6 @@ def valid_parameters(parameters) -> bool:
          print("CROSSOVER must be either onepoint, match or block")
          all_valid = False
 
-
     if parameters['GENO_ENCODE'] and parameters['GENO_ENCODE'] not in \
         ['add_quad', 'additive']:
         print("GENO_ENCODE must be either 'add_quad or additive")
@@ -127,6 +126,23 @@ def valid_parameters(parameters) -> bool:
     if parameters["GENOME_TYPE"] not in ['standard', 'leap', 'mcge']:
         print("GENOME_TYPE must be one of standard, leap, mcge")
     
+    if parameters["GEN_CROSS_SWITCH"]:
+        if not parameters["CROSSOVER2"]:
+            print("GEN_CROSS_SWITCH specified but no second crossover type set (CROSSOVER2)")
+            all_valid = False
+    if parameters["CROSSOVER2"]:
+        if not parameters["GEN_CROSS_SWITCH"]:
+            print("CROSSOVER2 specified but not generation at which to perform switch (GEN_CROSS_SWITCH)")
+            all_valid = False
+    if parameters['CROSSOVER2'] not in ['onepoint', 'match', 'block', None]:
+         print("CROSSOVER2 must be either onepoint, match or block")
+         all_valid = False
+
+    if parameters['CROSSOVER'] in ['match', 'block'] or parameters['CROSSOVER2'] in ['match', 'block']:
+        if parameters['GENOME_TYPE'] != 'standard':
+            print("GENOME_TYPE must be set to standard to use match or block for CROSSOVER/CROSSOVER2")
+            all_valild = False
+
     return all_valid    
     
 
@@ -233,6 +249,16 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
                         choices=['onepoint', 'match', 'block'],
                         help='Options are onepoint, match and block. Specifies type of'
                         'crossover to use')
+    parser.add_argument('--crossover2',
+                        dest='CROSSOVER2',
+                        type=str,
+                        choices=['onepoint', 'match', 'block'],
+                        help='Options are onepoint, match and block. Specifies type of'
+                        'crossover to switch GE to utilize during run')
+    parser.add_argument('--gen-cross-switch',
+                        dest='GEN_CROSS_SWITCH',
+                        type=int,
+                        help='Switch crossover type at this generation')
     parser.add_argument('--p-mut',
                         dest='P_MUT',
                         type=float,

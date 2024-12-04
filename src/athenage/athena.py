@@ -175,9 +175,11 @@ for cv in range(params['CV']):
                                               report_items=REPORT_ITEMS,
                                               genome_representation=GENOME_REPRESENTATION,
                                               stats=stats, halloffame=hof, verbose=False,
-                                              rank=proc_rank, 
+                                              rank=proc_rank, switch_crosstype=params['CROSSOVER2'],
+                                              switch_cross_gens=params['GEN_CROSS_SWITCH'],
                                               migrate_interval=params['GENS_MIGRATE'])
 
+    alg_setup.set_crossover(toolbox, params['CROSSOVER'])
     import textwrap
 
     max_fitness_values, mean_fitness_values = logbook.select("max", "avg")

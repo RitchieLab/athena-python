@@ -27,6 +27,7 @@ import warnings
 
 from genn import parallel 
 from deap import tools
+from genn.alg_setup import set_crossover
 
 def varAnd(population: list, toolbox: 'deap.base.Toolbox', cxpb: float, 
            mutpb: float, bnf_grammar: "grape.grape.grammar", codon_size: int, 
@@ -87,6 +88,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
                 genome_representation:str='list',
                 stats:'deap.tools.Statistics'=None, halloffame:'eap.tools.HallOfFame'=None, 
                 rank:int=0, migrate_interval:int=None,
+                switch_crosstype:str=None, switch_cross_gens:int=None,
                 verbose:bool=__debug__) -> tuple [list, 'deap.tools.logbook']:
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_, with some adaptations to run GE
@@ -117,6 +119,8 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
         rank: processs rank in MPI run
         migrate_interval: number of generations between individual transfer
             for island model (used with parallelized version)
+        switch_crosstype: designates crossover type to switch to during run
+        switch_cross_gens: generation at which to switch crossover type
         verbose: Whether or not to log the statistics.
 
     Returns: 
@@ -448,5 +452,8 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
                 
         if verbose and rank==0:
             print(logbook.stream)
+        
+        if switch_crosstype and switch_cross_gens == gen:
+            set_crossover(toolbox, switch_crosstype)
 
     return population, logbook

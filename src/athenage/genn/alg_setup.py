@@ -36,8 +36,7 @@ def configure_toolbox(fitness: str, selection: str, crosstype:str ='match',
         toolbox.register("mate", grape.crossover_match)
     elif crosstype == 'block':
         toolbox.register("mate", grape.crossover_block)
-        
-    toolbox.register("mate", grape.crossover_block)
+
     toolbox.register("mutate", grape.mutation_int_flip_per_codon)
     
     if fitness=='r-squared':
@@ -58,6 +57,24 @@ def configure_toolbox(fitness: str, selection: str, crosstype:str ='match',
         raise ValueError("fitness must be fitness_rsquared or fitness_balacc")
     
     return toolbox
+
+
+def set_crossover(toolbox: 'deap.base.toolbox', crosstype: str) -> None:
+    """Sets crossover type for toolbox
+
+    Args:
+        toolbox: DEAP toolbox
+        crosstype: specifies type to use
+
+    Returns:
+        None
+    """
+    if crosstype == 'onepoint':
+        toolbox.register("mate", grape.crossover_onepoint)
+    elif crosstype == 'match':
+        toolbox.register("mate", grape.crossover_match)
+    elif crosstype == 'block':
+        toolbox.register("mate", grape.crossover_block)
 
 
 def r_squared(y: np.ndarray, y_hat: np.ndarray) -> float:
