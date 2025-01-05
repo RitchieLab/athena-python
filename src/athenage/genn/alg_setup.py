@@ -2,7 +2,7 @@
 # import grape
 from deap import creator, base, tools
 import grape.grape as grape
-from genn.functions import activate, PA, PM, PS, PD, pdiv
+from genn.functions import activate, PA, PM, PS, PD, pdiv, PAND, PNAND, PXOR, POR, PNOR
 import numpy as np
 from sklearn.metrics import balanced_accuracy_score
 
@@ -230,7 +230,7 @@ def fitness_balacc(individual: 'deap.creator.Individual', points: list) -> float
             print("evaluation error", err)
             raise
     assert np.isrealobj(pred)
-    
+
     try:
         nan_mask = np.isnan(pred)
         # assign case/control status

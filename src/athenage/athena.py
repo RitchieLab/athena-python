@@ -9,7 +9,7 @@ Pyhon implementation of ATHENA software
 
 import grape.grape as grape
 import grape.algorithms as algorithms
-from genn.functions import activate, PA, PM, PS, PD, pdiv
+from genn.functions import activate, PA, PM, PS, PD, pdiv, PAND, PNAND, PXOR, POR, PNOR
 from genn import alg_setup
 from genn import parallel 
 
@@ -209,7 +209,10 @@ for cv in range(params['CV']):
     best_models.append(hof.items[0])
     nmissing_test = logbook.select("test_missing")
 
-    nmissing.append([hof.items[0].nmissing/len(Y_train),nmissing_test[-1]/len(Y_test)])
+    if params['CV'] > 1:
+        nmissing.append([hof.items[0].nmissing/len(Y_train),nmissing_test[-1]/len(Y_test)])
+    else:
+        nmissing.append([hof.items[0].nmissing/len(Y_train),0])
     
     # output report files
     if proc_rank == 0:

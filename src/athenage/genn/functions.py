@@ -141,3 +141,143 @@ def pdiv(a: np.ndarray, b: np.ndarray) -> np.ndarray:
         # Return a constant.
         return 1.0
 
+def PAND(inputs: list) -> np.ndarray:
+    """
+    Boolean AND operator. Returns 1.0 if all inputs are > 0 and 0 otherwise.
+    Ignores np.nan inputs
+
+    Args:
+        inputs: np.ndarrays containing floats or np.nan
+    
+    Returns:
+        numpy array 
+    """
+    stacked_arrays = np.stack(inputs, axis=0)
+    
+    valid_mask = ~np.isnan(stacked_arrays)
+    all_nan_mask = np.all(np.isnan(stacked_arrays), axis=0)
+    
+    result = np.all((stacked_arrays > 0) | ~valid_mask, axis=0)    
+    result = np.where(all_nan_mask, np.nan, result)
+    
+    return result.astype(float)
+
+
+def PNAND(inputs: list) -> np.ndarray:
+    """
+    Boolean NAND operator. Returns 0.0 if all inputs are > 0 and 1 otherwise.
+    Ignores np.nan inputs
+
+    Args:
+        inputs: np.ndarrays containing floats or np.nan
+    
+    Returns:
+        numpy array 
+    """
+    stacked_arrays = np.stack(inputs, axis=0)
+    
+    valid_mask = ~np.isnan(stacked_arrays)    
+    all_nan_mask = np.all(np.isnan(stacked_arrays), axis=0)
+    result = np.all((stacked_arrays <= 0) | ~valid_mask, axis=0)    
+    result = np.where(all_nan_mask, np.nan, result)
+    
+    return result.astype(float)
+
+def POR(inputs: list) -> np.ndarray:
+    """
+    Boolean OR operator. Returns 1.0 if any inputs are > 0 and 1 otherwise.
+    Ignores np.nan inputs
+
+    Args:
+        inputs: np.ndarrays containing floats or np.nan
+    
+    Returns:
+        numpy array 
+    """
+    stacked_arrays = np.stack(inputs, axis=0)
+    
+    valid_mask = ~np.isnan(stacked_arrays)    
+    all_nan_mask = np.all(np.isnan(stacked_arrays), axis=0)
+    
+    result = np.any((stacked_arrays > 0) & valid_mask, axis=0)  
+    result = np.where(all_nan_mask, np.nan, result)
+    
+    return result.astype(float)
+
+
+def PNOR(inputs: list) -> np.ndarray:
+    """
+    Boolean NOR operator. Returns 0.0 if any inputs are > 0 and 1.0 otherwise.
+    Ignores np.nan inputs
+
+    Args:
+        inputs: np.ndarrays containing floats or np.nan
+    
+    Returns:
+        numpy array 
+    """
+    stacked_arrays = np.stack(inputs, axis=0)
+    
+    valid_mask = ~np.isnan(stacked_arrays)    
+    all_nan_mask = np.all(np.isnan(stacked_arrays), axis=0)
+    
+    any_positive_mask = np.any((stacked_arrays > 0) & valid_mask, axis=0)    
+    all_non_positive_mask = np.all((stacked_arrays <= 0) | np.isnan(stacked_arrays), axis=0)
+    
+    result = np.full(stacked_arrays.shape[1:], np.nan, dtype=float)
+    result[any_positive_mask] = 0.0    
+    result[all_non_positive_mask] = 1.0
+    
+    final_result = np.where(all_nan_mask, np.nan, result)
+    
+    return final_result
+
+
+def PXOR(inputs: list) -> np.ndarray:
+    """
+    Boolean XOR operator. Returns 1.0 if if inputs alternate >0 and <=0.
+    Returns 1.0 if they do not.
+    Ignores np.nan inputs
+
+    Args:
+        inputs: np.ndarrays containing floats or np.nan
+    
+    Returns:
+        numpy array 
+    """
+    stacked_arrays = np.stack(inputs, axis=0)
+    valid_mask = ~np.isnan(stacked_arrays)
+    all_nan_mask = np.all(np.isnan(stacked_arrays), axis=0)
+    
+    result = np.zeros(stacked_arrays.shape[1:], dtype=float)
+    
+    # Iterate over each position and check for alternating behavior
+    for idx in np.ndindex(stacked_arrays.shape[1:]):
+        # Get the values for this index across all arrays
+        values = stacked_arrays[:, idx]
+        
+        # Ignore NaN values and get the valid (non-NaN) values
+        valid_values = values[valid_mask[:, idx]]
+        
+        if len(valid_values) > 1:
+            # Check if the values alternate between > 0 and <= 0
+            # We want a sequence of values like: [>0, <=0, >0, <=0] or the reverse
+            alternating = True
+            for i in range(1, len(valid_values)):
+                if valid_values[i] > 0 and valid_values[i-1] > 0:
+                    alternating = False
+                    break
+                if valid_values[i] <= 0 and valid_values[i-1] <= 0:
+                    alternating = False
+                    break
+            
+            if alternating:
+                result[idx] = 1.0
+        elif len(valid_values) == 1:
+            # If only one valid value exists and it's > 0, set result to 0
+            result[idx] = 0.0
+    
+    # Apply np.nan where all values were np.nan at the position
+    result = np.where(all_nan_mask, np.nan, result)
+    
+    return result

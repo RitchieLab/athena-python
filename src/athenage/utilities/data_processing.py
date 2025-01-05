@@ -226,7 +226,7 @@ def process_var_colormap(colorfn: str=None, node_color: str='lightgray',
 
     Args:
         colorfn: name of file to process, when no fn provided only the network nodes
-            (PA,PD,PM,PS) are included
+            (PA,PD,PM,PS,PAND,PNAND,POR,PXOR,PNOR) are included
         node_color: color for the operator nodes
         var_default: Default colors for unspecified variables
 
@@ -237,7 +237,9 @@ def process_var_colormap(colorfn: str=None, node_color: str='lightgray',
     
     color_map.add_category('netnodes', color_map.operator_color)
     color_map.add_nodes({'PA':color_map.operator_color,'PD':color_map.operator_color,
-    'PM':color_map.operator_color,'PS':color_map.operator_color},'netnodes')
+    'PM':color_map.operator_color,'PS':color_map.operator_color,'PAND':color_map.operator_color,
+    'PNAND':color_map.operator_color, 'POR':color_map.operator_color, 'PNOR':color_map.operator_color,
+    'PXOR':color_map.operator_color},'netnodes')
     
     # header for file is category,color,inputs
     if colorfn:
@@ -429,7 +431,7 @@ def format_number(num, max_decimals=2):
 
 def compress_weights(model_str):
     """ Compresses weights/constants to simplify the model string"""
-    if re.search(r"[PA|PD|PM|PS]", model_str):
+    if re.search(r"[PA|PD|PM|PS|PAND|PNAND|POR|PXOR|PNOR]", model_str):
         return compress_weights_nn(model_str)
     else:
         return compress_weights_sr(model_str)
@@ -564,7 +566,7 @@ def construct_nodes(modelstr:str) -> list:
      Returns
        nodes constructed from the model
     """ 
-    if re.search(r"PA|PS|PD|PM", modelstr):
+    if re.search(r"PA|PS|PD|PM|PAND|PNAND|POR|PXOR|PNOR]", modelstr):
         return construct_nodes_nn(modelstr)
     else:
         return construct_nodes_sr(modelstr)
@@ -692,7 +694,8 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
         None
     """
 
-    inputs_map.update({'PA':'PA', 'PM':'PM', 'PS':'PS','PD':'PD'})
+    inputs_map.update({'PA':'PA', 'PM':'PM', 'PS':'PS','PD':'PD','PAND':'PAND','PNAND':'PNAND',
+                       'POR':'POR','PNOR':'PNOR','PXOR':'PXOR'})
     for cv,model in enumerate(best_models,1):
         compressed = compress_weights(model.phenotype)
         modelstr = reset_variable_names(compressed, var_map)
