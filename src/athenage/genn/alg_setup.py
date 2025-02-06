@@ -4,7 +4,7 @@ from deap import creator, base, tools
 import grape.grape as grape
 from genn.functions import activate, PA, PM, PS, PD, pdiv, PAND, PNAND, PXOR, POR, PNOR
 import numpy as np
-from sklearn.metrics import balanced_accuracy_score
+from sklearn.metrics import balanced_accuracy_score, roc_auc_score  
 
 INVALID_FITNESS = -1000
 
@@ -53,6 +53,13 @@ def configure_toolbox(fitness: str, selection: str, crosstype:str ='match',
         else:
             toolbox.register("evaluate", fitness_balacc)
             toolbox.register("select", tools.selTournament, tournsize=2)
+    elif fitness == 'auc':
+        if selection=='lexicase':
+            toolbox.register("evaluate", fitness_auc_lexicase)
+            toolbox.register("select", grape.selBalAccLexicase)
+        else:
+            toolbox.register("evaluate", fitness_auc)
+            toolbox.register("select", tools.selTournament, tournsize=2)
     else:
         raise ValueError("fitness must be fitness_rsquared or fitness_balacc")
     
@@ -100,7 +107,7 @@ def fitness_rsquared(individual: 'deap.creator.Individual', points: list) -> flo
 
     Args:
         individual: solution being evaluated for fitness
-        points: 2-D list containing inputs and outcome for calcualting fitness
+        points: 2-D list containing inputs and outcome for calculating fitness
             points[0] contains 2-D np.ndarray of all inputs
 
     Returns:
@@ -148,14 +155,13 @@ def fitness_rsquared_lexicase(individual: 'deap.creator.Individual', points: lis
 
     Args:
         individual: solution being evaluated for fitness
-        points: 2-D list containing inputs and outcome for calcualting fitness
+        points: 2-D list containing inputs and outcome for calculating fitness
             points[0] contains 2-D np.ndarray of all inputs
 
     Returns:
         r-squared fitness
     """
 
-    #points = [X, Y]
     x = points[0]
     y = points[1]
     
@@ -203,7 +209,7 @@ def fitness_balacc(individual: 'deap.creator.Individual', points: list) -> float
 
     Args:
         individual: solution being evaluated for fitness
-        points: 2-D list containing inputs and outcome for calcualting fitness
+        points: 2-D list containing inputs and outcome for calculating fitness
             points[0] contains 2-D np.ndarray of all inputs
 
     Returns:
@@ -260,7 +266,7 @@ def fitness_balacc_lexicase(individual: 'deap.creator.Individual', points: list)
 
     Args:
         individual: solution being evaluated for fitness
-        points: 2-D list containing inputs and outcome for calcualting fitness
+        points: 2-D list containing inputs and outcome for calculating fitness
             points[0] contains 2-D np.ndarray of all inputs
 
     Returns:
@@ -314,4 +320,120 @@ def fitness_balacc_lexicase(individual: 'deap.creator.Individual', points: list)
         return INVALID_FITNESS,
     
     return fitness,
+
+def fitness_auc(individual: 'deap.creator.Individual', points: list) -> float:
+    """Calculate area under the curve (AUC)
+    as fitness for this individual using points passed
+
+    Args:
+        individual: solution being evaluated for fitness
+        points: 2-D list containing inputs and outcome for calculating fitness
+            points[0] contains 2-D np.ndarray of all inputs
+
+    Returns:
+        AUC fitness
+    """
+
+    x = points[0]
+    y = points[1]
     
+
+    if individual.invalid == True:
+        return INVALID_FITNESS,
+
+    try:
+        pred = eval(individual.phenotype)
+        
+#         pred2 = eval(compress_weights(individual.phenotype))
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        return INVALID_FITNESS,
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("evaluation error", err)
+            raise
+    assert np.isrealobj(pred)
+
+    try:
+        nan_mask = np.isnan(pred)
+        # assign case/control status
+        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        fitness = roc_auc_score(y[~nan_mask],pred_nonan)
+        individual.nmissing = np.count_nonzero(np.isnan(pred))
+        
+#         fitness_compressed = balanced_accuracy_score(y[~nan_mask],pred2)
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        fitness = INVALID_FITNESS
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("fitness error", err)
+            raise
+        
+    if fitness == float("inf"):
+        return INVALID_FITNESS,
+    
+    return fitness,
+    
+def fitness_auc_lexicase(individual: 'deap.creator.Individual', points: list) -> float:
+    """Calculate area under the curve (AUC) for this individual and store differences in
+        predicted vs observed outcomes for use in lexicase selection
+
+    Args:
+        individual: solution being evaluated for fitness
+        points: 2-D list containing inputs and outcome for calculating fitness
+            points[0] contains 2-D np.ndarray of all inputs
+
+    Returns:
+        balanced accuracy fitness
+    """
+
+    x = points[0]
+    y = points[1]
+    
+    if individual.invalid == True:
+        individual.ptscores = np.full(len(y), np.nan)
+        return INVALID_FITNESS,
+
+    try:
+        pred = eval(individual.phenotype)
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        return INVALID_FITNESS,
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("evaluation error", err)
+            raise
+    assert np.isrealobj(pred)
+    
+    try:
+        nan_mask = np.isnan(pred)
+        # assign case/control status
+        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        fitness = roc_auc_score(y[~nan_mask],pred_nonan)
+        individual.nmissing = np.count_nonzero(np.isnan(pred))
+        
+        # save individual point scores for use in lexicase selection
+        full = np.copy(pred)
+        full[~nan_mask] = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        individual.ptscores = np.absolute(y-full)
+        
+        
+    except (FloatingPointError, ZeroDivisionError, OverflowError,
+            MemoryError, ValueError):
+        fitness = INVALID_FITNESS
+        individual.ptscores = np.full(len(y), np.nan)
+    except Exception as err:
+            # Other errors should not usually happen (unless we have
+            # an unprotected operator) so user would prefer to see them.
+            print("fitness error", err)
+            raise
+        
+    if fitness == float("inf"):
+        individual.ptscores = np.full(len(y), np.nan)
+        return INVALID_FITNESS,
+    
+    return fitness,

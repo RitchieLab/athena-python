@@ -87,7 +87,7 @@ The genomes primarily affect the behavior of the [crossover operator](#Crossover
 
 ### Fitness
 
-**ATHENA** offers two fitness metrics, balanced accuracy and r-squared. [Balanced accuracy](https://en.wikipedia.org/wiki/Precision_and_recall#Imbalanced_data) should be used with binary outcomes (i.e. disease status). [R squared](https://en.wikipedia.org/wiki/Coefficient_of_determination) should be used with continuous outcome variables (i.e. cholesterol levels).
+**ATHENA** offers three fitness metrics, balanced accuracy, AUC and r-squared. [Balanced accuracy](https://en.wikipedia.org/wiki/Precision_and_recall#Imbalanced_data) and [area under the curve (AUC)](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve) should be used with binary outcomes (i.e. disease status). [R squared](https://en.wikipedia.org/wiki/Coefficient_of_determination) should be used with continuous outcome variables (i.e. cholesterol levels).
 
 ### Initialization
 
