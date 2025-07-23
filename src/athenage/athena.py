@@ -7,11 +7,11 @@ Pyhon implementation of ATHENA software
 
 """
 
-import grape.grape as grape
-import grape.algorithms as algorithms
-from genn.functions import activate, PA, PM, PS, PD, pdiv, PAND, PNAND, PXOR, POR, PNOR
-from genn import alg_setup
-from genn import parallel 
+import athenage.grape.grape as grape
+import athenage.grape.algorithms as algorithms
+from  athenage.genn.functions import activate, PA, PM, PS, PD, pdiv, PAND, PNAND, PXOR, POR, PNOR
+from  athenage.genn import alg_setup
+from  athenage.genn import parallel 
 
 import random
 import sys
@@ -23,7 +23,7 @@ from os import path
 import pandas as pd
 import numpy as np
 from deap import tools
-from utilities import *
+from athenage.utilities import *
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -157,6 +157,10 @@ for cv in range(params['CV']):
     stats.register("std", np.nanstd)
     stats.register("min", np.nanmin)
     stats.register("max", np.nanmax)
+
+    migrate_int=0
+    if parallel.has_mpi:
+      migrate_int=params['GENS_MIGRATE']
     
     
     # perform the Grammatical Evolution flow:
@@ -177,7 +181,7 @@ for cv in range(params['CV']):
                                               stats=stats, halloffame=hof, verbose=False,
                                               rank=proc_rank, switch_crosstype=params['CROSSOVER2'],
                                               switch_cross_gens=params['GEN_CROSS_SWITCH'],
-                                              migrate_interval=params['GENS_MIGRATE'])
+                                              migrate_interval=migrate_int)
 
     alg_setup.set_crossover(toolbox, params['CROSSOVER'])
     import textwrap

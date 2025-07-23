@@ -279,7 +279,7 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
     parser.add_argument('--codon-size',
                         dest='CODON_SIZE',
                         type=int,
-                        default=250,
+                        default=65536,
                         help='Maximum value of a codon in the genome of an individual'
                         'in the evolutionary population. At a minimum it should be'
                         '>= the largest number of choices for a rule in the grammar')

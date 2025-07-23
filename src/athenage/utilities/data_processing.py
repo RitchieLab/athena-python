@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.model_selection import KFold, StratifiedKFold
 import re
 import numpy as np
-from genn.functions import pdiv
+from athenage.genn.functions import pdiv
 
 from collections import deque
 import matplotlib.pyplot as plt

@@ -25,9 +25,9 @@ import numpy as np
 import time
 import warnings
 
-from genn import parallel 
+from athenage.genn import parallel 
 from deap import tools
-from genn.alg_setup import set_crossover
+from athenage.genn.alg_setup import set_crossover
 
 def varAnd(population: list, toolbox: 'deap.base.Toolbox', cxpb: float, 
            mutpb: float, bnf_grammar: "grape.grape.grammar", codon_size: int, 

@@ -1,8 +1,8 @@
 """ Setup of DEAP structures and additional functions used in GENN algorithm """
 # import grape
 from deap import creator, base, tools
-import grape.grape as grape
-from genn.functions import activate, PA, PM, PS, PD, pdiv, PAND, PNAND, PXOR, POR, PNOR
+import athenage.grape.grape as grape
+from athenage.genn.functions import activate, PA, PM, PS, PD, pdiv, PAND, PNAND, PXOR, POR, PNOR
 import numpy as np
 from sklearn.metrics import balanced_accuracy_score, roc_auc_score  
 
