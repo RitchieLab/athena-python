@@ -293,29 +293,46 @@ def rename_variables(df: pd.DataFrame) -> dict:
         df: dataframe to alter
     
     Returns:
-        vmap: new names are keys and original names are values
+        vmap: new names are keys and original names are values (with - replaced by _ to work with plotting)
+        origvmap: original column names 
 
     """
     newcols = {}
     vmap = {}
+    origvmap = {}
     oldcols = list(df.drop('y', axis=1).columns)
     for i in range(len(oldcols)):
         newvar = 'x' + str(i)# + ']'
         newcols[oldcols[i]]=newvar
-        vmap['x['+str(i) + ']']=oldcols[i]
+#        vmap['x['+str(i) + ']']=oldcols[i]
+        vmap['x['+str(i) + ']']=oldcols[i].replace("-","_")
+        origvmap[oldcols[i].replace("-","_")]=oldcols[i]
 
     df.rename(newcols, inplace=True, axis=1)
 
-    return vmap
+    return vmap, origvmap
 
-def reset_variable_names(model: str, vmap: dict) -> str:
+def reset_variable_names(model: str, vmap: dict, orig_vmap: dict) -> str:
     """Replace x variables with names in variable map
 
     Args:
         model: evolved model containing variables with indexed x values ('x[0],x[1],...)
         vmap: dict with key as x variable and value as name to replace with
+        orig_vmap: dict with key as protected variable name (- removed) and the original name
 
     Returns: 
+        string: model string with variable names updated
+    """
+    return re.sub(r"((x\[\d+\]))", lambda g: orig_vmap[vmap[g.group(1)]], model)
+
+def protected_variable_names(model: str, vmap: dict) -> str:
+    """Replace x variables with names in variable map ('-' removed for plotting)
+
+    Args:
+        model: evolved model containing variables with indexed x values ('x[0],x[1],...)
+        vmap: dict with key as x variable and value as name to replace with
+
+    Returns:
         string: model string with variable names updated
     """
     return re.sub(r"((x\[\d+\]))", lambda g: vmap[g.group(1)], model)
@@ -497,7 +514,7 @@ def compress_weights_sr(model_str):
 
 
 def write_summary(filename: str, best_models: list['deap.creator.Individual'], score_type: str, var_map: dict, 
-                  fitness_test: list[float],nmissing: list[int]) -> None:
+                  orig_var_map: dict, fitness_test: list[float],nmissing: list[int]) -> None:
     """Produce summary file reporting results
 
     Args:
@@ -505,6 +522,7 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
         best_models: deap Individual objects from run
         score_type: test used for scoring individuals
         var_map: key is value (x[0],x[1],etc) and value is original column name in dataset
+        orig_var_map: key is protect variable name ('-' removed) and value is original name in input
         fitness_test: contains testing fitness scores for each individual
         nmissing: number of missing rows for individual
 
@@ -525,7 +543,7 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
         fh.write(f"{i+1}\t")
         # extract variables from model
         for match in pattern.finditer(model.phenotype):
-            fh.write(f"{var_map[match.group(1)]} ")
+            fh.write(f"{orig_var_map[var_map[match.group(1)]]} ")
         
         fh.write(f"\t{model.fitness.values[0]}")
         fh.write(f"\t{fitness_test[i]}")
@@ -537,7 +555,7 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
     fh.write("\nCV\tModel\n")
     for i,model in enumerate(best_models):
         compressed = compress_weights(model.phenotype)
-        compressed = reset_variable_names(compressed, var_map)
+        compressed = reset_variable_names(compressed, var_map, orig_var_map)
         fh.write(f"{i+1}\t{compressed}\n")
     
     fh.write("\n***** Original Networks *****")
@@ -678,7 +696,7 @@ def construct_nodes_nn(modelstr:str) -> list:
     return nodes
 
 
-def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_map: dict, 
+def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_map: dict, orig_var_map: dict,
                 inputs_map: dict, color_map: ColorMapping) -> None:
     """Produces png file displaying best models with one per cross-validation.
 
@@ -686,6 +704,7 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
         basefn: name of file to write
         best_models: deap Individual objects from run
         var_map: key is value (x[0],x[1],etc) and value is name from dataset adjusted for multiple occurences (Ott encoding)
+        orig_var_map: key is protected variable name ('-' removed) and value is original name in input
         inputs_map: key is name (adjusted for Ott encoding), value is original column name in input dataset
         color_map: contains colors to use in plot
 
@@ -698,7 +717,8 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
                        'POR':'POR','PNOR':'PNOR','PXOR':'PXOR'})
     for cv,model in enumerate(best_models,1):
         compressed = compress_weights(model.phenotype)
-        modelstr = reset_variable_names(compressed, var_map)
+#        modelstr = reset_variable_names(compressed, var_map, orig_var_map)
+        modelstr = protected_variable_names(compressed, var_map)
         nodes = construct_nodes(modelstr)
         finalindex = len(nodes)-1
         node_labels={}
@@ -710,6 +730,8 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
         for node in nodes:
             node.num = abs(node.num - finalindex)
             node_labels[node.num] = node.label
+            if node.label in orig_var_map:
+              node_labels[node.num] = orig_var_map[node.label]
             # possible colors: https://matplotlib.org/stable/users/explain/colors/colors.html
             if node.label in inputs_map:
                 node_colors[node.num] = color_map.get_input_color(inputs_map[node.label])
@@ -735,7 +757,6 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
             edge_labels=edge_labels, node_color=node_colors, node_size=node_size, ax=ax,
             scale=(2,2), edge_label_fontdict=dict(size=6), node_label_fontdict=dict(size=4))
             # node_label_offset=(0,0.1))
-            
             
         if len(categories) > 0:
             # add legend

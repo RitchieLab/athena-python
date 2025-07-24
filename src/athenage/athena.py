@@ -69,7 +69,7 @@ best_models = []
 best_fitness_test = []
 nmissing = []
 
-data, train_splits, test_splits, var_map,BNF_GRAMMAR = None,None,None,None,None
+data, train_splits, test_splits, var_map,orig_var_map,BNF_GRAMMAR = None,None,None,None,None,None
 if proc_rank == 0:
     # process the input files to create the appropriate X and Y sets for testing training
     data, inputs_map, unmatched = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
@@ -91,7 +91,7 @@ if proc_rank == 0:
         ncvs=params['CV'], df=data, have_test_file=params['TEST_OUTCOME_FILE'], 
         test_df=test_data, rand_seed=params['RANDOM_SEED'])
     
-    var_map = data_processing.rename_variables(data)
+    var_map,orig_var_map = data_processing.rename_variables(data)
     color_map = data_processing.process_var_colormap(params['COLOR_MAP_FILE'])
 
     grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
@@ -221,7 +221,7 @@ for cv in range(params['CV']):
     # output report files
     if proc_rank == 0:
         print("Best individual:")#,"\n".join(textwrap.wrap(best,80)))
-        print("\n".join(textwrap.wrap(data_processing.reset_variable_names(best, var_map),80)))
+        print("\n".join(textwrap.wrap(data_processing.reset_variable_names(best, var_map, orig_var_map),80)))
         print("\nTraining Fitness: ", hof.items[0].fitness.values[0])
         print("Test Fitness: ", fitness_test[-1])
         print("Depth: ", hof.items[0].depth)
@@ -257,8 +257,8 @@ for cv in range(params['CV']):
 # create and write summary files and plots for run
 if proc_rank == 0:
     data_processing.write_summary(params['OUT'] + '_summary.txt',
-        best_models,params['FITNESS'], var_map, best_fitness_test, nmissing)
-    data_processing.write_plots(params['OUT'], best_models, var_map, inputs_map, color_map)
+        best_models,params['FITNESS'], var_map, orig_var_map, best_fitness_test, nmissing)
+    data_processing.write_plots(params['OUT'], best_models, var_map, orig_var_map, inputs_map, color_map)
     
 def main():
     pass
