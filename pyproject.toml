@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "athena-ge"
-version = "0.0.1"
+version = "2.0.0"
 authors = [
   { name="Scott Dudek", email="Scott.Dudek@pennmedicine.upenn.edu" },
 ]
