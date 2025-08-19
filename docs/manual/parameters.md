@@ -28,6 +28,7 @@ All options are listed here in both their command line and parameter file forms.
 | `--geno-encode` | GENO_ENCODE | [STR] |Default: *NONE*.  Sets genotype encoding. Must be either add_quad or additive |
 | `--includedvars` | INCLUDEDVARS | [STR STR ...] |Default: *NONE*. Variable names to be included in run (accepts multiple arguments) |
 | `--missing` | MISSING | [STR] |Default: *NONE*. Value denoting missing data in input files |
+| `--drop-fract` | DROP_FRACT | [FLOAT] |Default: *1.0*. Columns missing >= this fraction will be dropped from the run |
 | `--outcome` | OUTCOME | [STR] |Default: *NONE*. Column header designating which variable to use. Uses first when not designated. |
 | `--scale-contin` | SCALE_CONTIN | |Default: *False*. Scale continuous input variables from 0-1.0 |
 | `--scale-outcome` | SCALE_OUTCOME | |Default: *False*. Scale outcome variables form 0-1.0 |

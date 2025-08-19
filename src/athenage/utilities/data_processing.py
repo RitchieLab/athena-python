@@ -15,11 +15,14 @@ import networkx as nx
 from netgraph import Graph
 import textwrap
 import csv
+import tempfile
+import os
+import gc
 
 
 def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool=False,
     contin_scale: bool=False, geno_encode: str=None, missing: str=None, outcome: str=None,
-    included_vars: list[str]=None) -> tuple[pd.DataFrame, dict, list]:
+    missing_fract: float=1.0,included_vars: list[str]=None) -> tuple[pd.DataFrame, dict, list]:
     """Read in data and construct pandas dataframe
 
     Args:
@@ -30,6 +33,7 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
         contin_scale: scale each continuous variable from 0 to 1.0
         geno_encode: encode genotype data. options are 'add_quad' and 'additive'
         outcome: column header in continfn to use for 'y'
+        missing_fract: columns with >= fraction of missing will be dropped
         included_vars: list of variable names to include in analysis; all others excluded
 
     Returns:
@@ -53,7 +57,7 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
     contin_df = None
     inputs_map = {}
     if continfn:
-        contin_df = process_continfile(continfn, contin_scale, missing, included_vars)
+        contin_df = process_continfile(continfn, contin_scale, missing, included_vars, missing_fract)
         inputs_map={contin_df.columns[i]:contin_df.columns[i] for i in range(0,len(contin_df.columns))}
 
     if genofn:
@@ -63,15 +67,40 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
     dataset_df = dataset_df.sort_values('ID', ascending=False)
     unmatched = []
 
+    # merge genetic SNP info into dataset dataframe
     if genofn:
-        unmatched.extend(dataset_df[~dataset_df['ID'].isin(geno_df['ID'])]['ID'].tolist())
-        unmatched.extend(geno_df[~geno_df['ID'].isin(dataset_df['ID'])]['ID'].tolist())
-        dataset_df = pd.merge(dataset_df,geno_df,on="ID", validate='1:1')
+        dataset_df['ID'] = dataset_df['ID'].astype(str)
+        geno_df['ID']  = geno_df['ID'].astype(str)
+        unmatched_ids1 = dataset_df.loc[~dataset_df['ID'].isin(geno_df['ID']), 'ID']
+        unmatched_ids2 = geno_df.loc[~geno_df['ID'].isin(dataset_df['ID']), 'ID']
+        unmatched.extend(unmatched_ids1.tolist())
+        unmatched.extend(unmatched_ids2.tolist())
 
+        dataset_ids = dataset_df['ID'].astype(str)
+        geno_ids  = geno_df['ID'].astype(str)
+
+        # Symmetric difference = IDs in one but not the other
+        unmatched_ids = set(dataset_ids) ^ set(geno_ids)
+        unmatched.extend(unmatched_ids)
+        # Merge 
+        dataset_df = dataset_df.merge(contin_df, on="ID", validate="1:1", copy=False)
+
+        del gene_df
+        gc.collect()
+
+    # merge continuous input values into dataset frame
     if continfn:
-        unmatched.extend(dataset_df[~dataset_df['ID'].isin(contin_df['ID'])]['ID'].tolist())
-        unmatched.extend(contin_df[~contin_df['ID'].isin(dataset_df['ID'])]['ID'].tolist())
-        dataset_df = pd.merge(dataset_df, contin_df, on="ID", validate='1:1')
+        dataset_ids = dataset_df['ID'].astype(str)
+        contin_ids  = contin_df['ID'].astype(str)
+
+        # Symmetric difference = IDs in one but not the other
+        unmatched_ids = set(dataset_ids) ^ set(contin_ids)
+        unmatched.extend(unmatched_ids)
+        # Merge 
+        dataset_df = dataset_df.merge(contin_df, on="ID", validate="1:1", copy=False)
+
+        del contin_df
+        gc.collect()
 
     dataset_df.drop(columns=['ID'], inplace=True)
 
@@ -84,8 +113,7 @@ def normalize(val):
     newval = (val - minval) / diff 
     return newval
 
-
-def process_continfile(fn: str, scale: bool, missing: str=None, included_vars: list[str]=None) -> pd.DataFrame:
+def process_continfile(fn: str, scale: bool, missing: str=None, included_vars: list[str]=None, max_missing_fraction: float | None = None) -> pd.DataFrame:
     """Read in continuous data and construct dataframe from values
 
     Args:
@@ -93,25 +121,88 @@ def process_continfile(fn: str, scale: bool, missing: str=None, included_vars: l
         scale: normalize values if true
         missing: identifies any missing data in file
         included_vars: restrict set to only variables (column names) in list
+        max_missing_fraction: drop numeric columns where > this fraction are missing (0–1).
+                              If None, keep all columns (default).
             
     Returns: 
         pandas dataframe 
     """
-    data = pd.read_table(fn, delim_whitespace=True, header=0, keep_default_na=False)
 
-    if included_vars:
-        data=data.loc[:, data.columns.isin(included_vars)]
+    with open(fn) as f:
+        header_line = f.readline().strip()
+        header = header_line.split()
+        first_data_line = f.readline().strip()
+        first_data = first_data_line.split()
 
-    if missing:
-        data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].replace(missing, np.nan)
-        
-    data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].astype(float)
+    if len(first_data) != len(header):
+        raise ValueError(
+            f"Column mismatch in {fn}: header has {len(header)} columns but first data row has {len(first_data)}.\n"
+            f"Header (first 10 cols): {header[:10]}\n"
+            f"First row (first 10 cols): {first_data[:10]}"
+        )
 
-    if scale:
-        data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].apply(normalize, axis=0)
+    with open(fn) as f:
+        header = f.readline().strip().split()
 
-    return data
+    # --- Stream + replace missing into a temp file to reduce memory use on large files ---
+    with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
+        tmp.write(" ".join(header) + "\n")  # write header first
+        for line in open(fn):
+            # skip header (already written)
+            if line.startswith(header[0]):
+                continue
+            if missing is not None:
+                if isinstance(missing, (list, tuple, set)):
+                    for m in missing:
+                        line = line.replace(m, "nan")
+                else:
+                    line = line.replace(missing, "nan")
+            tmp.write(line)
+        tmp_name = tmp.name
+
+    try:
+        # --- Load columns ---
+        ids = np.loadtxt(tmp_name, dtype=str, skiprows=1, usecols=(0,))
+        data = np.loadtxt(tmp_name, dtype=np.float32, skiprows=1, usecols=range(1, len(header)))
+    finally:
+        #  Clean up temp file
+        os.remove(tmp_name)
     
+    # --- Convert to DataFrame ---
+    df = pd.DataFrame(data, columns=header[1:])
+    df.insert(0, header[0], ids)
+
+    # --- Restrict columns if needed ---
+    if included_vars:
+        keep_cols = [header[0]] + [c for c in included_vars if c in df.columns]
+        df = df[keep_cols]
+
+    # --- Drop columns with too many missing values ---
+    if max_missing_fraction is not None:
+        num = df.iloc[:, 1:].to_numpy(copy=False)
+        missing_frac = np.mean(np.isnan(num), axis=0)
+        keep_mask = missing_frac <= max_missing_fraction
+        cols_to_keep = [df.columns[0]] + df.columns[1:][keep_mask].tolist()
+        dropped_cols = df.columns[1:][~keep_mask].tolist()
+        if len(cols_to_keep) == 1:
+            raise ValueError(
+                f"All non-ID columns were dropped due to missing fraction > {max_missing_fraction}. "
+                f"Dropped columns: {dropped_cols}"
+            )
+        df = df[cols_to_keep]
+        print(f"Dropped columns (>{max_missing_fraction:.2f} missing): {dropped_cols}")
+
+    # --- Min–max normalize ---
+    if scale:
+        num = df.iloc[:, 1:].to_numpy(copy=False)
+        col_min = np.nanmin(num, axis=0)
+        col_max = np.nanmax(num, axis=0)
+        diff = col_max - col_min
+        diff[diff == 0] = 1
+        df.iloc[:, 1:] = (num - col_min) / diff
+
+    return df
+
     
 def additive_encoding(genos):
     return genos.map({'0':-1,'1':0, '2':1, np.nan:np.nan})
@@ -124,7 +215,7 @@ def add_quad_encoding(df):
     df.iloc[:, 1::2] = df.iloc[:, 1::2].astype(str).apply(add_quad_encoding_second)
     return df
 
-def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: list[str]=None) ->  tuple[pd.DataFrame, dict]:
+def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: list[str]=None, max_missing_fraction: float | None = None) ->  tuple[pd.DataFrame, dict]:
     """Read in genotype data and construct dataframe from values
 
     Args:
@@ -132,6 +223,8 @@ def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: l
         encoding: Genotype encoding type
         missing: identifies missing data in file
         included_vars: restrict set to only variables in list
+        max_missing_fraction: drop numeric columns where > this fraction are missing (0–1).
+                              If None, keep all columns (default).
 
     Returns: 
         data: pandas dataframe
@@ -145,8 +238,22 @@ def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: l
     if missing:
         # data.replace([missing], np.nan, inplace=True)
         data.loc[:,data.columns!='ID'] = data.loc[:,data.columns!='ID'].replace(missing, np.nan)
-    
-#     oldcols = list(data.drop('y', axis=1).columns)
+
+    # --- Drop columns with too many missing values ---
+    if max_missing_fraction is not None:
+        num = df.iloc[:, 1:].to_numpy(copy=False)
+        missing_frac = np.mean(np.isnan(num), axis=0)
+        keep_mask = missing_frac <= max_missing_fraction
+        cols_to_keep = [df.columns[0]] + df.columns[1:][keep_mask].tolist()
+        dropped_cols = df.columns[1:][~keep_mask].tolist()
+        if len(cols_to_keep) == 1:
+            raise ValueError(
+                f"All non-ID columns were dropped due to missing fraction > {max_missing_fraction}. "
+                f"Dropped columns: {dropped_cols}"
+            )
+        df = df[cols_to_keep]
+        print(f"Dropped columns (>{max_missing_fraction:.2f} missing): {dropped_cols}")
+
     labels = list(data.columns)
     geno_map={}
     
@@ -373,36 +480,19 @@ def prepare_split_data(df: pd.DataFrame, train_indexes: np.ndarray,
         X_test: x values for testing
         Y_test: y values for testing
     """
-    traindf = df.iloc[train_indexes]
-    testdf = df.iloc[test_indexes]
-    
-    train_rows = traindf.shape[0]
-    train_cols = traindf.shape[1]-1
-    
-    X_train = np.zeros([train_rows,train_cols], dtype=float)
-    Y_train = np.zeros([train_rows,], dtype=float)
-    for i in range(train_rows):
-        for j in range(train_cols):
-            X_train[i,j] = traindf['x'+str(j)].iloc[i]
-    for i in range(train_rows):
-        Y_train[i] = traindf['y'].iloc[i]
-    
-    test_rows=testdf.shape[0]
-    test_cols=testdf.shape[1]-1
 
-    X_test = np.zeros([test_rows,test_cols], dtype=float)
-    Y_test = np.zeros([test_rows,], dtype=float)
-    for i in range(test_rows):
-        for j in range(test_cols):
-            X_test[i,j] = testdf['x'+str(j)].iloc[i]
-    for i in range(test_rows):
-        Y_test[i] = testdf['y'].iloc[i]
-    
-    X_train = np.transpose(X_train)
-    X_test = np.transpose(X_test)
-    
-    return X_train,Y_train,X_test,Y_test
-    
+    traindf = df.iloc[train_indexes]
+    testdf  = df.iloc[test_indexes]
+
+    # Assume 'y' is the label column, everything else is features
+    X_train = traindf.drop(columns='y').to_numpy(dtype=np.float32).T   # transpose directly
+    Y_train = traindf['y'].to_numpy(dtype=np.float32)
+
+    X_test  = testdf.drop(columns='y').to_numpy(dtype=np.float32).T
+    Y_test  = testdf['y'].to_numpy(dtype=np.float32)
+
+    return X_train, Y_train, X_test, Y_test
+
 
 def generate_splits(ncvs: int, fitness_type: str, df: pd.DataFrame, have_test_file: bool=False, test_df: pd.DataFrame=None, 
                     rand_seed: int=1234) -> tuple[np.ndarray,np.ndarray,pd.DataFrame]:
@@ -584,7 +674,7 @@ def construct_nodes(modelstr:str) -> list:
      Returns
        nodes constructed from the model
     """ 
-    if re.search(r"PA|PS|PD|PM|PAND|PNAND|POR|PXOR|PNOR]", modelstr):
+    if re.search(r"PA\(|PS\(|PD\(|PM\(|PAND\(|PNAND\(|POR\(|PXOR\(|PNOR\(]", modelstr):
         return construct_nodes_nn(modelstr)
     else:
         return construct_nodes_sr(modelstr)

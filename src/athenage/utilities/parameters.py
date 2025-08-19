@@ -43,7 +43,12 @@ def valid_parameters(parameters) -> bool:
         if parameters[rate] < 0.0 or parameters[rate] > 1.0:
             print(f"{rate} must be in range 0-1.0")
             all_valid=False
-            
+
+    # check that missing drop fraction is greater than 0.0 and <= 1.0
+    for rate in ['DROP_FRACT']:  
+        if parameters[rate] <= 0.0 or parameters[rate] > 1.0:
+            print(f"{rate} must be in > 0 and <= 1.0")
+            all_valid=False
     
     if  not less_than(parameters, 'ELITE_SIZE', 'HOF_SIZE'):
         all_valid = False
@@ -328,6 +333,11 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
                         type=str,
                         help='Sets name of file containing continuous variables in'
                         ' input data')
+    parser.add_argument('--drop-fract',
+                        dest='DROP_FRACT',
+                        type=float,
+                        default=1.0,
+                        help='Input variables are dropped if they equal/exceed this fraction of missing across data')
     parser.add_argument('--grammar-file',
                         dest='GRAMMAR_FILE',
                         type=str,

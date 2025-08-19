@@ -75,7 +75,7 @@ if proc_rank == 0:
     data, inputs_map, unmatched = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
         continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
         out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
-        missing=params['MISSING'], outcome=params['OUTCOME'], included_vars=params['INCLUDEDVARS'])
+        missing=params['MISSING'], outcome=params['OUTCOME'], included_vars=params['INCLUDEDVARS'], missing_fract=params['DROP_FRACT'])
     if(len(unmatched)>0):
         print("\nWARNING: The following IDs are not found in all data input files and will be ignored:")
         print(''.join(unmatched))
@@ -107,6 +107,10 @@ if nprocs > 1:
 toolbox=alg_setup.configure_toolbox(params['FITNESS'], params['SELECTION'], params['CROSSOVER'],
                                     params['INIT'])
 
+if(len(var_map)> params['CODON_SIZE']):
+    params['CODON_SIZE'] = len(var_map) + (len(var_map) % 2)
+    print(f"params[CODON_SIZE] is now extended to {params['CODON_SIZE']} to match dataset size")
+
 # configure report items 
 REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
                 'fitness_test', 
@@ -125,7 +129,7 @@ for cv in range(params['CV']):
     
     (X_train,Y_train,X_test,Y_test) = data_processing.prepare_split_data(data, 
         train_splits[cv], test_splits[cv])
-    
+
     if params['INIT'] == 'random':
         population = toolbox.populationCreator(pop_size=params['POP_SIZE'],
                                            bnf_grammar=BNF_GRAMMAR,
