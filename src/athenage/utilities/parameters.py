@@ -336,7 +336,7 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
     parser.add_argument('--drop-fract',
                         dest='DROP_FRACT',
                         type=float,
-                        default=1.0,
+                        default=0.05,
                         help='Input variables are dropped if they equal/exceed this fraction of missing across data')
     parser.add_argument('--grammar-file',
                         dest='GRAMMAR_FILE',
