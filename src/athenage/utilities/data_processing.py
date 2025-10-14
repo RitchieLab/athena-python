@@ -83,9 +83,9 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
         unmatched_ids = set(dataset_ids) ^ set(geno_ids)
         unmatched.extend(unmatched_ids)
         # Merge 
-        dataset_df = dataset_df.merge(contin_df, on="ID", validate="1:1", copy=False)
+        dataset_df = dataset_df.merge(geno_df, on="ID", validate="1:1", copy=False)
 
-        del gene_df
+        del geno_df
         gc.collect()
 
     # merge continuous input values into dataset frame
@@ -620,7 +620,7 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
     Returns: 
         None
     """
-
+    
     header = f"CV\tVariables\t{score_type} Training\tTesting\tTraining-missing\tTesting-missing\n"
     
     fh = open(filename, "w")

@@ -45,7 +45,7 @@ All options are listed here in both their command line and parameter file forms.
 |---|---|---|---|
 | `--codon-consumption` | CODON_CONSUMPTION | [STR] |Default: *eager*. Whether grammar will consume codons when only one choice for a rule in the grammar. (eager, lazy) |
 | `--codon-size` | CODON_SIZE | [INT] |Default: *NONE*. Maximum value of a codon in the genome of an individual in the evolutionary population. At a minimum it should be>= the largest number of choices for a rule in the grammar|
-| `--fitness` | FITNESS | [STR] |Default: *balanced_acc*. Metric for fitness (balanced_acc, auc or r-squared)|
+| `--fitness` | FITNESS | [STR] |Default: *balanced_acc*. Metric for fitness (balanced_acc, f1_score, auc, auprc or r-squared)|
 | `--genome-type` | GENOME_TYPE | [STR] |Default: *standard*. GE genome type to use (standard, leap or mcge) generation |
 | `--gens` | GENS | [INT] |Default: *50*. Number of generations in evolution |
 | `--init` | INIT | [STR] |Default: *sensible*. Initialization procedure (sensible or random)|

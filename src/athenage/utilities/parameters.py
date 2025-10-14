@@ -82,8 +82,8 @@ def valid_parameters(parameters) -> bool:
             print("At least one of CONTIN_FILE and GENO_FILE must be set")
             all_valid = False
 
-    if parameters['FITNESS'] not in ['r-squared', 'balanced_acc', 'auc']:
-        print("FITNESS must be either r-squared, balanced_acc or auc")
+    if parameters['FITNESS'] not in ['r-squared', 'balanced_acc', 'auc', 'f1_score', 'auprc']:
+        print("FITNESS must be either r-squared, balanced_acc, f1_score, auc or auprc")
         all_valid = False
     
     if parameters['INIT'] not in ['random', 'sensible']:
@@ -344,10 +344,10 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
                         help='Sets name of grammar')
     parser.add_argument('--fitness',
                         dest='FITNESS',
-                        choices=['r-squared', 'balanced_acc', 'auc'],
+                        choices=['r-squared', 'balanced_acc', 'f1_score','auc', 'auprc'],
                         default='balanced_acc',
                         type=str,
-                        help='Sets metric for fitness (balanced_acc, auc or r-squared)')
+                        help='Sets metric for fitness (balanced_acc, auc, auprc, f1_score or r-squared)')
     parser.add_argument('--random-seed',
                         dest='RANDOM_SEED',
                         type=int,
