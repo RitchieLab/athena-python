@@ -9,7 +9,7 @@ import re
 import numpy as np
 from athenage.genn.functions import pdiv
 
-from collections import deque
+from collections import deque, defaultdict
 import matplotlib.pyplot as plt
 import networkx as nx
 from netgraph import Graph
@@ -602,6 +602,31 @@ def compress_weights_sr(model_str):
 
     return new_model_str
 
+def count_vars_cv(best_models: list['deap.creator.Individual'], var_map: dict, 
+                  orig_var_map: dict) -> defaultdict:
+    """Count unique occurences of variables across list of models
+
+    Args:
+        best_models: deap Individual objects from run
+        var_map: key is value (x[0],x[1],etc) and value is original column name in dataset
+        orig_var_map: key is protect variable name ('-' removed) and value is original name in input
+
+    Returns: 
+        defaultdict with count as key and value as list of variables with appearing that number of times in bestmodels
+    """ 
+    variable_counts = defaultdict(int)   
+    for model in best_models:
+        variables = set(re.findall(r'x\[\d+\]', model.phenotype))
+        for var in variables:
+            variable_counts[var] += 1
+    
+    # group variables by cv count
+    grouped_by_count = defaultdict(list)
+    for var, count in variable_counts.items():
+        grouped_by_count[count].append(orig_var_map[var_map[var]])
+    
+    return grouped_by_count
+
 
 def write_summary(filename: str, best_models: list['deap.creator.Individual'], score_type: str, var_map: dict, 
                   orig_var_map: dict, fitness_test: list[float],nmissing: list[int]) -> None:
@@ -620,7 +645,7 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
     Returns: 
         None
     """
-    
+
     header = f"CV\tVariables\t{score_type} Training\tTesting\tTraining-missing\tTesting-missing\n"
     
     fh = open(filename, "w")
@@ -640,6 +665,18 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
         fh.write(f"\t{nmissing[i][0] * 100:.2f}%")
         fh.write(f"\t{nmissing[i][1] * 100:.2f}%")
         fh.write("\n")
+
+
+    vars_by_count = count_vars_cv(best_models, var_map, orig_var_map)
+
+    fh.write("\nCV count\tVariables\n")
+    for i in range(len(best_models),0,-1):
+        fh.write(f"{i}")
+        if i in vars_by_count:
+            fh.write("\t")
+            fh.write(" ".join(vars_by_count[i]))
+        fh.write("\n")
+
 
 
     fh.write("\nCV\tModel\n")
