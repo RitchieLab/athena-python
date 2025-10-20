@@ -116,6 +116,26 @@ def r_squared(y: np.ndarray, y_hat: np.ndarray) -> float:
     return 1 - (ss_res/ss_tot)
     
 
+def alt_fitness(fitness: str) -> dict:
+    """Return dict containing alternate fitness functions for reporting
+
+        Args:
+        fitness: name of fitness metric used 
+
+    Returns:
+        dict
+    """
+
+    methods={}
+    if fitness != 'r-squared':
+        methods['balanced_acc']=fitness_balacc
+        methods['auprc']=fitness_auprc
+        methods['auc']=fitness_auc
+        methods['f1_score']=fitness_f1
+        methods.pop(fitness, None)
+
+    return methods
+
 def fitness_rsquared(individual: 'deap.creator.Individual', points: list) -> float:
     """Calculate r-squared fitness for this individual using points passed
 

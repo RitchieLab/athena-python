@@ -629,7 +629,7 @@ def count_vars_cv(best_models: list['deap.creator.Individual'], var_map: dict,
 
 
 def write_summary(filename: str, best_models: list['deap.creator.Individual'], score_type: str, var_map: dict, 
-                  orig_var_map: dict, fitness_test: list[float],nmissing: list[int]) -> None:
+                  orig_var_map: dict, fitness_test: list[float],nmissing: list[int], alt_scores: list[dict]) -> None:
     """Produce summary file reporting results
 
     Args:
@@ -640,6 +640,7 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
         orig_var_map: key is protect variable name ('-' removed) and value is original name in input
         fitness_test: contains testing fitness scores for each individual
         nmissing: number of missing rows for individual
+        alt_scores: testing and training values for any alternative metrics (not used for fitness)
 
 
     Returns: 
@@ -677,6 +678,39 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
             fh.write(" ".join(vars_by_count[i]))
         fh.write("\n")
 
+    if alt_scores:
+        metrics = list(alt_scores[0].keys())
+        metrics.sort()
+        fh.write("\nAlternate training scores (not used for fitness)")
+        fh.write("\nCV")
+        
+        for metric in metrics:
+            fh.write(f"\t{metric}")
+        fh.write("\n")
+        for i in range(len(alt_scores)):
+            fh.write(str(i+1))
+            for metric in metrics:
+                fh.write(f"\t{alt_scores[i][metric]['train']}")
+            fh.write("\n")
+
+        fh.write("\n")
+
+        fh.write("\nAlternate testing scores (not used for fitness)")
+        fh.write("\nCV")
+        
+        for metric in metrics:
+            fh.write(f"\t{metric}")
+        fh.write("\n")
+        for i in range(len(alt_scores)):
+            fh.write(str(i+1))
+            for metric in metrics:
+                fh.write(f"\t{alt_scores[i][metric]['test']}")
+            fh.write("\n")
+
+
+        # \tTraining Score\tTesting Score\n")
+        # for i in range(len(alt_scores)):
+        #     fh.write()
 
 
     fh.write("\nCV\tModel\n")

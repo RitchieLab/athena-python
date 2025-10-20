@@ -122,6 +122,8 @@ REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
           'structural_diversity', #'fitness_diversity',
           'selection_time', 'generation_time', 'best_phenotype']
 
+alt_scores=[]
+
 # conduct evolution for specified number of cross-validations
 for cv in range(params['CV']):
     if proc_rank == 0:
@@ -166,6 +168,8 @@ for cv in range(params['CV']):
     if parallel.has_mpi:
       migrate_int=params['GENS_MIGRATE']
     
+    # get alternate fitness measures for reporting
+    alt_fitnesses=alg_setup.alt_fitness(params['FITNESS'])
     
     # perform the Grammatical Evolution flow:
     population, logbook = algorithms.ge_eaSimpleWithElitism(population, toolbox, 
@@ -185,7 +189,7 @@ for cv in range(params['CV']):
                                               stats=stats, halloffame=hof, verbose=False,
                                               rank=proc_rank, switch_crosstype=params['CROSSOVER2'],
                                               switch_cross_gens=params['GEN_CROSS_SWITCH'],
-                                              migrate_interval=migrate_int)
+                                              migrate_interval=migrate_int, metric_reporters=alt_fitnesses)
 
     alg_setup.set_crossover(toolbox, params['CROSSOVER'])
     import textwrap
@@ -231,6 +235,17 @@ for cv in range(params['CV']):
         print("Depth: ", hof.items[0].depth)
         print("Length of the genome: ", hof.items[0].genome.total_codons())
         print(f'Used portion of the genome: {hof.items[0].genome.used_codons()/hof.items[0].genome.total_codons():.2f}')
+        # [X_train, Y_train]
+        alt_metrics={}
+        for metric in alt_fitnesses:
+            value = alt_fitnesses[metric](hof.items[0],[X_train, Y_train])
+            alt_metrics[metric]={}
+            alt_metrics[metric]['train']=value[0]
+            print("training ",metric, "=", value[0])
+            value = alt_fitnesses[metric](hof.items[0],[X_test, Y_test])
+            alt_metrics[metric]['test']=value[0]
+            print("testing ",metric, "=", value[0])
+        alt_scores.append(alt_metrics)
     
         import csv    
         header = REPORT_ITEMS
@@ -261,7 +276,7 @@ for cv in range(params['CV']):
 # create and write summary files and plots for run
 if proc_rank == 0:
     data_processing.write_summary(params['OUT'] + '_summary.txt',
-        best_models,params['FITNESS'], var_map, orig_var_map, best_fitness_test, nmissing)
+        best_models,params['FITNESS'], var_map, orig_var_map, best_fitness_test, nmissing, alt_scores)
     data_processing.write_plots(params['OUT'], best_models, var_map, orig_var_map, inputs_map, color_map)
     
 def main():

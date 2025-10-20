@@ -88,7 +88,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
                 genome_representation:str='list',
                 stats:'deap.tools.Statistics'=None, halloffame:'eap.tools.HallOfFame'=None, 
                 rank:int=0, migrate_interval:int=None,
-                switch_crosstype:str=None, switch_cross_gens:int=None,
+                switch_crosstype:str=None, switch_cross_gens:int=None, metric_reporters:dict={},
                 verbose:bool=__debug__) -> tuple [list, 'deap.tools.logbook']:
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_, with some adaptations to run GE
@@ -121,6 +121,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
             for island model (used with parallelized version)
         switch_crosstype: designates crossover type to switch to during run
         switch_cross_gens: generation at which to switch crossover type
+        metric_reporters: dict with fitness functions to report in addition 
         verbose: Whether or not to log the statistics.
 
     Returns: 
@@ -224,7 +225,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
         best_ind_used_codons = halloffame.items[0].used_codons
         best_phenotype = halloffame.items[0].phenotype
         if not verbose and rank==0:
-            print("gen =", 0, ", Best fitness =", halloffame.items[0].fitness.values)
+            print("gen =", 0, ", Best fitness =", halloffame.items[0].fitness.values[0])
     
     avg_length = sum_length / n_length
     avg_nodes = sum_nodes / n_nodes
@@ -392,7 +393,11 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
             best_ind_used_codons = halloffame.items[0].used_codons
             best_phenotype = halloffame.items[0].phenotype
             if not verbose and rank==0:
-                print("gen =", gen, ", Best fitness =", halloffame.items[0].fitness.values, ", Number of invalids =", invalid)
+                print("gen =", gen, ", Best fitness =", halloffame.items[0].fitness.values[0], ", Number of invalids =", invalid, end="")
+                for metric in metric_reporters:
+                     value = metric_reporters[metric](halloffame.items[0],points_train)
+                     print(" ",metric, "=", value[0], end="")
+                print()
             if points_test:
                 if gen < ngen:
                     fitness_test = np.NaN
