@@ -1773,10 +1773,10 @@ are included in help strings.</p>
                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Sets name of grammar&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--fitness&#39;</span><span class="p">,</span>
                         <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;FITNESS&#39;</span><span class="p">,</span>
-                        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;r-squared&#39;</span><span class="p">,</span> <span class="s1">&#39;balanced_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;auc&#39;</span><span class="p">],</span>
+                        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;r-squared&#39;</span><span class="p">,</span> <span class="s1">&#39;balanced_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;f1_score&#39;</span><span class="p">,</span><span class="s1">&#39;auc&#39;</span><span class="p">,</span> <span class="s1">&#39;auprc&#39;</span><span class="p">],</span>
                         <span class="n">default</span><span class="o">=</span><span class="s1">&#39;balanced_acc&#39;</span><span class="p">,</span>
                         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Sets metric for fitness (balanced_acc, auc or r-squared)&#39;</span><span class="p">)</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Sets metric for fitness (balanced_acc, auc, auprc, f1_score or r-squared)&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--random-seed&#39;</span><span class="p">,</span>
                         <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;RANDOM_SEED&#39;</span><span class="p">,</span>
                         <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
@@ -2231,8 +2231,8 @@ Returns:
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;At least one of CONTIN_FILE and GENO_FILE must be set&quot;</span><span class="p">)</span>
             <span class="n">all_valid</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;FITNESS&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r-squared&#39;</span><span class="p">,</span> <span class="s1">&#39;balanced_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;auc&#39;</span><span class="p">]:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FITNESS must be either r-squared, balanced_acc or auc&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;FITNESS&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r-squared&#39;</span><span class="p">,</span> <span class="s1">&#39;balanced_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;auc&#39;</span><span class="p">,</span> <span class="s1">&#39;f1_score&#39;</span><span class="p">,</span> <span class="s1">&#39;auprc&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FITNESS must be either r-squared, balanced_acc, f1_score, auc or auprc&quot;</span><span class="p">)</span>
         <span class="n">all_valid</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;INIT&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="s1">&#39;sensible&#39;</span><span class="p">]:</span>
