@@ -189,6 +189,8 @@ def load_param_file(file_name: str) -> dict:
 
             if key == 'INCLUDEDVARS':
                 value = value.split()
+            if key == 'MAX_DEPTH_GENS':
+                value = parse_depth_gen_string(value)
 
             # Set parameter
             params[key] = value
@@ -423,6 +425,11 @@ def parse_cmd_args(arguments: list, has_mpi: bool=False) -> dict:
                         type=int,
                         default=100,
                         help='Sets max depth for mapping with individuals exceeding this being invalid')
+    parser.add_argument('--max-depth-gens',
+                        dest='MAX_DEPTH_GENS',
+                        type=parse_depth_gen_string,
+                        default={},
+                        help="Specify max depth generation changes as a comma-separated string of 'gen=depth' pairs, e.g., '5=25,20=20'.")
     parser.add_argument('--color-map-file',
                         dest='COLOR_MAP_FILE',
                         type=str,
@@ -481,5 +488,34 @@ def set_params(command_line_args: list, has_mpi: bool=False) -> dict:
         load_param_file(cmd_args['PARAM_FILE'])
 
     return params
+
+
+def parse_depth_gen_string(s):
+    """Parses a string like '5=0.1,20=0.9' into a dictionary.
+
+    Args:
+        command_line_args: Command line arguments specified by the user.
+        has_mpi: True when mpi detected so that parameters can be distributred to worker processes
+    
+    Returns:
+        max_depth_gens: dict with key as generation and value as the depth to use
+
+    """
+    max_depth_gens = {}
+    
+    # Split the main string by comma
+    for pair in s.split(','):
+        # Split each pair by the equals sign
+        if '=' not in pair:
+             raise argparse.ArgumentTypeError(f"Each segment must be in 'index=value' format. Found: '{pair}'.")
+        index_str, value_str = pair.split('=', 1)
+        try:
+            index = int(index_str.strip())
+            value = int(value_str.strip())
+            max_depth_gens[index] = value
+        except ValueError as e:
+            raise argparse.ArgumentTypeError(f"Invalid index or value type in pair: '{pair}'. Error: {e}")
+            
+    return max_depth_gens
     
     

@@ -81,7 +81,7 @@ class hofWarning(UserWarning):
     
 def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: float,
                 mutpb:float, ngen:int, elite_size:int, 
-                bnf_grammar:'grape.grape.grammar', codon_size:int, max_tree_depth:int, 
+                bnf_grammar:'grape.grape.grammar', codon_size:int, max_tree_depth:int, max_depth_gens:dict={},
                 max_genome_length:int=None,
                 points_train:list=None, points_test:list=None, codon_consumption:str='eager', 
                 report_items:list=None,
@@ -106,6 +106,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
         bnf_grammar: BNF grammar for mapping
         codon_size: Maximum value in codon of genome
         max_tree_depth: Maximum depth for a tree when mapping genome
+        max_depth_gens: Key is generation to start the max depth value restrction in dict
         max_genome_length: Maximum number of codons in genome
         points_train: Points to use in training
         points_test: Points to use in testing
@@ -279,6 +280,9 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
 
     # Begin the generational process
     for gen in range(logbook.select("gen")[-1]+1, ngen + 1):
+        # check for changes in max tree depth for this generation
+        if gen in max_depth_gens:
+            max_tree_depth = max_depth_gens[gen]
         start_gen = time.time()    
     
         # Select the next generation individuals

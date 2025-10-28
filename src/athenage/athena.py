@@ -180,6 +180,7 @@ for cv in range(params['CV']):
                                               bnf_grammar=BNF_GRAMMAR,
                                               codon_size=params['CODON_SIZE'],
                                               max_tree_depth=params['MAX_DEPTH'],
+                                              max_depth_gens=params['MAX_DEPTH_GENS'],
                                               max_genome_length=MAX_GENOME_LENGTH,
                                               points_train=[X_train, Y_train],
                                               points_test=[X_test, Y_test],

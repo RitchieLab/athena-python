@@ -50,6 +50,7 @@ All options are listed here in both their command line and parameter file forms.
 | `--gens` | GENS | [INT] |Default: *50*. Number of generations in evolution |
 | `--init` | INIT | [STR] |Default: *sensible*. Initialization procedure (sensible or random)|
 | `--max-depth` | MAX_DEPTH | [INT] |Default: *100*. Max depth for mapping with individuals exceeding this being invalid |
+| `--max-depth-gens` | MAX_DEPTH_GENS | [INT:INT,INT:INT,...] |Default: *None*. Max depth generation changes as a comma-separated string of 'gen=depth' pairs, e.g., '5=25,20=20'. |
 | `--max-init-tree-depth` | MAX_INIT_TREE_DEPTH | [INT] |Default: *11* Maximum depth for tree created by sensible initialization |
 | `--max-init-genome-length` | MAX_INIT_GENOME_LENGTH | [INT] |Default: *250*. Maximum genome length for random initializtion |                   
 | `--min-init-tree-depth` | MIN_INIT_TREE_DEPTH | [INT] |Default: *7*. Minimum depth for tree created by sensible initialization|
