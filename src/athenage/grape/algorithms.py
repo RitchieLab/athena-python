@@ -240,7 +240,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
     selection_time = 0
     
     if points_test:
-        fitness_test = np.NaN
+        fitness_test = np.nan
     
     record = stats.compile(valid0) if stats else {}
     if parallel.has_mpi and parallel.nprocs > 1:
@@ -327,7 +327,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
         valid0 = [ind for ind in population if not ind.invalid]
         valid = [ind for ind in valid0 if not math.isnan(ind.fitness.values[0])]
         if len(valid0) != len(valid):
-            warnings.warn("Warning: There are valid individuals with fitness = NaN in the population. We will avoid in the statistics.")
+            warnings.warn("Warning: There are valid individuals with fitness = nan in the population. We will avoid in the statistics.")
         invalid = len(population) - len(valid0) #We use the original number of invalids in this case, because we just want to count the completely mapped individuals
         
         list_structures = []
@@ -404,7 +404,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
                 print()
             if points_test:
                 if gen < ngen:
-                    fitness_test = np.NaN
+                    fitness_test = np.nan
                 else:
                     nmissing = halloffame.items[0].nmissing
                     fitness_test = toolbox.evaluate(halloffame.items[0], points_test)[0]
