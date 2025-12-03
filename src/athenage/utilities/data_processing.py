@@ -562,6 +562,7 @@ def compress_weights_nn(model_str):
 
 def compress_weights_sr(model_str):
     new_model_str = model_str
+
     float_pattern = re.compile(r"float\(\d*\.\d*\)")
 
     m = float_pattern.search(new_model_str)
@@ -570,23 +571,43 @@ def compress_weights_sr(model_str):
         new_model_str = new_model_str[:m.start()] + str(value) + new_model_str[m.end():]
         m = float_pattern.search(new_model_str)
 
-    pdiv_pattern = re.compile(r"pdiv\([^\(|pdiv].*?\)")
+    def find_matching_paren(s: str, open_idx: int) -> int | None:
+        """Return index of matching ')' for '(' at open_idx, or None if not found."""
+        depth = 1
+        for i in range(open_idx + 1, len(s)):
+            if s[i] == "(":
+                depth += 1
+            elif s[i] == ")":
+                depth -= 1
+                if depth == 0:
+                    return i
+        return None
+
     pdiv_exclude = re.compile(r"x|\(pdiv")
     op_pattern = re.compile(r"\([^\(][0-9\+|\-|\*  .]+?\)")
     anymatch = True
     while anymatch:
         anymatch = False
+        # evaluate pdiv calls with numeric-only arguments; find the full span by balancing parens
         i = 0
-        m = pdiv_pattern.search(new_model_str[i:])
-        while m:
-            if pdiv_exclude.search(new_model_str[m.start():m.end()]):
-                i = m.start() + 4
-            else:
-                value = eval(new_model_str[m.start():m.end()])
-                value = format_number(value,3)
-                new_model_str = new_model_str[:m.start()] + str(value) + new_model_str[m.end():]
-                anymatch = True
-            m = pdiv_pattern.search(new_model_str, i)
+        needle = "pdiv("
+        while True:
+            start = new_model_str.find(needle, i)
+            if start == -1:
+                break
+            open_idx = start + len(needle) - 1  # index of '(' after pdiv
+            end = find_matching_paren(new_model_str, open_idx)
+            if end is None:  # unmatched parenthesis; bail from pdiv scanning
+                break
+            segment = new_model_str[start : end + 1]
+            if pdiv_exclude.search(segment):
+                i = start + len(needle)
+                continue
+            value = eval(segment)
+            value = format_number(value,3)
+            new_model_str = new_model_str[:start] + str(value) + new_model_str[end + 1 :]
+            anymatch = True
+            i = start + len(str(value))
 
         i=0
         m = op_pattern.search(new_model_str)
@@ -707,22 +728,16 @@ def write_summary(filename: str, best_models: list['deap.creator.Individual'], s
                 fh.write(f"\t{alt_scores[i][metric]['test']}")
             fh.write("\n")
 
-
-        # \tTraining Score\tTesting Score\n")
-        # for i in range(len(alt_scores)):
-        #     fh.write()
-
-
-    fh.write("\nCV\tModel\n")
-    for i,model in enumerate(best_models):
-        compressed = compress_weights(model.phenotype)
-        compressed = reset_variable_names(compressed, var_map, orig_var_map)
-        fh.write(f"{i+1}\t{compressed}\n")
-    
     fh.write("\n***** Original Networks *****")
     fh.write("\nCV\tModel\n")
     for i,model in enumerate(best_models):
         fh.write(f"{i+1}\t{model.phenotype}\n")
+
+    fh.write("\nCV\tCompressed Model\n")
+    for i,model in enumerate(best_models):
+        compressed = compress_weights(model.phenotype)
+        compressed = reset_variable_names(compressed, var_map, orig_var_map)
+        fh.write(f"{i+1}\t{compressed}\n")
     
     fh.close()
 

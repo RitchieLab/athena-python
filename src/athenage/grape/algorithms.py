@@ -138,16 +138,16 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
             raise ValueError("You should add a hof object to use elitism.") 
         else:
             warnings.warn('You will not register results of the best individual while not using a hof object.', hofWarning)
-            logbook.header = ['gen', 'invalid'] + (stats.fields if stats else []) + ['avg_length', 'avg_nodes', 'avg_depth', 'avg_used_codons', 'behavioural_diversity', 'structural_diversity', 'fitness_diversity', 'selection_time', 'generation_time']
+            logbook.header = ['gen', 'total_inds', 'invalid'] + (stats.fields if stats else []) + ['avg_length', 'avg_nodes', 'avg_depth', 'avg_used_codons', 'behavioural_diversity', 'structural_diversity', 'fitness_diversity', 'selection_time', 'generation_time']
     else:
         if halloffame.maxsize < 1:
             raise ValueError("HALLOFFAME_SIZE should be greater or equal to 1")
         if elite_size > halloffame.maxsize:
             raise ValueError("HALLOFFAME_SIZE should be greater or equal to ELITE_SIZE")         
         if points_test:
-            logbook.header = ['gen', 'invalid'] + (stats.fields if stats else []) + ['fitness_test', 'best_ind_length', 'avg_length', 'best_ind_nodes', 'avg_nodes', 'best_ind_depth', 'avg_depth', 'avg_used_codons', 'best_ind_used_codons', 'behavioural_diversity', 'structural_diversity', 'fitness_diversity', 'selection_time', 'generation_time', 'best_phenotype']
+            logbook.header = ['gen', 'total_inds', 'invalid'] + (stats.fields if stats else []) + ['fitness_test', 'best_ind_length', 'avg_length', 'best_ind_nodes', 'avg_nodes', 'best_ind_depth', 'avg_depth', 'avg_used_codons', 'best_ind_used_codons', 'behavioural_diversity', 'structural_diversity', 'fitness_diversity', 'selection_time', 'generation_time', 'best_phenotype']
         else:
-            logbook.header = ['gen', 'invalid'] + (stats.fields if stats else []) + ['best_ind_length', 'avg_length', 'best_ind_nodes', 'avg_nodes', 'best_ind_depth', 'avg_depth', 'avg_used_codons', 'best_ind_used_codons', 'behavioural_diversity', 'structural_diversity', 'fitness_diversity', 'selection_time', 'generation_time', 'best_phenotype']
+            logbook.header = ['gen', 'total_inds', 'invalid'] + (stats.fields if stats else []) + ['best_ind_length', 'avg_length', 'best_ind_nodes', 'avg_nodes', 'best_ind_depth', 'avg_depth', 'avg_used_codons', 'best_ind_used_codons', 'behavioural_diversity', 'structural_diversity', 'fitness_diversity', 'selection_time', 'generation_time', 'best_phenotype']
 
     start_gen = time.time()        
     # Evaluate the individuals with an invalid fitness
@@ -247,7 +247,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
         record = parallel.get_stats(stats,valid0)
     
     if points_test: 
-        logbook.record(gen=0, invalid=invalid, **record, 
+        logbook.record(gen=0, total_inds=n_inds, invalid=invalid, **record, 
                        fitness_test=fitness_test,
                        best_ind_length=best_ind_length, avg_length=avg_length, 
                        best_ind_nodes=best_ind_nodes,
@@ -262,7 +262,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
                        selection_time=selection_time, 
                        generation_time=generation_time, best_phenotype=best_phenotype)
     else:
-        logbook.record(gen=0, invalid=invalid, **record, 
+        logbook.record(gen=0, total_inds=n_inds, invalid=invalid, **record, 
                        best_ind_length=best_ind_length, avg_length=avg_length, 
                        best_ind_nodes=best_ind_nodes,
                        avg_nodes=avg_nodes,
@@ -426,7 +426,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
             record = parallel.get_stats(stats,valid0)
         
         if points_test: 
-            logbook.record(gen=gen, invalid=invalid, **record, 
+            logbook.record(gen=gen, total_inds=n_inds, invalid=invalid, **record, 
                        fitness_test=fitness_test,
                        best_ind_length=best_ind_length, avg_length=avg_length, 
                        best_ind_nodes=best_ind_nodes,
@@ -443,7 +443,7 @@ def ge_eaSimpleWithElitism(population:list, toolbox:'deap.base.Toolbox', cxpb: f
                        best_phenotype=best_phenotype,
                        test_missing=nmissing_test)
         else:
-            logbook.record(gen=gen, invalid=invalid, **record, 
+            logbook.record(gen=gen, total_inds=n_inds, invalid=invalid, **record, 
                        best_ind_length=best_ind_length, avg_length=avg_length, 
                        best_ind_nodes=best_ind_nodes,
                        avg_nodes=avg_nodes,

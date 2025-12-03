@@ -202,7 +202,7 @@ for cv in range(params['CV']):
 
     selection_time = logbook.select("selection_time")
     generation_time = logbook.select("generation_time")
-    gen, invalid = logbook.select("gen", "invalid")
+    gen, invalid, total_inds = logbook.select("gen", "invalid", "total_inds")
     avg_used_codons = logbook.select("avg_used_codons")
     best_ind_used_codons = logbook.select("best_ind_used_codons")
     
@@ -255,7 +255,7 @@ for cv in range(params['CV']):
             writer = csv.writer(csvfile, delimiter='\t')
             writer.writerow(header)
             for value in range(len(max_fitness_values)):
-                writer.writerow([gen[value], invalid[value], mean_fitness_values[value],
+                writer.writerow([gen[value], total_inds[value], invalid[value], mean_fitness_values[value],
                                  std_fitness_values[value], min_fitness_values[value],
                                  max_fitness_values[value], 
                                  fitness_test[value],
