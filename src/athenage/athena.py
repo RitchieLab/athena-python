@@ -112,7 +112,7 @@ if(len(var_map)> params['CODON_SIZE']):
     print(f"params[CODON_SIZE] is now extended to {params['CODON_SIZE']} to match dataset size")
 
 # configure report items 
-REPORT_ITEMS = ['gen', 'invalid', 'avg', 'std', 'min', 'max',
+REPORT_ITEMS = ['gen', 'total_inds', 'invalid', 'avg', 'std', 'min', 'max',
                 'fitness_test', 
           'best_ind_length', 'avg_length', 
           'best_ind_nodes', 'avg_nodes', 
