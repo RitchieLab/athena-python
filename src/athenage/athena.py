@@ -278,7 +278,7 @@ for cv in range(params['CV']):
 if proc_rank == 0:
     data_processing.write_summary(params['OUT'] + '_summary.txt',
         best_models,params['FITNESS'], var_map, orig_var_map, best_fitness_test, nmissing, alt_scores)
-    data_processing.write_plots(params['OUT'], best_models, var_map, orig_var_map, inputs_map, color_map)
+    #data_processing.write_plots(params['OUT'], best_models, var_map, orig_var_map, inputs_map, color_map)
     
 def main():
     pass
