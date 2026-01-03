@@ -68,11 +68,12 @@ np.random.seed(params['RANDOM_SEED'])
 best_models = []
 best_fitness_test = []
 nmissing = []
+invalid_col_names = []
 
 data, train_splits, test_splits, var_map,orig_var_map,BNF_GRAMMAR = None,None,None,None,None,None
 if proc_rank == 0:
     # process the input files to create the appropriate X and Y sets for testing training
-    data, inputs_map, unmatched = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
+    data, inputs_map, unmatched, invalid_col_names = data_processing.read_input_files(outcomefn=params['OUTCOME_FILE'], genofn=params['GENO_FILE'],
         continfn=params['CONTIN_FILE'], geno_encode=params['GENO_ENCODE'], 
         out_scale=params['SCALE_OUTCOME'], contin_scale=params['SCALE_CONTIN'],
         missing=params['MISSING'], outcome=params['OUTCOME'], included_vars=params['INCLUDEDVARS'], missing_fract=params['DROP_FRACT'])
@@ -97,8 +98,16 @@ if proc_rank == 0:
     grammarstr = data_processing.process_grammar_file(params['GRAMMAR_FILE'], data)
     BNF_GRAMMAR = grape.Grammar(grammarstr, params['CODON_CONSUMPTION'])
 
- # share data to subordinate processes when using paralllelization
+    # if invalid_cols isn't empty need to output the problematic ones and then stop the application
+    if invalid_col_names:
+        if proc_rank == 0:
+            formatted_cols = " ".join(invalid_col_names)
+            print(f"\nERROR:\nColumn names must contain only alphanumerics, '_', ':', and '-'\nThese names from data input files are invalid: {formatted_cols}")
+            if nprocs == 1:
+                sys.exit(1)
 if nprocs > 1:
+    parallel.continue_run(proc_rank, not invalid_col_names)
+    # share data to subordinate processes when using paralllelization
     data,train_splits, test_splits, var_map, BNF_GRAMMAR = parallel.distribute_data(rank=proc_rank,
         data=data,train_splits=train_splits, test_splits=test_splits, vmap=var_map,
         grammar=BNF_GRAMMAR)
@@ -278,7 +287,7 @@ for cv in range(params['CV']):
 if proc_rank == 0:
     data_processing.write_summary(params['OUT'] + '_summary.txt',
         best_models,params['FITNESS'], var_map, orig_var_map, best_fitness_test, nmissing, alt_scores)
-    #data_processing.write_plots(params['OUT'], best_models, var_map, orig_var_map, inputs_map, color_map)
+    data_processing.write_plots(params['OUT'], best_models, var_map, orig_var_map, inputs_map, color_map)
     
 def main():
     pass

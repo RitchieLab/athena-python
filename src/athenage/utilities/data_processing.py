@@ -22,7 +22,7 @@ import gc
 
 def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool=False,
     contin_scale: bool=False, geno_encode: str=None, missing: str=None, outcome: str=None,
-    missing_fract: float=1.0,included_vars: list[str]=None) -> tuple[pd.DataFrame, dict, list]:
+    missing_fract: float=1.0,included_vars: list[str]=None) -> tuple[pd.DataFrame, dict, list, list]:
     """Read in data and construct pandas dataframe
 
     Args:
@@ -40,6 +40,7 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
         dataset_df: pandas dataframe
         inputs_map: dictionary with new label as key, original label as value
         unmatched: list of IDs that are not in all input files
+        invalid_cols: list of column names that contain invalid characters
     """
     
     y_df = process_continfile(outcomefn, out_scale)
@@ -56,12 +57,15 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
 
     contin_df = None
     inputs_map = {}
+    invalid_cols = []
     if continfn:
         contin_df = process_continfile(continfn, contin_scale, missing, included_vars, missing_fract)
+        invalid_cols.extend(get_invalid_column_names(contin_df.columns))
         inputs_map={contin_df.columns[i]:contin_df.columns[i] for i in range(0,len(contin_df.columns))}
 
     if genofn:
         geno_df, geno_map = process_genofile(genofn, geno_encode, missing, included_vars)
+        invalid_cols.extend(get_invalid_column_names(list(geno_map.values())))
         inputs_map.update(geno_map)
     
     dataset_df = dataset_df.sort_values('ID', ascending=False)
@@ -104,7 +108,7 @@ def read_input_files(outcomefn: str, genofn: str, continfn: str, out_scale: bool
 
     dataset_df.drop(columns=['ID'], inplace=True)
 
-    return dataset_df, inputs_map, unmatched
+    return dataset_df, inputs_map, unmatched, invalid_cols
     
 
 def normalize(val):
@@ -112,6 +116,22 @@ def normalize(val):
     diff = np.nanmax(val) - minval
     newval = (val - minval) / diff 
     return newval
+
+def get_invalid_column_names(names: list[str])->list[str]:
+    """Check all strings to contain only allowed characters for column names (Alphanumeric,
+    digits, ':', '_' and '-')
+
+    Args:
+        names: Array of column names 
+            
+    Returns: 
+        list of invalid column names
+    """  
+    pattern = re.compile(r"[A-Za-z_][A-Za-z0-9_:-]*")
+    problem_cols = [col for col in names if not pattern.fullmatch(col)]
+    
+    return problem_cols
+
 
 def process_continfile(fn: str, scale: bool, missing: str=None, included_vars: list[str]=None, max_missing_fraction: float | None = None) -> pd.DataFrame:
     """Read in continuous data and construct dataframe from values
@@ -277,6 +297,8 @@ def process_genofile(fn: str, encoding: str, missing: str=None, included_vars: l
         # add back ID column
         new_df.insert(0,"ID",data['ID'])
         data = new_df
+    else:
+        geno_map = {labels[i]:labels[i] for i in range(0,len(labels))}
 
     return data, geno_map
     
@@ -774,7 +796,6 @@ def construct_nodes_sr(modelstr:str) -> list:
      Returns
        nodes constructed from the model
     """ 
-
     model = modelstr.replace('activate(','')
     model = model[:-1]
     postfix_stack = infix_to_postfix(model)
@@ -893,7 +914,6 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
                        'POR':'POR','PNOR':'PNOR','PXOR':'PXOR'})
     for cv,model in enumerate(best_models,1):
         compressed = compress_weights(model.phenotype)
-#        modelstr = reset_variable_names(compressed, var_map, orig_var_map)
         modelstr = protected_variable_names(compressed, var_map)
         nodes = construct_nodes(modelstr)
         finalindex = len(nodes)-1
@@ -929,6 +949,7 @@ def write_plots(basefn: str, best_models: list['deap.Creator.Individual'], var_m
                 edges.append((node.num,node.to))
         plt.clf()
         fig, ax = plt.subplots()
+
         Graph(edges, node_layout='dot', arrows=True, node_labels = node_labels, 
             edge_labels=edge_labels, node_color=node_colors, node_size=node_size, ax=ax,
             scale=(2,2), edge_label_fontdict=dict(size=6), node_label_fontdict=dict(size=4))
@@ -983,7 +1004,7 @@ def infix_to_postfix(expression):
     # - variables/functions (letters, numbers, underscores)
     # - negative numbers (e.g., -4.8 or -3)
     # - operators +, -, *, /, (, ), and commas for function arguments
-    tokens = re.findall(r'\d+\.\d+|\d+|-\d+\.\d+|-\d+|[A-Za-z_][A-Za-z0-9_]*|[-+*/()=,]', expression)
+    tokens = re.findall(r'\d+\.\d+|\d+|-\d+\.\d+|-\d+|[A-Za-z_][A-Za-z0-9_:]*|[-+*/()=,]', expression)
 
     # Process the tokens
     for token in tokens:
@@ -1007,7 +1028,7 @@ def infix_to_postfix(expression):
             while (stack and get_precedence(stack[-1]) >= get_precedence(token)):
                 output.append(stack.pop())
             stack.append(token)
-        elif re.match(r'^[a-zA-Z_][a-zA-Z_0-9]*$', token): #variables
+        elif re.match(r'^[a-zA-Z_][a-zA-Z_0-9:]*$', token): #variables
             output.append(token)
 
     # Pop all remaining operators in the stack
