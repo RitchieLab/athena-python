@@ -290,7 +290,6 @@ def fitness_balacc(individual: 'deap.creator.Individual', points: list) -> float
         
     if fitness == float("inf"):
         return INVALID_FITNESS,
-    
     return fitness,
     
 
@@ -505,8 +504,9 @@ def fitness_auprc(individual: 'deap.creator.Individual', points: list) -> float:
     try:
         nan_mask = np.isnan(pred)
         # assign case/control status
-        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
-        fitness = average_precision_score(y[~nan_mask],pred_nonan)
+        # pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        # fitness = average_precision_score(y[~nan_mask],pred_nonan)
+        fitness = average_precision_score(y[~nan_mask], pred[~nan_mask])
         individual.nmissing = np.count_nonzero(np.isnan(pred))
         
 #         fitness_compressed = balanced_accuracy_score(y[~nan_mask],pred2)
@@ -559,8 +559,9 @@ def fitness_auprc_lexicase(individual: 'deap.creator.Individual', points: list) 
     try:
         nan_mask = np.isnan(pred)
         # assign case/control status
-        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
-        fitness = average_precision_score(y[~nan_mask],pred_nonan)
+        # pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        # fitness = average_precision_score(y[~nan_mask],pred_nonan)
+        fitness = average_precision_score(y[~nan_mask], pred[~nan_mask])
         individual.nmissing = np.count_nonzero(np.isnan(pred))
         
         # save individual point scores for use in lexicase selection
@@ -623,8 +624,9 @@ def fitness_auc(individual: 'deap.creator.Individual', points: list) -> float:
     try:
         nan_mask = np.isnan(pred)
         # assign case/control status
-        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
-        fitness = roc_auc_score(y[~nan_mask],pred_nonan)
+        # pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        # fitness = roc_auc_score(y[~nan_mask],pred_nonan)
+        fitness = roc_auc_score(y[~nan_mask], pred[~nan_mask])
         individual.nmissing = np.count_nonzero(np.isnan(pred))
         
 #         fitness_compressed = balanced_accuracy_score(y[~nan_mask],pred2)
@@ -677,8 +679,9 @@ def fitness_auc_lexicase(individual: 'deap.creator.Individual', points: list) ->
     try:
         nan_mask = np.isnan(pred)
         # assign case/control status
-        pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
-        fitness = roc_auc_score(y[~nan_mask],pred_nonan)
+        # pred_nonan = np.where(pred[~nan_mask] < 0.5, 0, 1)
+        # fitness = roc_auc_score(y[~nan_mask],pred_nonan)
+        fitness = roc_auc_score(y[~nan_mask], pred[~nan_mask])
         individual.nmissing = np.count_nonzero(np.isnan(pred))
         
         # save individual point scores for use in lexicase selection
